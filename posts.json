@@ -6,7 +6,7 @@
         "descripcion": "Se ha incrementado la dificultad en el nivel 5. Los mobs ahora tienen más vida y ataques más rápidos. ¡Prepárate para el desafío!",
         "fecha": "2025-10-25", 
         "imagenUrl": "https://github.com/masterstudio-oficial/MasterStudio/blob/main/revil.png?raw=true",
-        "esNuevo": true
+        "esNuevo": false
     },
     {
         "id": 2,
@@ -15,6 +15,6 @@
         "descripcion": "Procuren tomar la sombra para no quemarsen...",
         "fecha": "2025-10-24", 
         "imagenUrl": "https://github.com/masterstudio-oficial/MasterStudio/blob/main/sol.png?raw=true",
-        "esNuevo": false
+        "esNuevo": true
     }
 ]
