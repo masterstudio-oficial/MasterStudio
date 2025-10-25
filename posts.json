@@ -1,7 +1,7 @@
 [
     {
         "id": 1,
-        "categoria": "dificultad",  // <--- ESTO ES LO CLAVE
+        "categoria": "dificultad",
         "titulo": "Nueva Dificultad Extrema: Nivel 5",
         "descripcion": "Se ha incrementado la dificultad en el nivel 5. Los mobs ahora tienen más vida y ataques más rápidos. ¡Prepárate para el desafío!",
         "fecha": "2025-10-25", 
@@ -10,7 +10,7 @@
     },
     {
         "id": 2,
-        "categoria": "dificultad",     // <--- ESTE POST VA A OTRA SECCIÓN
+        "categoria": "dificultad",
         "titulo": "Ahora el Sol los quemara sin parar",
         "descripcion": "Procuren tomar la sombra para no quemarsen...",
         "fecha": "2025-10-24", 
