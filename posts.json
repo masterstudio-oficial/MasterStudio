@@ -1,1 +1,20 @@
-[]
+[
+    {
+        "id": 1,
+        "categoria": "dificultad",  // <--- ESTO ES LO CLAVE
+        "titulo": "Nueva Dificultad Extrema: Nivel 5",
+        "descripcion": "Se ha incrementado la dificultad en el nivel 5. Los mobs ahora tienen más vida y ataques más rápidos. ¡Prepárate para el desafío!",
+        "fecha": "2025-10-25", 
+        "imagenUrl": "https://url-de-tu-imagen.com/ejemplo.png",
+        "esNuevo": true
+    },
+    {
+        "id": 2,
+        "categoria": "dificultad",     // <--- ESTE POST VA A OTRA SECCIÓN
+        "titulo": "Ahora el Sol los quemara sin parar",
+        "descripcion": "Procuren tomar la sombra para no quemarsen...",
+        "fecha": "2025-10-24", 
+        "imagenUrl": "https://otra-url.com/ejemplo2.png",
+        "esNuevo": false
+    }
+]
