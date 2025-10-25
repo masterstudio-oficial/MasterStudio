@@ -229,49 +229,54 @@
             </div>
         </section>
 
-        <section id="mobs" class="placeholder">
+        <section id="mobs" class="placeholder" data-category="mobs">
             <h1>Mobs nuevos</h1>
+            <div id="posts-mobs" class="posts-container"></div>
             <p>Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="dificultad">
+        <section id="dificultad" data-category="dificultad">
             <h1>Cambio de dificultad</h1>
-            <div id="post-list-dificultad">
+            <div id="posts-dificultad" class="posts-container">
                 </div>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="eventos" class="placeholder">
+        <section id="eventos" class="placeholder" data-category="eventos">
             <h1>Eventos</h1>
+            <div id="posts-eventos" class="posts-container"></div>
             <p>Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="actualizaciones" class="placeholder">
+        <section id="actualizaciones" class="placeholder" data-category="actualizaciones">
             <h1>Actualizaciones</h1>
+            <div id="posts-actualizaciones" class="posts-container"></div>
             <p>Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="recompensas" class="placeholder">
+        <section id="recompensas" class="placeholder" data-category="recompensas">
             <h1>Recompensas</h1>
+            <div id="posts-recompensas" class="posts-container"></div>
             <p>Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="castigos" class="placeholder">
+        <section id="castigos" class="placeholder" data-category="castigos">
             <h1>Castigos</h1>
+            <div id="posts-castigos" class="posts-container"></div>
             <p>Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
@@ -280,107 +285,110 @@
     </main>
 
     <script>
-        // ----------------------------------------------------------------------
-        // 1. FUNCIÓN PARA CARGAR DATOS Y GENERAR POSTS
-        // ----------------------------------------------------------------------
-        async function loadPosts() {
-            // El contenedor donde se insertarán los posts
-            let postListContainer = document.getElementById('post-list-dificultad');
-            
-            // Si el contenedor no existe (solo por seguridad, ya lo añadimos arriba), lo crea.
-            if (!postListContainer) {
-                postListContainer = document.createElement('div');
-                postListContainer.id = 'post-list-dificultad';
-                document.getElementById('dificultad').insertBefore(postListContainer, document.getElementById('dificultad').querySelector('.footer'));
-            } else {
-                // Limpiamos el contenido existente antes de recargar
-                postListContainer.innerHTML = '';
-            }
-            
-            try {
-                // Carga el archivo posts.json (asumiendo que está en la misma carpeta que este HTML)
-                const response = await fetch('./posts.json');
-                if (!response.ok) {
-                    throw new Error(`Error al cargar posts.json: ${response.statusText}`);
+        // JavaScript para mostrar/ocultar secciones y botón home
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', function() {
+                // Ocultar todas las secciones
+                document.querySelectorAll('section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                // Mostrar la sección seleccionada
+                const targetId = this.getAttribute('data-section');
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
                 }
-                const posts = await response.json();
+                // Mostrar/ocultar botón home
+                const homeButton = document.querySelector('.home');
+                if (targetId === 'home') {
+                    homeButton.style.display = 'none';
+                } else {
+                    homeButton.style.display = 'inline-block';
+                }
+            });
+        });
+        
+        // FUNCIÓN DE CARGA DINÁMICA DE POSTS DESDE GITHUB
+        async function loadPosts() {
+            // URL de tu archivo JSON en GitHub
+            const JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
 
-                if (posts && posts.length > 0) {
-                    posts.forEach(post => {
-                        const postElement = document.createElement('div');
-                        postElement.classList.add('post');
+            try {
+                const response = await fetch(JSON_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                // Convertimos la respuesta a JSON
+                const posts = await response.json(); 
 
-                        // Crear el badge NEW! si esNuevo es true
-                        let newBadge = '';
-                        if (post.esNuevo) {
-                            newBadge = `<div class="new-badge">NEW!</div>`;
+                // 1. Limpiar los contenedores de posts en todas las secciones
+                document.querySelectorAll('section[data-category]').forEach(section => {
+                    const category = section.getAttribute('data-category');
+                    let container = document.getElementById(`posts-${category}`);
+                    if (!container) {
+                        // Si el contenedor no existe (por si una sección era placeholder)
+                        container = document.createElement('div');
+                        container.id = `posts-${category}`;
+                        container.className = 'posts-container';
+                        // Insertarlo justo antes del footer
+                        const footer = section.querySelector('.footer');
+                        if (footer) {
+                            section.insertBefore(container, footer);
+                        } else {
+                             section.appendChild(container);
                         }
+                    }
+                    container.innerHTML = ''; // Limpiar el contenido anterior
+                });
 
-                        // Usamos post.imagenUrl que viene del bot y post.descripcion, etc.
+                if (posts.length === 0) {
+                    document.getElementById('posts-dificultad').innerHTML = '<p style="color: #cccccc; margin-top: 20px;">Aún no hay publicaciones.</p>';
+                    return;
+                }
+
+                posts.forEach(post => {
+                    // Determinar el contenedor usando la categoría del post
+                    const category = post.categoria || 'dificultad'; // Usamos 'dificultad' por defecto
+                    const container = document.getElementById(`posts-${category}`);
+
+                    if (container) {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'post';
+
+                        // Crea la insignia NEW! si esNuevo es true
+                        let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
+
                         postElement.innerHTML = `
-                            ${newBadge}
-                            <img src="${post.imagenUrl}" alt="${post.titulo}">
+                            ${badge}
+                            <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
                             <div class="post-content">
                                 <h3>${post.titulo}</h3>
                                 <div class="date">Fecha: ${post.fecha}</div>
                                 <p>${post.descripcion}</p>
                             </div>
                         `;
-                        postListContainer.appendChild(postElement);
-                    });
-                } else {
-                    postListContainer.innerHTML = '<p style="text-align: center; color: #FF5722;">Aún no hay publicaciones de dificultad.</p>';
-                }
-
-            } catch (error) {
-                console.error("Error al renderizar los posts:", error);
-                postListContainer.innerHTML = `<p style="text-align: center; color: red;">Error al cargar los datos: ${error.message}. Asegúrate de que posts.json esté en el repositorio.</p>`;
+                        // Insertamos el post al inicio del contenedor para que el más nuevo esté arriba
+                        container.prepend(postElement); 
+                        
+                        // Ocultamos el texto 'Contenido próximamente...' si ya hay posts
+                        const placeholderText = container.nextElementSibling;
+                        if (placeholderText && placeholderText.tagName === 'P' && placeholderText.textContent.includes('Contenido próximamente')) {
+                            placeholderText.style.display = 'none';
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error('Error al cargar posts:', e);
+                // Muestra el error en la web para depuración
+                document.getElementById('dificultad').innerHTML = `
+                    <h1>Cambio de dificultad</h1>
+                    <p style="color: red; margin-top: 20px;">Error al cargar los datos: ${e.message}. El bot subió un archivo corrupto. Arregla posts.json en GitHub (debe ser: []).</p>
+                `;
             }
         }
 
-
-        // ----------------------------------------------------------------------
-        // 2. LÓGICA DE NAVEGACIÓN
-        // ----------------------------------------------------------------------
-        document.addEventListener('DOMContentLoaded', () => {
-            // 1. Cargar los posts de dificultad apenas carga la página
-            loadPosts(); 
-
-            // 2. Lógica de los botones de navegación
-            document.querySelectorAll('.nav-button').forEach(button => {
-                button.addEventListener('click', function() {
-                    const targetId = this.getAttribute('data-section');
-
-                    // Ocultar todas las secciones
-                    document.querySelectorAll('section').forEach(section => {
-                        section.classList.remove('active');
-                    });
-                    
-                    // Mostrar la sección seleccionada
-                    const targetSection = document.getElementById(targetId);
-                    if (targetSection) {
-                        targetSection.classList.add('active');
-                    }
-                    
-                    // Mostrar/ocultar botón home
-                    const homeButton = document.querySelector('.home');
-                    if (targetId === 'home') {
-                        homeButton.style.display = 'none';
-                    } else {
-                        homeButton.style.display = 'inline-block';
-                    }
-                    
-                    // Si la sección seleccionada es "dificultad", volver a cargar los posts
-                    if (targetId === 'dificultad') {
-                        loadPosts(); 
-                    }
-                });
-            });
-
-            // Asegurar que la sección 'home' esté activa al inicio y el botón 'home' oculto
-            document.getElementById('home').classList.add('active');
-            document.querySelector('.home').style.display = 'none';
-        });
+        // Cargar los posts al inicio
+        loadPosts();
     </script>
 </body>
 </html>
