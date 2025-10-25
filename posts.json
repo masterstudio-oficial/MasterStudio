@@ -1,6 +1,6 @@
 [
     {
-        "id": 1,
+        "id": 2,
         "categoria": "dificultad",
         "titulo": "Nueva Dificultad Extrema: Nivel 5",
         "descripcion": "Se ha incrementado la dificultad en el nivel 5. Los mobs ahora tienen más vida y ataques más rápidos. ¡Prepárate para el desafío!",
@@ -9,7 +9,7 @@
         "esNuevo": false
     },
     {
-        "id": 2,
+        "id": 1,
         "categoria": "dificultad",
         "titulo": "Ahora el Sol los quemara sin parar",
         "descripcion": "Procuren tomar la sombra para no quemarsen...",
