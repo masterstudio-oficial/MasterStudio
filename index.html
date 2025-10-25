@@ -239,33 +239,8 @@
 
         <section id="dificultad">
             <h1>Cambio de dificultad</h1>
-            <!-- Ejemplo de publicaciones (tarjetas cronológicas) -->
-            <div class="post">
-                <div class="new-badge">NEW!</div>
-                <img src="https://via.placeholder.com/150" alt="Imagen de cambio del día">
-                <div class="post-content">
-                    <h3>Dificultad Incrementada: Nivel 5</h3>
-                    <div class="date">Fecha: 2023-10-01</div>
-                    <p>Se ha incrementado la dificultad en el nivel 5. Los mobs ahora tienen más vida y ataques más rápidos. ¡Prepárate para el desafío!</p>
+            <div id="post-list-dificultad">
                 </div>
-            </div>
-            <div class="post">
-                <img src="https://via.placeholder.com/150" alt="Imagen de cambio del día">
-                <div class="post-content">
-                    <h3>Cambio en Mecánicas: Modo Supervivencia</h3>
-                    <div class="date">Fecha: 2023-09-28</div>
-                    <p>Nuevo modo de supervivencia activado. Los recursos son limitados y los eventos aleatorios ocurren con mayor frecuencia.</p>
-                </div>
-            </div>
-            <div class="post">
-                <img src="https://via.placeholder.com/150" alt="Imagen de cambio del día">
-                <div class="post-content">
-                    <h3>Ajuste de Balance: Ataques Especiales</h3>
-                    <div class="date">Fecha: 2023-09-25</div>
-                    <p>Los ataques especiales ahora tienen un cooldown reducido, aumentando la intensidad del combate.</p>
-                </div>
-            </div>
-            <!-- Más posts se pueden agregar dinámicamente aquí -->
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
@@ -305,27 +280,106 @@
     </main>
 
     <script>
-        // JavaScript para mostrar/ocultar secciones y botón home
-        document.querySelectorAll('.nav-button').forEach(button => {
-            button.addEventListener('click', function() {
-                // Ocultar todas las secciones
-                document.querySelectorAll('section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                // Mostrar la sección seleccionada
-                const targetId = this.getAttribute('data-section');
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.classList.add('active');
+        // ----------------------------------------------------------------------
+        // 1. FUNCIÓN PARA CARGAR DATOS Y GENERAR POSTS
+        // ----------------------------------------------------------------------
+        async function loadPosts() {
+            // El contenedor donde se insertarán los posts
+            let postListContainer = document.getElementById('post-list-dificultad');
+            
+            // Si el contenedor no existe (solo por seguridad, ya lo añadimos arriba), lo crea.
+            if (!postListContainer) {
+                postListContainer = document.createElement('div');
+                postListContainer.id = 'post-list-dificultad';
+                document.getElementById('dificultad').insertBefore(postListContainer, document.getElementById('dificultad').querySelector('.footer'));
+            } else {
+                // Limpiamos el contenido existente antes de recargar
+                postListContainer.innerHTML = '';
+            }
+            
+            try {
+                // Carga el archivo posts.json (asumiendo que está en la misma carpeta que este HTML)
+                const response = await fetch('./posts.json');
+                if (!response.ok) {
+                    throw new Error(`Error al cargar posts.json: ${response.statusText}`);
                 }
-                // Mostrar/ocultar botón home
-                const homeButton = document.querySelector('.home');
-                if (targetId === 'home') {
-                    homeButton.style.display = 'none';
+                const posts = await response.json();
+
+                if (posts && posts.length > 0) {
+                    posts.forEach(post => {
+                        const postElement = document.createElement('div');
+                        postElement.classList.add('post');
+
+                        // Crear el badge NEW! si esNuevo es true
+                        let newBadge = '';
+                        if (post.esNuevo) {
+                            newBadge = `<div class="new-badge">NEW!</div>`;
+                        }
+
+                        // Usamos post.imagenUrl que viene del bot y post.descripcion, etc.
+                        postElement.innerHTML = `
+                            ${newBadge}
+                            <img src="${post.imagenUrl}" alt="${post.titulo}">
+                            <div class="post-content">
+                                <h3>${post.titulo}</h3>
+                                <div class="date">Fecha: ${post.fecha}</div>
+                                <p>${post.descripcion}</p>
+                            </div>
+                        `;
+                        postListContainer.appendChild(postElement);
+                    });
                 } else {
-                    homeButton.style.display = 'inline-block';
+                    postListContainer.innerHTML = '<p style="text-align: center; color: #FF5722;">Aún no hay publicaciones de dificultad.</p>';
                 }
+
+            } catch (error) {
+                console.error("Error al renderizar los posts:", error);
+                postListContainer.innerHTML = `<p style="text-align: center; color: red;">Error al cargar los datos: ${error.message}. Asegúrate de que posts.json esté en el repositorio.</p>`;
+            }
+        }
+
+
+        // ----------------------------------------------------------------------
+        // 2. LÓGICA DE NAVEGACIÓN
+        // ----------------------------------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            // 1. Cargar los posts de dificultad apenas carga la página
+            loadPosts(); 
+
+            // 2. Lógica de los botones de navegación
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const targetId = this.getAttribute('data-section');
+
+                    // Ocultar todas las secciones
+                    document.querySelectorAll('section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    
+                    // Mostrar la sección seleccionada
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                    }
+                    
+                    // Mostrar/ocultar botón home
+                    const homeButton = document.querySelector('.home');
+                    if (targetId === 'home') {
+                        homeButton.style.display = 'none';
+                    } else {
+                        homeButton.style.display = 'inline-block';
+                    }
+                    
+                    // Si la sección seleccionada es "dificultad", volver a cargar los posts
+                    if (targetId === 'dificultad') {
+                        loadPosts(); 
+                    }
+                });
             });
+
+            // Asegurar que la sección 'home' esté activa al inicio y el botón 'home' oculto
+            document.getElementById('home').classList.add('active');
+            document.querySelector('.home').style.display = 'none';
         });
     </script>
 </body>
