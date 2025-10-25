@@ -1,1 +1,11 @@
-[]
+[
+    {
+        "id": 1,
+        "categoria": "mobs",
+        "titulo": "REVIL",
+        "descripcion": "ahora el caminar se ha vuelto un desafio! un nuevo mob REVIL podra atacarte sin avisar",
+        "fecha": "2025-10-25",
+        "imagenUrl": "https://github.com/masterstudio-oficial/MasterStudio/blob/main/revil.png?raw=true",
+        "esNuevo": true
+    }
+]
