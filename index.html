@@ -67,29 +67,68 @@
             transition: all 0.3s ease;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            /* Importante para el indicador de activo */
             position: relative;
         }
         
-        /* 🚨 NUEVO: Indicador de sección activa (Sutil) */
+        /* Estilo base para el botón activo */
         .nav-button.active-nav {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Sombra brillante */
-            background-color: rgba(40, 40, 40, 0.9); /* Un poco más oscuro */
-            border: 1px solid #ffffff; /* Borde más visible */
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Sombra brillante base */
+            background-color: rgba(40, 40, 40, 0.9); 
+            border: 1px solid #ffffff; 
             transform: translateY(-2px);
         }
+
+        /* 🚨 NUEVOS ESTILOS POR CATEGORÍA ACTIVA 🚨 */
+
+        /* Inicio - Blanco */
+        .home.active-nav {
+            border-color: #ffffff;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        }
+
+        /* Mobs nuevos - Amarillo */
+        .mobs.active-nav {
+            border-color: #FFD700; /* Amarillo */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        }
+
+        /* Cambio de dificultad - Naranja */
+        .dificultad.active-nav {
+            border-color: #FFA500; /* Naranja */
+            box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+        }
+
+        /* Eventos - Rosa */
+        .eventos.active-nav {
+            border-color: #FF69B4; /* Rosa */
+            box-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
+        }
+
+        /* Actualizaciones - Azul */
+        .actualizaciones.active-nav {
+            border-color: #2196F3; /* Azul */
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.8);
+        }
+
+        /* Recompensas - Verde */
+        .recompensas.active-nav {
+            border-color: #4CAF50; /* Verde */
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+        }
+
+        /* Castigos - Rojo */
+        .castigos.active-nav {
+            border-color: #F44336; /* Rojo */
+            box-shadow: 0 0 15px rgba(244, 67, 54, 0.8);
+        }
         
-        /* Efectos hover con colores temáticos */
+        /* Fin de estilos de categoría activa */
+        
         .nav-button:hover {
             transform: translateY(-2px);
         }
-        /* Los estilos de hover ahora también se aplican al botón activo */
+        
         .nav-button:not(.active-nav):hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); } 
-
-        .home {
-            /* 🚨 CORREGIDO: Home siempre visible, quitamos el 'display: none' */
-            /* Usamos la clase home en el HTML y el JS lo activa/desactiva */
-        }
 
         /* Main content */
         main {
@@ -107,14 +146,13 @@
             display: block;
         }
 
-        #home h1 {
-            font-family: 'VT323', monospace; /* Pixelada para títulos */
+        section h1 {
+            font-family: 'VT323', monospace;
             margin-bottom: 20px;
             color: #ffffff;
             text-align: center;
         }
         
-        /* Centrar texto de inicio */
         #home p {
             margin-bottom: 20px;
             color: #cccccc;
@@ -153,7 +191,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
-            align-items: flex-start; /* Asegura que la imagen esté arriba */
+            align-items: flex-start; 
         }
 
         .post img {
@@ -162,7 +200,6 @@
             object-fit: cover;
             margin-right: 20px;
             border-radius: 10px;
-            /* 🚨 NUEVO: Añadido margen inferior si la descripción es larga */
             margin-bottom: 10px; 
         }
 
@@ -171,24 +208,22 @@
         }
 
         .post-content h3 {
-            font-family: 'VT323', monospace; /* Pixelada para títulos de posts */
-            margin-bottom: 5px; /* Reducido para pegarlo más al date */
+            font-family: 'VT323', monospace; 
+            margin-bottom: 5px; 
             font-size: 1.6rem;
             color: #ffffff;
-            /* 🚨 NUEVO: Forzar que el título esté separado del resto */
             display: block; 
         }
 
         .post-content .date {
             font-size: 0.9rem;
             color: #cccccc;
-            margin-bottom: 15px; /* Espacio separador entre fecha y descripción */
+            margin-bottom: 15px; 
             display: block;
         }
         
         .post-content p {
             color: #cccccc;
-            /* 🚨 NUEVO: Aseguramos que la descripción vaya después de la fecha */
             display: block; 
         }
 
@@ -214,7 +249,7 @@
         }
 
         .placeholder h1 {
-            font-family: 'VT323', monospace; /* Pixelada para títulos de secciones */
+            font-family: 'VT323', monospace; 
         }
     </style>
 </head>
@@ -306,20 +341,21 @@
         document.querySelectorAll('.nav-button').forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-section');
-
-                // 🚨 NUEVO: Remover la clase 'active-nav' de todos los botones
+                
+                // 1. Remover la clase 'active-nav' de todos los botones
                 document.querySelectorAll('.nav-button').forEach(btn => {
                     btn.classList.remove('active-nav');
                 });
-                // 🚨 NUEVO: Añadir la clase 'active-nav' al botón que fue clickeado
+                
+                // 2. Añadir la clase 'active-nav' al botón que fue clickeado
                 this.classList.add('active-nav');
 
-                // Ocultar todas las secciones
+                // 3. Ocultar todas las secciones
                 document.querySelectorAll('section').forEach(section => {
                     section.classList.remove('active');
                 });
                 
-                // Mostrar la sección seleccionada
+                // 4. Mostrar la sección seleccionada
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
                     targetSection.classList.add('active');
@@ -336,6 +372,7 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
+                // Si el JSON está vacío (solo []), parseará una lista vacía
                 const posts = await response.json(); 
 
                 // Limpiar contenedores
@@ -353,7 +390,6 @@
 
                         let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
                         
-                        // Añadimos la imagen y el contenido del post
                         postElement.innerHTML = `
                             ${badge}
                             <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
@@ -375,11 +411,10 @@
                 });
             } catch (e) {
                 console.error('Error al cargar posts:', e);
-                // Muestra un error visible solo si el JSON está corrupto (como el error 'Wk...')
+                
                 document.querySelectorAll('section[data-category]').forEach(section => {
                      const h1 = section.querySelector('h1');
                      if (h1) {
-                         // Solo si la sección está vacía, mostramos el error
                          const container = section.querySelector('.posts-container');
                          if (container && container.innerHTML === '') {
                              h1.insertAdjacentHTML('afterend', `
