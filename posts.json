@@ -1,5 +1,14 @@
 [
     {
+        "id": 2,
+        "categoria": "actualizaciones",
+        "titulo": "NUEVA INSTANCIA - LAUNCHER",
+        "descripcion": "Hemos lanzado nueva instancia de nuestro Launcher, que esta dirigida para ser usada en el server MasterMythron",
+        "fecha": "2025-10-26",
+        "imagenUrl": "https://ibb.co/FkP9FSTg",
+        "esNuevo": true
+    },
+    {
         "id": 1,
         "categoria": "castigos",
         "titulo": "PRUEBA",
