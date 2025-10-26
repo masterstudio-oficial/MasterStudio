@@ -1,433 +1,1193 @@
 <!DOCTYPE html>
+
 <html lang="es">
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>MasterStudio</title>
+
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+
     <style>
+
         /* Reset básico */
+
         * {
+
             margin: 0;
+
             padding: 0;
+
             box-sizing: border-box;
+
         }
+
+
 
         body {
+
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Fuente legible para textos pequeños */
+
             background-color: #000000; /* Negro */
+
             color: #ffffff; /* Blanco */
+
             line-height: 1.6;
+
             overflow-x: hidden;
+
         }
+
+
 
         /* Header */
+
         header {
+
             display: flex;
+
             align-items: center;
+
             justify-content: center;
+
             padding: 30px;
+
             background-color: rgba(26, 26, 26, 0.8); /* Gris oscuro con transparencia */
+
             backdrop-filter: blur(10px); /* Efecto glassmorphism si soportado */
+
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
         }
+
+
 
         .logo {
+
             font-family: 'VT323', monospace; /* Tipografía pixelada sencilla */
+
             font-size: 3.5rem; /* Agrandado para que sea más grande que la corona */
+
             font-weight: bold;
+
             margin-right: 15px;
+
             color: #ffffff;
+
         }
+
+
 
         .icon {
+
             font-size: 2.5rem;
+
         }
 
-        /* Navegación */
-        nav {
+        
+
+        /* INICIO: CONTENEDOR DE NAVEGACIÓN PRINCIPAL Y BOTÓN LAUNCHER */
+
+        .main-navigation-container {
+
             display: flex;
+
             justify-content: center;
-            flex-wrap: wrap;
-            padding: 30px;
-            background-color: rgba(26, 26, 26, 0.6); /* Gris oscuro con transparencia */
+
+            align-items: flex-start; /* Alinea los ítems arriba para que los botones tengan el mismo top */
+
+            padding: 30px 50px; /* Padding a los lados para que el botón Launcher se separe */
+
+            background-color: rgba(26, 26, 26, 0.6);
+
             backdrop-filter: blur(10px);
+
+            gap: 20px; /* Espacio entre el botón Launcher y la nav */
+
         }
+
+
+
+        /* Navegación (Solo para los botones de categorías) */
+
+        nav {
+
+            display: flex;
+
+            justify-content: center;
+
+            flex-wrap: wrap;
+
+            padding: 0; /* Quitamos el padding aquí ya que lo pusimos en el main-navigation-container */
+
+            flex-grow: 1; /* Permite que la nav ocupe el espacio restante */
+
+        }
+
+        /* FIN: CONTENEDOR DE NAVEGACIÓN */
+
+
 
         .nav-button {
+
             margin: 10px;
+
             padding: 15px 30px;
+
             background-color: rgba(26, 26, 26, 0.8); /* Gris oscuro con transparencia */
+
             border: 1px solid rgba(255, 255, 255, 0.2);
+
             border-radius: 10px;
+
             text-decoration: none;
+
             color: #ffffff;
+
             font-weight: bold;
+
             font-size: 1.1rem;
+
             transition: all 0.3s ease;
+
             cursor: pointer;
+
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+
             position: relative;
-        }
-        
-        /* Estilo base para el botón activo */
-        .nav-button.active-nav {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Sombra brillante base */
-            background-color: rgba(40, 40, 40, 0.9); 
-            border: 1px solid #ffffff; 
-            transform: translateY(-2px);
+
         }
 
-        /* 🚨 NUEVOS ESTILOS POR CATEGORÍA ACTIVA 🚨 */
+        
+
+        /* Estilo base para el botón activo */
+
+        .nav-button.active-nav {
+
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Sombra brillante base */
+
+            background-color: rgba(40, 40, 40, 0.9); 
+
+            border: 1px solid #ffffff; 
+
+            transform: translateY(-2px);
+
+        }
+
+
+
+        /* 🚨 ESTILOS POR CATEGORÍA ACTIVA 🚨 */
+
+
 
         /* Inicio - Blanco */
+
         .home.active-nav {
+
             border-color: #ffffff;
+
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+
         }
+
+
 
         /* Mobs nuevos - Amarillo */
+
         .mobs.active-nav {
+
             border-color: #FFD700; /* Amarillo */
+
             box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+
         }
+
+
 
         /* Cambio de dificultad - Naranja */
+
         .dificultad.active-nav {
+
             border-color: #FFA500; /* Naranja */
+
             box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
+
         }
+
+
 
         /* Eventos - Rosa */
+
         .eventos.active-nav {
+
             border-color: #FF69B4; /* Rosa */
+
             box-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
+
         }
+
+
 
         /* Actualizaciones - Azul */
+
         .actualizaciones.active-nav {
+
             border-color: #2196F3; /* Azul */
+
             box-shadow: 0 0 15px rgba(33, 150, 243, 0.8);
+
         }
+
+
 
         /* Recompensas - Verde */
+
         .recompensas.active-nav {
+
             border-color: #4CAF50; /* Verde */
+
             box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
+
         }
+
+
 
         /* Castigos - Rojo */
+
         .castigos.active-nav {
+
             border-color: #F44336; /* Rojo */
+
             box-shadow: 0 0 15px rgba(244, 67, 54, 0.8);
+
         }
+
         
-        /* Fin de estilos de categoría activa */
+
+        /* Launcher - Cian */
+
+        .launcher.active-nav {
+
+            border-color: #00BCD4; /* Cian */
+
+            box-shadow: 0 0 15px rgba(0, 188, 212, 0.8);
+
+        }
+
         
+
         .nav-button:hover {
+
             transform: translateY(-2px);
+
         }
+
         
+
         .nav-button:not(.active-nav):hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); } 
 
+
+
         /* Main content */
+
         main {
+
             padding: 50px;
+
             max-width: 1200px;
+
             margin: 0 auto;
+
         }
+
+
 
         section {
+
             display: none; /* Ocultas inicialmente */
+
             margin-bottom: 40px;
+
         }
+
+
 
         section.active {
+
             display: block;
+
         }
 
+
+
         section h1 {
+
             font-family: 'VT323', monospace;
-            margin-bottom: 20px;
+
+            /* Eliminamos el margin-bottom y text-align del h1 directamente */
+
             color: #ffffff;
-            text-align: center;
+
         }
+
         
-        #home p {
-            margin-bottom: 20px;
-            color: #cccccc;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
+
+        /* INICIO: ESTILO PARA EL TÍTULO DEL LAUNCHER CON LOGO */
+
+        .launcher-title-container {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center; /* Centra el contenedor completo */
+
+            margin-bottom: 20px; /* Mismo margen que el h1 normal */
+
         }
+
+
+
+        .launcher-title-container img {
+
+            height: 50px; /* Ajusta el tamaño del logo */
+
+            vertical-align: middle; /* Alineación vertical con el texto */
+
+        }
+
+
+
+        .launcher-title-container img:first-of-type {
+
+            margin-right: 15px; /* Margen a la derecha del primer logo */
+
+        }
+
+
+
+        .launcher-title-container img:last-of-type {
+
+            margin-left: 15px; /* Margen a la izquierda del segundo logo */
+
+        }
+
+        /* FIN: ESTILO PARA EL TÍTULO DEL LAUNCHER CON LOGO */
+
+
+
+        #home p {
+
+            margin-bottom: 20px;
+
+            color: #cccccc;
+
+            max-width: 800px;
+
+            margin-left: auto;
+
+            margin-right: auto;
+
+            text-align: center;
+
+        }
+
 
 
         .footer {
+
             margin-top: 50px;
+
             text-align: center;
+
             color: #cccccc;
+
             font-size: 0.9rem;
+
         }
+
+
 
         .footer a {
+
             color: #2196F3; /* Azul para enlaces */
+
             text-decoration: none;
+
         }
+
+
 
         .footer a:hover {
+
             text-decoration: underline;
+
         }
+
+
 
         /* Tarjetas de publicaciones */
+
         .post {
+
             display: flex;
+
             margin-bottom: 30px;
+
             padding: 20px;
+
             background-color: rgba(26, 26, 26, 0.8); /* Gris oscuro con transparencia */
+
             backdrop-filter: blur(10px);
+
             border-radius: 15px;
+
             border: 1px solid rgba(255, 255, 255, 0.1);
+
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+
             position: relative;
+
             overflow: hidden;
+
             align-items: flex-start; 
+
         }
+
+
 
         .post img {
+
             width: 150px;
+
             height: 150px;
+
             object-fit: cover;
+
             margin-right: 20px;
+
             border-radius: 10px;
+
             margin-bottom: 10px; 
+
         }
+
+
 
         .post-content {
+
             flex: 1;
+
         }
+
+
 
         .post-content h3 {
+
             font-family: 'VT323', monospace; 
+
             margin-bottom: 5px; 
+
             font-size: 1.6rem;
+
             color: #ffffff;
+
             display: block; 
+
         }
+
+
 
         .post-content .date {
+
             font-size: 0.9rem;
+
             color: #cccccc;
+
             margin-bottom: 15px; 
+
             display: block;
+
         }
+
         
+
         .post-content p {
+
             color: #cccccc;
+
             display: block; 
+
         }
+
+
 
         /* Placeholder NEW! */
+
         .new-badge {
+
             position: absolute;
+
             top: 10px;
+
             right: 10px;
+
             background-color: #FFC107; /* Amarillo brillante */
+
             color: #000000;
+
             padding: 5px 10px;
+
             border-radius: 20px;
+
             font-weight: bold;
+
             font-size: 0.8rem;
+
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+
         }
+
+
 
         /* Placeholder para otras secciones */
+
         .placeholder {
+
             text-align: center;
+
             color: #cccccc;
+
             padding: 50px;
+
         }
+
+
 
         .placeholder h1 {
+
             font-family: 'VT323', monospace; 
+
         }
+
+
+
+        /* INICIO: Estilos para la guía del launcher */
+
+        .guide-step {
+
+            margin-bottom: 50px;
+
+            padding: 20px;
+
+            background-color: rgba(26, 26, 26, 0.6);
+
+            border-radius: 10px;
+
+            border: 1px solid rgba(0, 188, 212, 0.3); /* Borde cian sutil */
+
+        }
+
+        .guide-step h2 {
+
+            font-family: 'VT323', monospace;
+
+            font-size: 2rem;
+
+            color: #00BCD4; /* Cian */
+
+            margin-bottom: 15px;
+
+        }
+
+        .guide-step p {
+
+            margin-bottom: 20px;
+
+            color: #cccccc;
+
+        }
+
+        .guide-image-container {
+
+            text-align: center; /* Centra la imagen */
+
+            margin: 20px 0;
+
+        }
+
+        .guide-image-container img {
+
+            max-width: 100%;
+
+            height: auto;
+
+            border-radius: 5px;
+
+            border: 2px solid #00BCD4; /* Borde cian para resaltar */
+
+        }
+
+        
+
+        /* ESTILO DEL BOTÓN DE DESCARGA DORADO */
+
+        .download-button {
+
+            display: inline-block;
+
+            padding: 15px 30px;
+
+            margin: 20px auto; /* Centra el botón si es el único elemento en su línea */
+
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); /* Dorado/Naranja */
+
+            color: #000000;
+
+            font-family: 'VT323', monospace;
+
+            font-size: 1.5rem;
+
+            font-weight: bold;
+
+            text-decoration: none;
+
+            border: 2px solid #FFD700;
+
+            border-radius: 10px;
+
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); /* Resplandor dorado */
+
+            transition: all 0.3s ease;
+
+            cursor: pointer;
+
+            text-align: center;
+
+        }
+
+        
+
+        .download-button:hover {
+
+            background: linear-gradient(135deg, #FFC107 0%, #FF8C00 100%);
+
+            box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+
+            transform: scale(1.05);
+
+        }
+
+        
+
+        /* Contenedor para centrar el botón */
+
+        .button-container {
+
+            text-align: center;
+
+            margin-top: 20px;
+
+        }
+
+        /* FIN: Estilos para la guía del launcher y el botón */
+
     </style>
+
 </head>
+
 <body>
+
     <header>
+
         <div class="logo">MasterStudio</div>
+
         <div class="icon">👑</div>
+
     </header>
 
-    <nav>
-        <button class="nav-button home active-nav" data-section="home">🏠 Inicio</button>
-        <button class="nav-button mobs" data-section="mobs">Mobs nuevos</button>
-        <button class="nav-button dificultad" data-section="dificultad">Cambio de dificultad</button>
-        <button class="nav-button eventos" data-section="eventos">Eventos</button>
-        <button class="nav-button actualizaciones" data-section="actualizaciones">Actualizaciones</button>
-        <button class="nav-button recompensas" data-section="recompensas">Recompensas</button>
-        <button class="nav-button castigos" data-section="castigos">Castigos</button>
-    </nav>
+
+
+    <div class="main-navigation-container">
+
+        
+
+        <button class="nav-button launcher" data-section="launcher" style="margin: 10px 30px 10px 0;">💻 Launcher</button>
+
+
+
+        <nav>
+
+            <button class="nav-button home active-nav" data-section="home">🏠 Inicio</button>
+
+            <button class="nav-button mobs" data-section="mobs">Mobs nuevos</button>
+
+            <button class="nav-button dificultad" data-section="dificultad">Cambio de dificultad</button>
+
+            <button class="nav-button eventos" data-section="eventos">Eventos</button>
+
+            <button class="nav-button actualizaciones" data-section="actualizaciones">Actualizaciones</button>
+
+            <button class="nav-button recompensas" data-section="recompensas">Recompensas</button>
+
+            <button class="nav-button castigos" data-section="castigos">Castigos</button>
+
+        </nav>
+
+    </div>
 
     <main>
+
         <section id="home" class="active">
+
             <h1>Bienvenido a MasterStudio</h1>
+
             <p>En MasterStudio, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🌍, fusionando creatividad, dinamismo y diversión para todos los jugadores 🎮.</p>
+
             <p><strong>Nuestra Misión:</strong></p>
+
             <p>Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🚀. Diseñamos mundos y sistemas que sorprenden, inspiran y mantienen a los jugadores inmersos en cada aventura 🧭.</p>
+
             <div class="footer">
+
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+
                 <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
+
             </div>
+
         </section>
+
+
+
+        <section id="launcher">
+
+            
+
+            <div class="launcher-title-container">
+
+                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher Izquierdo"> 
+
+                <h1>Instalación del MasterClient Launcher</h1>
+
+                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher Derecho">
+
+            </div>
+
+            
+
+            <div class="guide-step">
+
+                <h2>PASO 1: Descarga del Instalador</h2>
+
+                <p>Deberás descargar la última versión publicada aca en nuestra pagina, o en nuestro canal de descargas de discord, haciendo click en el botón de descarga, Si te llega a salir un mensaje de error o de advertencia, no te preocupes, es totalmente seguro, dale al boton de descargar para continuar con tu descarga.</p>
+
+                
+
+                <div class="button-container">
+
+                    <a href="http://us-1.fl.hafu.cfd:41421/updates/MasterClient.exe" class="download-button" download>
+
+                        DESCARGA AQUÍ
+
+                    </a>
+
+                </div>
+
+                
+
+                <div class="guide-image-container">
+
+                    <img src="https://i.postimg.cc/qR26GPny/Diseno-sin-titulo-31.png" alt="Imagen del Paso 1" style="max-width: 600px;">
+
+                </div>
+
+            </div>
+
+            
+
+            <div class="guide-step">
+
+                <h2>PASO 2: Ejecución y Instalación</h2>
+
+                <p>Luego de completar el primer paso, pasaremos al segundo paso, en donde tendras que abrir el archivo que acabaste de descargar, para proseguir a la instalación. Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en "Más Información" y una vez desplegado nos habilitara la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.</p>
+
+                <div class="guide-image-container">
+
+                    <img src="https://i.postimg.cc/SNYR7Fh8/Diseno-sin-titulo-33.png" alt="Imagen del Paso 2" style="max-width: 600px;">
+
+                </div>
+
+            </div>
+
+
+
+            <div class="guide-step">
+
+                <h2>Finalización PASO 2: Ejecución y Instalación</h2>
+
+                <p>Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, en donde nos abrira automaticamente una ventana del instalador del MasterClient - MasterStudio Launcher, la primera ventana nos saldra los Terminos de uso del launcher, los cuales los leeremos para estar de acuerdo, y como siguiente paso le daremos a "Acepto". Luego pasaremos a la segunda ventana donde nos saldra en que usuario de nuestra PC queremos instalar el MasterClient o si lo instalaremos en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos "Instalar".</p>
+
+                <div class="guide-image-container">
+
+                    <img src="https://i.postimg.cc/8CZfXRn4/Diseno-sin-titulo-34.png" alt="Imagen del Paso 2.1" style="max-width: 600px;"> 
+
+                </div>
+
+            </div>
+			
+			
+			
+			<div class="guide-step">
+
+                <h2>PASO 3: Configuración y Instancia</h2>
+
+                <p>Seguramente cuando se nos habra el Launcher, no nos saldra Jugar directamente, nos saldra sin Instancias o sin nada simplemente, primero que todo nos dirigiremos a la esquina superior derecha, y iniciaremos sesión, sea con cuenta Premiun (Microsoft) o como Invitado (Solo el nombre de Usuario del juego) En caso de haber seleccionado con Microsoft, pues iniciaras sesión como comunmente lo haces como usuario Premiun, pero en caso de seleccionar Invitado se abrira una pestaña donde pondras tu Nick Name que saldra en Minecraft. Luego de iniciar sesión nos dirigiremos a la tuerca de configuración del Launcher, y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods), luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dandole de nuevo a la tuerca.</p>
+
+                <div class="guide-image-container">
+
+                    <img src="https://i.postimg.cc/Sssdg7kD/Diseno-sin-titulo-36.png" alt="Imagen del Paso 3" style="max-width: 600px;">
+
+                </div>
+
+            </div>
+
+
+
+            <div class="guide-step">
+
+                <h2>Finalización PASO 3: Instancia</h2>
+
+                <p>TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MIENCRAFT) SERAN INFORMADAS EN EL DISCORD!</p>
+				
+				
+				
+                <div class="button-container">
+
+                    <a href="https://discord.gg/Xj5SARVFQ5" class="download-button" download>
+
+                        DISCORD
+
+                    </a>
+
+            </div>
+
+
+
+            <div class="footer">
+
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+
+                <p>¿Necesitas ayuda? Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
+
+            </div>
+
+        </section>
+
+        
 
         <section id="mobs" data-category="mobs">
+
             <h1>Mobs nuevos</h1>
+
             <div id="posts-mobs" class="posts-container"></div>
+
             <p class="placeholder-text">Contenido próximamente...</p>
+
             <div class="footer">
+
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+
             </div>
+
         </section>
+
+
 
         <section id="dificultad" data-category="dificultad">
+
             <h1>Cambio de dificultad</h1>
+
             <div id="posts-dificultad" class="posts-container"></div>
+
             <p class="placeholder-text">Contenido próximamente...</p>
+
             <div class="footer">
+
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+
             </div>
+
         </section>
+
+
 
         <section id="eventos" data-category="eventos">
+
             <h1>Eventos</h1>
+
             <div id="posts-eventos" class="posts-container"></div>
+
             <p class="placeholder-text">Contenido próximamente...</p>
+
             <div class="footer">
+
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+
             </div>
+
         </section>
+
+
 
         <section id="actualizaciones" data-category="actualizaciones">
+
             <h1>Actualizaciones</h1>
+
             <div id="posts-actualizaciones" class="posts-container"></div>
+
             <p class="placeholder-text">Contenido próximamente...</p>
+
             <div class="footer">
+
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+
             </div>
+
         </section>
+
+
 
         <section id="recompensas" data-category="recompensas">
+
             <h1>Recompensas</h1>
+
             <div id="posts-recompensas" class="posts-container"></div>
+
             <p class="placeholder-text">Contenido próximamente...</p>
+
             <div class="footer">
+
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+
             </div>
+
         </section>
+
+
 
         <section id="castigos" data-category="castigos">
+
             <h1>Castigos</h1>
+
             <div id="posts-castigos" class="posts-container"></div>
+
             <p class="placeholder-text">Contenido próximamente...</p>
+
             <div class="footer">
+
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+
             </div>
+
         </section>
+
     </main>
 
+
+
     <script>
+
         // JavaScript para mostrar/ocultar secciones y botón home
+
+        // Ahora el script selecciona todos los botones sin importar su contenedor
+
         document.querySelectorAll('.nav-button').forEach(button => {
+
             button.addEventListener('click', function() {
+
                 const targetId = this.getAttribute('data-section');
+
                 
+
                 // 1. Remover la clase 'active-nav' de todos los botones
+
                 document.querySelectorAll('.nav-button').forEach(btn => {
+
                     btn.classList.remove('active-nav');
+
                 });
+
                 
+
                 // 2. Añadir la clase 'active-nav' al botón que fue clickeado
+
                 this.classList.add('active-nav');
 
+
+
                 // 3. Ocultar todas las secciones
+
                 document.querySelectorAll('section').forEach(section => {
+
                     section.classList.remove('active');
+
                 });
+
                 
+
                 // 4. Mostrar la sección seleccionada
+
                 const targetSection = document.getElementById(targetId);
+
                 if (targetSection) {
+
                     targetSection.classList.add('active');
+
                 }
+
             });
+
         });
+
         
+
         // Función para cargar los posts dinámicamente
+
         async function loadPosts() {
+
             const JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
 
+
+
             try {
+
                 const response = await fetch(JSON_URL);
+
                 if (!response.ok) {
+
                     throw new Error(`HTTP error! status: ${response.status}`);
+
                 }
+
                 // Si el JSON está vacío (solo []), parseará una lista vacía
+
                 const posts = await response.json(); 
 
+
+
                 // Limpiar contenedores
+
                 document.querySelectorAll('.posts-container').forEach(container => {
+
                     container.innerHTML = '';
+
                 });
+
+
 
                 posts.forEach(post => {
+
                     const category = post.categoria || 'dificultad'; 
+
                     const container = document.getElementById(`posts-${category}`);
 
+
+
                     if (container) {
+
                         const postElement = document.createElement('div');
+
                         postElement.className = 'post';
 
+
+
                         let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
+
                         
+
                         postElement.innerHTML = `
+
                             ${badge}
+
                             <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
+
                             <div class="post-content">
+
                                 <h3>${post.titulo}</h3>
+
                                 <span class="date">Fecha: ${post.fecha}</span>
+
                                 <p>${post.descripcion}</p>
+
                             </div>
+
                         `;
+
                         // Insertamos el post al inicio para que el más nuevo esté arriba
+
                         container.prepend(postElement); 
+
                         
+
                         // Ocultamos el texto 'Contenido próximamente...' si ya hay posts en esa categoría
+
                         const placeholderText = container.parentElement.querySelector('.placeholder-text');
+
                         if (placeholderText) {
+
                             placeholderText.style.display = 'none';
+
                         }
+
                     }
+
                 });
+
             } catch (e) {
+
                 console.error('Error al cargar posts:', e);
+
                 
+
                 document.querySelectorAll('section[data-category]').forEach(section => {
-                     const h1 = section.querySelector('h1');
-                     if (h1) {
-                         const container = section.querySelector('.posts-container');
-                         if (container && container.innerHTML === '') {
-                             h1.insertAdjacentHTML('afterend', `
-                                <p style="color: red; margin-top: 20px;">Error al cargar los datos: ${e.message}. Asegúrate de que posts.json en GitHub esté configurado a **[ ]**.</p>
-                             `);
-                         }
-                     }
-                 });
+
+                    const h1 = section.querySelector('h1');
+
+                    if (h1) {
+
+                            const container = section.querySelector('.posts-container');
+
+                            if (container && container.innerHTML === '') {
+
+                                h1.insertAdjacentHTML('afterend', `
+
+                                    <p style="color: red; margin-top: 20px;">Error al cargar los datos: ${e.message}. Asegúrate de que posts.json en GitHub esté configurado a **[ ]**.</p>
+
+                                `);
+
+                            }
+
+                    }
+
+                });
+
             }
+
         }
 
+
+
         // Cargar los posts al inicio
+
         loadPosts();
+
     </script>
+
 </body>
+
 </html>
