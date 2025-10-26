@@ -67,24 +67,29 @@
             transition: all 0.3s ease;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            /* Importante para el indicador de activo */
+            position: relative;
         }
-
-        .home {
-            display: none; /* Oculto inicialmente */
+        
+        /* 🚨 NUEVO: Indicador de sección activa (Sutil) */
+        .nav-button.active-nav {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Sombra brillante */
+            background-color: rgba(40, 40, 40, 0.9); /* Un poco más oscuro */
+            border: 1px solid #ffffff; /* Borde más visible */
+            transform: translateY(-2px);
         }
-
+        
         /* Efectos hover con colores temáticos */
         .nav-button:hover {
             transform: translateY(-2px);
         }
+        /* Los estilos de hover ahora también se aplican al botón activo */
+        .nav-button:not(.active-nav):hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); } 
 
-        .home:hover { box-shadow: 0 0 20px #ffffff; } /* Blanco para home */
-        .mobs:hover { box-shadow: 0 0 20px #FFC107; } /* Amarillo */
-        .dificultad:hover { box-shadow: 0 0 20px #FF5722; } /* Naranja */
-        .eventos:hover { box-shadow: 0 0 20px #E91E63; } /* Rosado */
-        .actualizaciones:hover { box-shadow: 0 0 20px #2196F3; } /* Azul */
-        .recompensas:hover { box-shadow: 0 0 20px #4CAF50; } /* Verde */
-        .castigos:hover { box-shadow: 0 0 20px #F44336; } /* Rojo */
+        .home {
+            /* 🚨 CORREGIDO: Home siempre visible, quitamos el 'display: none' */
+            /* Usamos la clase home en el HTML y el JS lo activa/desactiva */
+        }
 
         /* Main content */
         main {
@@ -106,15 +111,19 @@
             font-family: 'VT323', monospace; /* Pixelada para títulos */
             margin-bottom: 20px;
             color: #ffffff;
+            text-align: center;
         }
-
+        
+        /* Centrar texto de inicio */
         #home p {
             margin-bottom: 20px;
             color: #cccccc;
             max-width: 800px;
             margin-left: auto;
             margin-right: auto;
+            text-align: center;
         }
+
 
         .footer {
             margin-top: 50px;
@@ -132,7 +141,7 @@
             text-decoration: underline;
         }
 
-        /* Tarjetas de publicaciones para dificultad */
+        /* Tarjetas de publicaciones */
         .post {
             display: flex;
             margin-bottom: 30px;
@@ -144,6 +153,7 @@
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
             position: relative;
             overflow: hidden;
+            align-items: flex-start; /* Asegura que la imagen esté arriba */
         }
 
         .post img {
@@ -152,6 +162,8 @@
             object-fit: cover;
             margin-right: 20px;
             border-radius: 10px;
+            /* 🚨 NUEVO: Añadido margen inferior si la descripción es larga */
+            margin-bottom: 10px; 
         }
 
         .post-content {
@@ -160,19 +172,24 @@
 
         .post-content h3 {
             font-family: 'VT323', monospace; /* Pixelada para títulos de posts */
-            margin-bottom: 10px;
-            font-size: 1.4rem;
+            margin-bottom: 5px; /* Reducido para pegarlo más al date */
+            font-size: 1.6rem;
             color: #ffffff;
+            /* 🚨 NUEVO: Forzar que el título esté separado del resto */
+            display: block; 
         }
 
         .post-content .date {
             font-size: 0.9rem;
             color: #cccccc;
-            margin-bottom: 15px;
+            margin-bottom: 15px; /* Espacio separador entre fecha y descripción */
+            display: block;
         }
-
+        
         .post-content p {
             color: #cccccc;
+            /* 🚨 NUEVO: Aseguramos que la descripción vaya después de la fecha */
+            display: block; 
         }
 
         /* Placeholder NEW! */
@@ -208,7 +225,7 @@
     </header>
 
     <nav>
-        <button class="nav-button home" data-section="home">🏠 Inicio</button>
+        <button class="nav-button home active-nav" data-section="home">🏠 Inicio</button>
         <button class="nav-button mobs" data-section="mobs">Mobs nuevos</button>
         <button class="nav-button dificultad" data-section="dificultad">Cambio de dificultad</button>
         <button class="nav-button eventos" data-section="eventos">Eventos</button>
@@ -229,10 +246,10 @@
             </div>
         </section>
 
-        <section id="mobs" class="placeholder" data-category="mobs">
+        <section id="mobs" data-category="mobs">
             <h1>Mobs nuevos</h1>
             <div id="posts-mobs" class="posts-container"></div>
-            <p>Contenido próximamente...</p>
+            <p class="placeholder-text">Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
@@ -240,44 +257,44 @@
 
         <section id="dificultad" data-category="dificultad">
             <h1>Cambio de dificultad</h1>
-            <div id="posts-dificultad" class="posts-container">
-                </div>
+            <div id="posts-dificultad" class="posts-container"></div>
+            <p class="placeholder-text">Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="eventos" class="placeholder" data-category="eventos">
+        <section id="eventos" data-category="eventos">
             <h1>Eventos</h1>
             <div id="posts-eventos" class="posts-container"></div>
-            <p>Contenido próximamente...</p>
+            <p class="placeholder-text">Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="actualizaciones" class="placeholder" data-category="actualizaciones">
+        <section id="actualizaciones" data-category="actualizaciones">
             <h1>Actualizaciones</h1>
             <div id="posts-actualizaciones" class="posts-container"></div>
-            <p>Contenido próximamente...</p>
+            <p class="placeholder-text">Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="recompensas" class="placeholder" data-category="recompensas">
+        <section id="recompensas" data-category="recompensas">
             <h1>Recompensas</h1>
             <div id="posts-recompensas" class="posts-container"></div>
-            <p>Contenido próximamente...</p>
+            <p class="placeholder-text">Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
-        <section id="castigos" class="placeholder" data-category="castigos">
+        <section id="castigos" data-category="castigos">
             <h1>Castigos</h1>
             <div id="posts-castigos" class="posts-container"></div>
-            <p>Contenido próximamente...</p>
+            <p class="placeholder-text">Contenido próximamente...</p>
             <div class="footer">
                 <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
@@ -288,29 +305,30 @@
         // JavaScript para mostrar/ocultar secciones y botón home
         document.querySelectorAll('.nav-button').forEach(button => {
             button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-section');
+
+                // 🚨 NUEVO: Remover la clase 'active-nav' de todos los botones
+                document.querySelectorAll('.nav-button').forEach(btn => {
+                    btn.classList.remove('active-nav');
+                });
+                // 🚨 NUEVO: Añadir la clase 'active-nav' al botón que fue clickeado
+                this.classList.add('active-nav');
+
                 // Ocultar todas las secciones
                 document.querySelectorAll('section').forEach(section => {
                     section.classList.remove('active');
                 });
+                
                 // Mostrar la sección seleccionada
-                const targetId = this.getAttribute('data-section');
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
                     targetSection.classList.add('active');
                 }
-                // Mostrar/ocultar botón home
-                const homeButton = document.querySelector('.home');
-                if (targetId === 'home') {
-                    homeButton.style.display = 'none';
-                } else {
-                    homeButton.style.display = 'inline-block';
-                }
             });
         });
         
-        // FUNCIÓN DE CARGA DINÁMICA DE POSTS DESDE GITHUB
+        // Función para cargar los posts dinámicamente
         async function loadPosts() {
-            // URL de tu archivo JSON en GitHub
             const JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
 
             try {
@@ -318,72 +336,58 @@
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                // Convertimos la respuesta a JSON
                 const posts = await response.json(); 
 
-                // 1. Limpiar los contenedores de posts en todas las secciones
-                document.querySelectorAll('section[data-category]').forEach(section => {
-                    const category = section.getAttribute('data-category');
-                    let container = document.getElementById(`posts-${category}`);
-                    if (!container) {
-                        // Si el contenedor no existe (por si una sección era placeholder)
-                        container = document.createElement('div');
-                        container.id = `posts-${category}`;
-                        container.className = 'posts-container';
-                        // Insertarlo justo antes del footer
-                        const footer = section.querySelector('.footer');
-                        if (footer) {
-                            section.insertBefore(container, footer);
-                        } else {
-                             section.appendChild(container);
-                        }
-                    }
-                    container.innerHTML = ''; // Limpiar el contenido anterior
+                // Limpiar contenedores
+                document.querySelectorAll('.posts-container').forEach(container => {
+                    container.innerHTML = '';
                 });
 
-                if (posts.length === 0) {
-                    document.getElementById('posts-dificultad').innerHTML = '<p style="color: #cccccc; margin-top: 20px;">Aún no hay publicaciones.</p>';
-                    return;
-                }
-
                 posts.forEach(post => {
-                    // Determinar el contenedor usando la categoría del post
-                    const category = post.categoria || 'dificultad'; // Usamos 'dificultad' por defecto
+                    const category = post.categoria || 'dificultad'; 
                     const container = document.getElementById(`posts-${category}`);
 
                     if (container) {
                         const postElement = document.createElement('div');
                         postElement.className = 'post';
 
-                        // Crea la insignia NEW! si esNuevo es true
                         let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
-
+                        
+                        // Añadimos la imagen y el contenido del post
                         postElement.innerHTML = `
                             ${badge}
                             <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
                             <div class="post-content">
                                 <h3>${post.titulo}</h3>
-                                <div class="date">Fecha: ${post.fecha}</div>
+                                <span class="date">Fecha: ${post.fecha}</span>
                                 <p>${post.descripcion}</p>
                             </div>
                         `;
-                        // Insertamos el post al inicio del contenedor para que el más nuevo esté arriba
+                        // Insertamos el post al inicio para que el más nuevo esté arriba
                         container.prepend(postElement); 
                         
-                        // Ocultamos el texto 'Contenido próximamente...' si ya hay posts
-                        const placeholderText = container.nextElementSibling;
-                        if (placeholderText && placeholderText.tagName === 'P' && placeholderText.textContent.includes('Contenido próximamente')) {
+                        // Ocultamos el texto 'Contenido próximamente...' si ya hay posts en esa categoría
+                        const placeholderText = container.parentElement.querySelector('.placeholder-text');
+                        if (placeholderText) {
                             placeholderText.style.display = 'none';
                         }
                     }
                 });
             } catch (e) {
                 console.error('Error al cargar posts:', e);
-                // Muestra el error en la web para depuración
-                document.getElementById('dificultad').innerHTML = `
-                    <h1>Cambio de dificultad</h1>
-                    <p style="color: red; margin-top: 20px;">Error al cargar los datos: ${e.message}. El bot subió un archivo corrupto. Arregla posts.json en GitHub (debe ser: []).</p>
-                `;
+                // Muestra un error visible solo si el JSON está corrupto (como el error 'Wk...')
+                document.querySelectorAll('section[data-category]').forEach(section => {
+                     const h1 = section.querySelector('h1');
+                     if (h1) {
+                         // Solo si la sección está vacía, mostramos el error
+                         const container = section.querySelector('.posts-container');
+                         if (container && container.innerHTML === '') {
+                             h1.insertAdjacentHTML('afterend', `
+                                <p style="color: red; margin-top: 20px;">Error al cargar los datos: ${e.message}. Asegúrate de que posts.json en GitHub esté configurado a **[ ]**.</p>
+                             `);
+                         }
+                     }
+                 });
             }
         }
 
