@@ -1,5 +1,14 @@
 [
     {
+        "id": 2,
+        "categoria": "actualizaciones",
+        "titulo": "NUEVA MECANICA",
+        "descripcion": "explora todas las mecanicas en nuestro discord",
+        "fecha": "2025-10-25",
+        "imagenUrl": "https://github.com/masterstudio-oficial/MasterStudio/blob/main/mastersafio.png?raw=true",
+        "esNuevo": true
+    },
+    {
         "id": 1,
         "categoria": "mobs",
         "titulo": "REVIL",
