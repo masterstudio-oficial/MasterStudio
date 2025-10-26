@@ -1,5 +1,14 @@
 [
     {
+        "id": 2,
+        "categoria": "mobs",
+        "titulo": "VAMPIROS",
+        "descripcion": "Los vampiros son seres nocturnos que obtienen fuerza, velocidad y sentidos mejorados al costo de depender de la sangre para sobrevivir, sus debilidades son el agua, fuego, luz solar y el ajo",
+        "fecha": "2025-10-26",
+        "imagenUrl": "https://i.postimg.cc/2j1n71TZ/IMG-20251026-082450.jpg",
+        "esNuevo": true
+    },
+    {
         "id": 1,
         "categoria": "actualizaciones",
         "titulo": "NUEVA INSTANCIA - LAUNCHER",
