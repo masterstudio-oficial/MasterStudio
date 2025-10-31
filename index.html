@@ -3,9 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterStudio</title>
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <title>MasterStudio - Edición Halloween 👻</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Creepster&display=swap" rel="stylesheet">
     <style>
+        /* INICIO: Animación de Fondo de Niebla (Fog/Mist) */
+        @keyframes fog-movement {
+            0% { background-position: 0 0; }
+            100% { background-position: -200vw 0; }
+        }
+        
+        .halloween-fog-effect::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 400vw;
+            height: 100vh;
+            /* Patrón de imagen sutil de niebla/nubes con transparencia */
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAABCAYAAADeC2x5AAAABmJLR0QA/wD/AP/gvaeTAAAAB3RJTUUH5gIHDws/p9tq+wAAAAlwFlzAAAuIwAA LiMD+gkF9gAAAAd0SU1FB9gIHFYvQxYh1+gAAAAdaVRYdFNvZnR3YXJlAHJlYWRlci.hB9Obd') repeat-x;
+            opacity: 0.15;
+            z-index: -1;
+            animation: fog-movement 120s linear infinite;
+            pointer-events: none;
+        }
+        /* FIN: Animación de Fondo de Niebla */
+
         /* Reset básico */
         * {
             margin: 0;
@@ -15,10 +37,15 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000000; /* Negro */
-            color: #ffffff; /* Blanco */
+            background-color: #0d0115; /* Negro Morado Oscuro */
+            color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden;
+        }
+
+        /* Aplicamos la clase de niebla al body para el efecto */
+        body.halloween-fog-effect {
+            position: relative;
         }
 
         /* Header */
@@ -27,32 +54,40 @@
             align-items: center;
             justify-content: center;
             padding: 30px;
-            background-color: rgba(26, 26, 26, 0.8); /* Gris oscuro con transparencia */
-            backdrop-filter: blur(10px); /* Efecto glassmorphism si soportado */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: rgba(30, 0, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 255, 0, 0.5);
         }
 
         .logo {
-            font-family: 'VT323', monospace; /* Tipografía pixelada sencilla */
-            font-size: 3.5rem; /* Agrandado para que sea más grande que la corona */
+            font-family: 'VT323', monospace;
+            font-size: 3.5rem;
             font-weight: bold;
             margin-right: 15px;
-            color: #ffffff;
+            color: #00ff00;
+            text-shadow: 0 0 10px #00ff00, 0 0 20px rgba(0, 255, 0, 0.5);
         }
-
+        
+        /* Icono (Fantasma) */
         .icon {
             font-size: 2.5rem;
+            animation: float-icon 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes float-icon {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-5px); }
         }
         
         /* INICIO: CONTENEDOR DE NAVEGACIÓN PRINCIPAL Y BOTÓN LAUNCHER */
         .main-navigation-container {
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* Alinea los ítems arriba para que los botones tengan el mismo top */
-            padding: 30px 50px; /* Padding a los lados para que el botón Launcher se separe */
-            background-color: rgba(26, 26, 26, 0.6);
+            align-items: flex-start;
+            padding: 30px 50px;
+            background-color: rgba(30, 0, 40, 0.6);
             backdrop-filter: blur(10px);
-            gap: 20px; /* Espacio entre el botón Launcher y la nav */
+            gap: 20px;
         }
 
         /* Navegación (Solo para los botones de categorías) */
@@ -60,15 +95,15 @@
             display: flex;
             justify-content: center;
             flex-wrap: wrap;
-            padding: 0; /* Quitamos el padding aquí ya que lo pusimos en el main-navigation-container */
-            flex-grow: 1; /* Permite que la nav ocupe el espacio restante */
+            padding: 0;
+            flex-grow: 1;
         }
         /* FIN: CONTENEDOR DE NAVEGACIÓN */
 
         .nav-button {
             margin: 10px;
             padding: 15px 30px;
-            background-color: rgba(26, 26, 26, 0.8); /* Gris oscuro con transparencia */
+            background-color: rgba(26, 26, 26, 0.8);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 10px;
             text-decoration: none;
@@ -77,73 +112,97 @@
             font-size: 1.1rem;
             transition: all 0.3s ease;
             cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
             position: relative;
         }
         
-        /* Estilo base para el botón activo */
+        /* Sombra de murciélago (CORREGIDA a emoji directo 🦇) */
+        .nav-button::before {
+            content: '🦇'; /* Cambiado a emoji directo */
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-button:hover::before {
+            opacity: 1;
+            top: -25px;
+        }
+        
         .nav-button.active-nav {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Sombra brillante base */
-            background-color: rgba(40, 40, 40, 0.9);	
-            border: 1px solid #ffffff;	
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            background-color: rgba(40, 40, 40, 0.9);
+            border: 1px solid #ffffff;
             transform: translateY(-2px);
         }
 
-        /* 🚨 ESTILOS POR CATEGORÍA ACTIVA 🚨 */
-
-        /* Inicio - Blanco */
-        .home.active-nav {
-            border-color: #ffffff;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+        /* ESTILOS POR CATEGORÍA ACTIVA */
+        .home.active-nav { border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+        .mobs.active-nav { border-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        .dificultad.active-nav { border-color: #FFA500; box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); }
+        .eventos.active-nav { border-color: #FF69B4; box-shadow: 0 0 15px rgba(255, 105, 180, 0.8); }
+        .actualizaciones.active-nav { border-color: #2196F3; box-shadow: 0 0 15px rgba(33, 150, 243, 0.8); }
+        .recompensas.active-nav { border-color: #4CAF50; box-shadow: 0 0 15px rgba(76, 175, 80, 0.8); }
+        .castigos.active-nav { border-color: #F44336; box-shadow: 0 0 15px rgba(244, 67, 54, 0.8); }
+        .launcher.active-nav { border-color: #00BCD4; box-shadow: 0 0 15px rgba(0, 188, 212, 0.8); }
+        
+        /* NUEVO ESTILO ESPECIAL PARA EL BOTÓN DE SORTEO */
+        .special-nav-button {
+            background: linear-gradient(135deg, #8A2BE2 0%, #4B0082 100%); /* Degradado morado */
+            border: 3px solid #DA70D6; /* Borde rosado-morado brillante */
+            color: #ffffff;
+            font-family: 'Creepster', cursive; /* Fuente espeluznante */
+            font-size: 1.3rem; /* Tamaño más grande */
+            padding: 18px 35px; /* Relleno más grande */
+            box-shadow: 0 0 25px rgba(218, 112, 214, 0.9); /* Sombra brillante y expansiva */
+            transition: all 0.4s ease-in-out;
+            position: relative;
+            overflow: hidden;
+            z-index: 1; /* Asegurar que esté por encima de otros elementos menores */
+            margin: 10px; /* Asegurar que mantenga el margen de la lista de navegación */
         }
 
-        /* Mobs nuevos - Amarillo */
-        .mobs.active-nav {
-            border-color: #FFD700; /* Amarillo */
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
+        /* Efecto de brillo al pasar el ratón */
+        .special-nav-button::before {
+            content: '✨'; /* Efecto de brillo adicional */
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            font-size: 2em;
+            opacity: 0;
+            transition: all 0.5s ease-out;
+            z-index: -1;
         }
 
-        /* Cambio de dificultad - Naranja */
-        .dificultad.active-nav {
-            border-color: #FFA500; /* Naranja */
-            box-shadow: 0 0 15px rgba(255, 165, 0, 0.8);
-        }
-
-        /* Eventos - Rosa */
-        .eventos.active-nav {
-            border-color: #FF69B4; /* Rosa */
-            box-shadow: 0 0 15px rgba(255, 105, 180, 0.8);
-        }
-
-        /* Actualizaciones - Azul */
-        .actualizaciones.active-nav {
-            border-color: #2196F3; /* Azul */
-            box-shadow: 0 0 15px rgba(33, 150, 243, 0.8);
-        }
-
-        /* Recompensas - Verde */
-        .recompensas.active-nav {
-            border-color: #4CAF50; /* Verde */
-            box-shadow: 0 0 15px rgba(76, 175, 80, 0.8);
-        }
-
-        /* Castigos - Rojo */
-        .castigos.active-nav {
-            border-color: #F44336; /* Rojo */
-            box-shadow: 0 0 15px rgba(244, 67, 54, 0.8);
+        .special-nav-button:hover {
+            transform: scale(1.08); /* Ligeramente más grande al pasar el ratón */
+            background: linear-gradient(135deg, #9932CC 0%, #6A0DAD 100%); /* Cambio de degradado al pasar el ratón */
+            box-shadow: 0 0 40px rgba(218, 112, 214, 1.2); /* Sombra más intensa */
         }
         
-        /* Launcher - Cian */
-        .launcher.active-nav {
-            border-color: #00BCD4; /* Cian */
-            box-shadow: 0 0 15px rgba(0, 188, 212, 0.8);
+        .special-nav-button:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 1;
         }
         
+        /* Estilo para cuando el botón especial está activo */
+        .sorteo.active-nav.special-nav-button { 
+            border-color: #DA70D6; 
+            box-shadow: 0 0 35px rgba(218, 112, 214, 1);
+            transform: scale(1.05); /* Que se mantenga un poco más grande cuando esté activo */
+            background: linear-gradient(135deg, #9932CC 0%, #6A0DAD 100%); 
+        }
+
         .nav-button:hover {
             transform: translateY(-2px);
         }
         
-        .nav-button:not(.active-nav):hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }	
+        .nav-button:not(.active-nav):hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
 
         /* Main content */
         main {
@@ -153,7 +212,7 @@
         }
 
         section {
-            display: none; /* Ocultas inicialmente */
+            display: none;
             margin-bottom: 40px;
         }
 
@@ -162,33 +221,58 @@
         }
 
         section h1 {
-            font-family: 'VT323', monospace;
-            /* Eliminamos el margin-bottom y text-align del h1 directamente */
-            color: #ffffff;
+            font-family: 'Creepster', cursive;
+            font-size: 3rem;
+            color: #ff6600;
+            text-align: center;
+            text-shadow: 3px 3px 0px #000000;
         }
         
-        /* INICIO: ESTILO PARA EL TÍTULO DEL LAUNCHER CON LOGO */
-        .launcher-title-container {
-            display: flex;
-            align-items: center;
-            justify-content: center; /* Centra el contenedor completo */
-            margin-bottom: 20px; /* Mismo margen que el h1 normal */
+        /* Estilo especial para los subtítulos del launcher (títulos h2) */
+        .guide-step h2 {
+            font-family: 'Creepster', cursive;
+            font-size: 2.5rem;
+            color: #00ff00;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 0px #1e0028;
+        }
+        
+        /* INICIO: Estilos para la guía del launcher */
+        .guide-step {
+            /* Fondo del contenedor de cada paso */
+            background-color: rgba(30, 0, 40, 0.6);
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            border-radius: 10px; /* Borde redondeado */
+            padding: 25px; /* Relleno interior */
+            margin-bottom: 30px; /* Separación entre pasos */
+            text-align: center; /* Centramos todo el contenido del paso */
         }
 
-        .launcher-title-container img {
-            height: 50px; /* Ajusta el tamaño del logo */
-            vertical-align: middle; /* Alineación vertical con el texto */
+        .guide-step p {
+            max-width: 90%; /* Limitar ancho del párrafo */
+            margin: 15px auto; /* Centrar párrafos */
+            font-size: 1.1rem;
+            color: #cccccc;
+            text-align: left; /* Alineación del texto del paso */
         }
 
-        .launcher-title-container img:first-of-type {
-            margin-right: 15px; /* Margen a la derecha del primer logo */
+        .guide-image-container {
+            margin: 20px auto; /* Centrar contenedor de imagen */
+            max-width: fit-content;
         }
 
-        .launcher-title-container img:last-of-type {
-            margin-left: 15px; /* Margen a la izquierda del segundo logo */
+        .guide-image-container img {
+            border: 3px solid #ff6600; /* Borde más grueso para las imágenes */
+            border-radius: 8px; /* Borde redondeado */
+            width: 100%; /* Ajustar al contenedor */
+            max-width: 700px; /* Máximo ancho de la imagen */
+            height: auto;
+            display: block; /* Asegurar que la imagen se centre correctamente */
+            margin: 0 auto;
         }
-        /* FIN: ESTILO PARA EL TÍTULO DEL LAUNCHER CON LOGO */
+        /* FIN: Estilos para la guía del launcher */
 
+        /* Estilos de la sección Inicio (Negritas removidas) */
         #home p {
             margin-bottom: 20px;
             color: #cccccc;
@@ -198,35 +282,46 @@
             text-align: center;
         }
 
+        /* Footer general (usado en todas las secciones) */
         .footer {
             margin-top: 50px;
             text-align: center;
-            color: #cccccc;
-            font-size: 0.9rem;
+            color: #888888;
+            font-size: 0.9rem; /* Tamaño más pequeño */
         }
 
         .footer a {
-            color: #2196F3; /* Azul para enlaces */
+            color: #ff6600;
             text-decoration: none;
         }
-
-        .footer a:hover {
-            text-decoration: underline;
+        
+        /* Footer específico para el último paso del Launcher (ajustado para que se vea igual que el general) */
+        .guide-step .footer {
+            margin-top: 30px; 
+            text-align: center;
+            color: #888888;
+            font-size: 0.9rem;
         }
+
 
         /* Tarjetas de publicaciones */
         .post {
             display: flex;
             margin-bottom: 30px;
             padding: 20px;
-            background-color: rgba(26, 26, 26, 0.8); /* Gris oscuro con transparencia */
+            background-color: rgba(30, 0, 40, 0.8);
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(150, 0, 255, 0.3);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
             position: relative;
             overflow: hidden;
-            align-items: flex-start;	
+            align-items: flex-start;
+        }
+        
+        .post:hover {
+            border: 1px solid rgba(0, 255, 0, 0.5);
+            transform: translateY(-2px);
         }
 
         .post img {
@@ -235,174 +330,202 @@
             object-fit: cover;
             margin-right: 20px;
             border-radius: 10px;
-            margin-bottom: 10px;	
-        }
-
-        .post-content {
-            flex: 1;
+            margin-bottom: 10px;
+            border: 3px solid #ff6600;
         }
 
         .post-content h3 {
-            font-family: 'VT323', monospace;	
-            margin-bottom: 5px;	
-            font-size: 1.6rem;
-            color: #ffffff;
-            display: block;	
+            font-family: 'Creepster', cursive;
+            font-size: 2rem;
+            color: #ff6600;
+            text-shadow: 1px 1px 0px #000;
         }
 
         .post-content .date {
-            font-size: 0.9rem;
-            color: #cccccc;
-            margin-bottom: 15px;	
-            display: block;
+            color: #00ff00;
         }
         
-        .post-content p {
-            color: #cccccc;
-            display: block;	
-        }
-
         /* Placeholder NEW! */
         .new-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #FFC107; /* Amarillo brillante */
-            color: #000000;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        /* Placeholder para otras secciones */
-        .placeholder {
-            text-align: center;
-            color: #cccccc;
-            padding: 50px;
-        }
-
-        .placeholder h1 {
-            font-family: 'VT323', monospace;	
-        }
-
-        /* INICIO: Estilos para la guía del launcher */
-        .guide-step {
-            margin-bottom: 50px;
-            padding: 20px;
-            background-color: rgba(26, 26, 26, 0.6);
-            border-radius: 10px;
-            border: 1px solid rgba(0, 188, 212, 0.3); /* Borde cian sutil */
-        }
-        .guide-step h2 {
-            font-family: 'VT323', monospace;
-            font-size: 2rem;
-            color: #00BCD4; /* Cian */
-            margin-bottom: 15px;
-        }
-        .guide-step p {
-            margin-bottom: 20px;
-            color: #cccccc;
-        }
-        .guide-image-container {
-            text-align: center; /* Centra la imagen */
-            margin: 20px 0;
-        }
-        .guide-image-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            border: 2px solid #00BCD4; /* Borde cian para resaltar */
+            background-color: #ff6600;
+            color: #1e0028;
+            animation: pulse-badge 1s infinite alternate;
         }
         
-        /* ESTILO DEL BOTÓN DE DESCARGA DORADO */
+        @keyframes pulse-badge {
+            0% { box-shadow: 0 0 10px #ff6600; }
+            100% { box-shadow: 0 0 20px #ff6600; }
+        }
+
+        /* ESTILO DEL BOTÓN DE DESCARGA */
         .download-button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 20px auto; /* Centra el botón si es el único elemento en su línea */
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%); /* Dorado/Naranja */
-            color: #000000;
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-            border: 2px solid #FFD700;
+            display: inline-block; /* Para que se apliquen estilos de tamaño */
+            background: linear-gradient(135deg, #ff6600 0%, #a03600 100%);
+            color: #0d0115;
+            border: 2px solid #ff6600;
             border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6); /* Resplandor dorado */
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
             cursor: pointer;
-            text-align: center;
+            box-shadow: 0 0 20px rgba(255, 102, 0, 0.8);
         }
         
         .download-button:hover {
-            background: linear-gradient(135deg, #FFC107 0%, #FF8C00 100%);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+            background: linear-gradient(135deg, #FF8C00 0%, #CC5500 100%);
+            box-shadow: 0 0 30px rgba(255, 102, 0, 1);
             transform: scale(1.05);
         }
         
-        /* ESTILO DEL BOTÓN DE DISCORD (AZUL-MORADO) */
+        /* ESTILO DEL BOTÓN DE DISCORD */
         .discord-button {
             display: inline-block;
-            padding: 15px 30px;
-            margin: 20px auto;
-            background-color: #7289DA; /* Color principal de Discord */
-            color: #ffffff;
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-            border: 2px solid #99AAB5; /* Gris claro de Discord para el borde */
+            background-color: #00ff00;
+            color: #0d0115;
+            border: 2px solid #00ff00;
             border-radius: 10px;
-            box-shadow: 0 0 15px rgba(114, 137, 218, 0.8); /* Resplandor azul-morado */
+            padding: 15px 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
             transition: all 0.3s ease;
             cursor: pointer;
-            text-align: center;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
         }
 
         .discord-button:hover {
-            background-color: #677BC4; /* Tono más oscuro al pasar el ratón */
-            box-shadow: 0 0 25px rgba(114, 137, 218, 1);
+            background-color: #00cc00;
+            box-shadow: 0 0 25px rgba(0, 255, 0, 1);
             transform: scale(1.05);
         }
-
 
         /* Contenedor para centrar el botón */
         .button-container {
             text-align: center;
             margin-top: 20px;
         }
-        /* FIN: Estilos para la guía del launcher y el botón */
+        /* FIN: Estilos de botones */
+        
+        .placeholder-text {
+            font-family: 'Creepster', cursive;
+            font-size: 2rem;
+            color: #ff6600;
+            text-align: center;
+            padding: 50px;
+        }
+
+        /* INICIO: Estilos de la NUEVA Sección SORTEO */
+        .sorteo-container {
+            background-color: rgba(50, 0, 50, 0.8);
+            border: 3px solid #9400D3; /* Borde Morado Oscuro */
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(148, 0, 211, 0.5);
+            position: relative;
+            overflow: hidden;
+            max-width: 800px;
+            margin: 40px auto;
+        }
+
+        /* Decoración de Telaraña (Esquinas) */
+        .sorteo-container::before, .sorteo-container::after {
+            content: '🕸️';
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.8;
+            color: #9400D3;
+        }
+
+        .sorteo-container::before {
+            top: 10px;
+            left: 10px;
+        }
+
+        .sorteo-container::after {
+            bottom: 10px;
+            right: 10px;
+            transform: scaleX(-1);
+        }
+        
+        .countdown-title {
+            font-family: 'Creepster', cursive;
+            font-size: 3.5rem;
+            color: #00ff00; /* Verde Neón */
+            text-shadow: 4px 4px 0px #1e0028, 0 0 15px rgba(0, 255, 0, 0.7);
+            margin-bottom: 20px;
+            animation: pulse-glow 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { text-shadow: 4px 4px 0px #1e0028, 0 0 10px rgba(0, 255, 0, 0.7); }
+            100% { text-shadow: 4px 4px 0px #1e0028, 0 0 25px rgba(0, 255, 0, 1); }
+        }
+
+        .countdown-timer {
+            font-family: 'VT323', monospace;
+            font-size: 4rem;
+            color: #ff6600; /* Naranja Brillante */
+            text-shadow: 2px 2px 0px #000, 0 0 10px rgba(255, 102, 0, 0.8);
+            margin-bottom: 30px;
+        }
+
+        /* Estilo para el ganador revelado */
+        .winner-announcement {
+            font-family: 'Creepster', cursive;
+            font-size: 4rem;
+            color: #FFD700; /* Oro */
+            text-shadow: 5px 5px 0px #8B0000, 0 0 30px rgba(255, 215, 0, 1);
+            margin-top: 30px;
+            animation: winner-pulse 0.5s infinite alternate;
+        }
+
+        @keyframes winner-pulse {
+            0% { transform: scale(1.0); }
+            100% { transform: scale(1.05); }
+        }
+
+        .winner-username {
+            font-family: 'VT323', monospace;
+            font-size: 5rem;
+            color: #00ff00;
+            margin-top: 10px;
+        }
+        /* FIN: Estilos de la NUEVA Sección SORTEO */
+        
     </style>
 </head>
-<body>
+<body class="halloween-fog-effect">
     <header>
         <div class="logo">MasterStudio</div>
-        <div class="icon">👑</div>
+        <div class="icon">👻</div>
     </header>
 
     <div class="main-navigation-container">
         
-        <button class="nav-button launcher" data-section="launcher" style="margin: 10px 30px 10px 0;">💻 Launcher</button>
+        <button class="nav-button launcher" data-section="launcher" style="margin: 10px 30px 10px 0;">🚀 Launcher</button>
 
         <nav>
             <button class="nav-button home active-nav" data-section="home">🏠 Inicio</button>
             <button class="nav-button mobs" data-section="mobs">Mobs nuevos</button>
             <button class="nav-button dificultad" data-section="dificultad">Cambio de dificultad</button>
-            <button class="nav-button eventos" data-section="eventos">Eventos</button>
+            <button class="nav-button eventos" data-section="eventos">Eventos 🚨</button>
             <button class="nav-button actualizaciones" data-section="actualizaciones">Actualizaciones</button>
             <button class="nav-button recompensas" data-section="recompensas">Recompensas</button>
             <button class="nav-button castigos" data-section="castigos">Castigos</button>
+            <button class="nav-button sorteo special-nav-button" data-section="sorteo">🕸️ Sorteo</button>
         </nav>
     </div>
     <main>
         <section id="home" class="active">
-            <h1>Bienvenido a MasterStudio</h1>
-            <p>En MasterStudio, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🌍, fusionando creatividad, dinamismo y diversión para todos los jugadores 🎮.</p>
-            <p><strong>Nuestra Misión:</strong></p>
-            <p>Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🚀. Diseñamos mundos y sistemas que sorprenden, inspiran y mantienen a los jugadores inmersos en cada aventura 🧭.</p>
+            <h1>¡Truco o Trato en MasterStudio!</h1>
+            <p>En **MasterStudio**, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🎮⚔️ fusionando creatividad, dinamismo y diversión para todos los jugadores ✨.</p>
+            <p>Nuestra Misión:</p>
+            <p>Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🔥. ¡Prepárate para la temporada más aterradora! 💀🕯️</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
                 <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
             </div>
         </section>
@@ -410,17 +533,15 @@
         <section id="launcher">
             
             <div class="launcher-title-container">
-                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher Izquierdo">	
-                <h1>Instalación del MasterClient Launcher</h1>
-                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher Derecho">
+                <h1 style="margin: 0;">Instalación del MasterClient Launcher</h1>
             </div>
             
             <div class="guide-step">
                 <h2>PASO 1: Descarga del Instalador</h2>
-                <p>Deberás descargar la última versión publicada aca en nuestra pagina, o en nuestro canal de descargas de discord, haciendo click en el botón de descarga, Si te llega a salir un mensaje de error o de advertencia, no te preocupes, es totalmente seguro, dale al boton de descargar para continuar con tu descarga.</p>
+                <p>Deberás descargar la última versión publicada acá en nuestra página, o en nuestro canal de descargas de discord, haciendo click en el botón de descarga. Si te llega a salir un mensaje de error o de advertencia, no te preocupes, es totalmente seguro, dale al botón de descargar para continuar con tu descarga.</p>
                 
-                <div class="button-container">
-                    <a href="http://us-1.fl.hafu.cfd:41421/updates/MasterClient.exe" class="download-button" download>
+                <div class="button-container" style="margin-bottom: 30px;">
+                    <a href="http://us-1.fl.hafu.cfd:41421/updates/MasterClient.exe" class="download-button" download style="padding: 20px 40px; font-size: 1.5rem; border-radius: 12px;">
                         DESCARGA AQUÍ
                     </a>
                 </div>
@@ -431,26 +552,24 @@
             </div>
             
             <div class="guide-step">
-                <h2>PASO 2: Ejecución y Instalación</h2>
-                <p>Luego de completar el primer paso, pasaremos al segundo paso, en donde tendras que abrir el archivo que acabaste de descargar, para proseguir a la instalación. Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en "Más Información" y una vez desplegado nos habilitara la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.</p>
+                <h2>PASO 2: Ejecución e Instalación</h2>
+                <p>Luego de completar el primer paso, pasaremos al segundo paso, donde tendrás que abrir el archivo que acabaste de descargar para proseguir a la instalación. Lo más seguro es que te salga una advertencia de Windows Protect; comúnmente siempre sale cuando intentas instalar cualquier programa de internet. Simplemente le daremos click en "Más Información" y una vez desplegado, nos habilitará la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalación de MasterClient.</p>
                 <div class="guide-image-container">
                     <img src="https://i.postimg.cc/SNYR7Fh8/Diseno-sin-titulo-33.png" alt="Imagen del Paso 2" style="max-width: 600px;">
                 </div>
             </div>
 
             <div class="guide-step">
-                <h2>Finalización PASO 2: Ejecución y Instalación</h2>
-                <p>Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, en donde nos abrira automaticamente una ventana del instalador del MasterClient - MasterStudio Launcher, la primera ventana nos saldra los Terminos de uso del launcher, los cuales los leeremos para estar de acuerdo, y como siguiente paso le daremos a "Acepto". Luego pasaremos a la segunda ventana donde nos saldra en que usuario de nuestra PC queremos instalar el MasterClient o si lo instalaremos en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos "Instalar".</p>
+                <h2>Finalización PASO 2: Ejecución e Instalación</h2>
+                <p>Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, donde se nos abrirá automáticamente una ventana del instalador del MasterClient - MasterStudio Launcher. La primera ventana nos mostrará los Términos de uso del launcher, los cuales leeremos para estar de acuerdo, y como siguiente paso le daremos a "Acepto". Luego pasaremos a la segunda ventana, donde nos preguntará en qué usuario de nuestra PC queremos instalar el MasterClient o si lo instalarás en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos "Instalar".</p>
                 <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/8CZfXRn4/Diseno-sin-titulo-34.png" alt="Imagen del Paso 2.1" style="max-width: 600px;">	
+                    <img src="https://i.postimg.cc/8CZfXRn4/Diseno-sin-titulo-34.png" alt="Imagen del Paso 2.1" style="max-width: 600px;">
                 </div>
             </div>
-			
-			
-			
-			<div class="guide-step">
-                <h2>PASO 3: Configuración y Instancia</h2>
-                <p>Seguramente cuando se nos habra el Launcher, no nos saldra Jugar directamente, nos saldra sin Instancias o sin nada simplemente, primero que todo nos dirigiremos a la esquina superior derecha, y iniciaremos sesión, sea con cuenta Premiun (Microsoft) o como Invitado (Solo el nombre de Usuario del juego) En caso de haber seleccionado con Microsoft, pues iniciaras sesión como comunmente lo haces como usuario Premiun, pero en caso de seleccionar Invitado se abrira una pestaña donde pondras tu Nick Name que saldra en Minecraft. Luego de iniciar sesión nos dirigiremos a la tuerca de configuración del Launcher, y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods), luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dandole de nuevo a la tuerca.</p>
+            
+            <div class="guide-step">
+                <h2>PASO 3: Configuración e Instancia</h2>
+                <p>Seguramente cuando se nos abra el Launcher, no nos saldrá Jugar directamente, nos saldrá sin Instancias o sin nada simplemente. Primero que todo, nos dirigiremos a la esquina superior derecha e iniciaremos sesión, sea con cuenta Premium (Microsoft) o como Invitado (Solo el nombre de Usuario del juego). En caso de haber seleccionado con Microsoft, pues iniciarás sesión como comúnmente lo haces como usuario Premium, pero en caso de seleccionar Invitado, se abrirá una pestaña donde pondrás tu Nick Name que saldrá en Minecraft. Luego de iniciar sesión, nos dirigiremos a la tuerca de configuración del Launcher y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods). Luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dándole de nuevo a la tuerca.</p>
                 <div class="guide-image-container">
                     <img src="https://i.postimg.cc/Sssdg7kD/Diseno-sin-titulo-36.png" alt="Imagen del Paso 3" style="max-width: 600px;">
                 </div>
@@ -458,82 +577,163 @@
 
             <div class="guide-step">
                 <h2>Finalización PASO 3: Instancia</h2>
-                <p>TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERAN INFORMADOS EN EL DISCORD!</p>
-				
-				
-				
+                <p style="color: #00ff00; text-align: center; max-width: 100%;">TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERÁN INFORMADOS EN EL DISCORD!</p>
+                
                 <div class="button-container">
-                    <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
-                        ÚNETE A NUESTRO DISCORD 💬
+                    <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank" style="padding: 15px 30px; font-size: 1.3rem; border-radius: 10px;">
+                        ÚNETE A NUESTRO DISCORD 📢
                     </a>
                 </div>
 
                 <div class="footer">
-                    <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                    <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
                 </div>
             </div>
             
         </section>
         
-        <section id="mobs" data-category="mobs">
-            <h1>Mobs nuevos</h1>
-            <div id="posts-mobs" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+        <section id="sorteo">
+            <h1>Sorteo Especial Halloween 🎃</h1>
+            <div class="sorteo-container">
+                <p class="countdown-title" id="sorteo-title">Se revelará el ganador en:</p>
+                <div class="countdown-timer" id="countdown">48:00:00</div>
+                <div id="winner-reveal" style="display: none;">
+                    <p class="winner-announcement">¡FELICIDADES - ESPECIAL HALLOWEEN!</p>
+                    <p class="winner-username" id="winner-name"></p>
+                </div>
+                <p style="color: #cccccc; margin-top: 20px;">Mantente atento a nuestro Discord para participar en el sorteo de Halloween. ¡Mucha suerte!</p>
+            </div>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+        <section id="mobs" data-category="mobs">
+            <h1>Mobs Espeluznantes Nuevos</h1>
+            <div id="posts-mobs" class="posts-container"></div>
+            <p class="placeholder-text">¡Cuidado con lo que acecha en la oscuridad! 🐺</p>
+            <div class="footer">
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
         <section id="dificultad" data-category="dificultad">
-            <h1>Cambio de dificultad</h1>
+            <h1>Cambio de Dificultad (Noche de Terror)</h1>
             <div id="posts-dificultad" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text">¡El nivel de miedo subirá pronto! 😈</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
         <section id="eventos" data-category="eventos">
-            <h1>Eventos</h1>
+            <h1>Eventos de Calabaza y Fantasmas</h1>
             <div id="posts-eventos" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text">¡Mantente al tanto de las cacerías de brujas! 🧙‍♀️</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
         <section id="actualizaciones" data-category="actualizaciones">
-            <h1>Actualizaciones</h1>
+            <h1>Actualizaciones Terroríficas</h1>
             <div id="posts-actualizaciones" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text">Próximas actualizaciones en el cementerio... 🪦</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
         <section id="recompensas" data-category="recompensas">
-            <h1>Recompensas</h1>
+            <h1>Recompensas de Halloween</h1>
             <div id="posts-recompensas" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text">¡Dulces o baneos! 🍬</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
         <section id="castigos" data-category="castigos">
-            <h1>Castigos</h1>
+            <h1>Castigos de la Cripta</h1>
             <div id="posts-castigos" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text">¡No dejes que el Conde Master te atrape! 🧛</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
         </section>
 
     </main>
 
     <script>
+        // *** CONFIGURACIÓN DEL SORTEO ***
+        // 1. FECHA DE FINALIZACIÓN: Utiliza localStorage para un contador de 48 horas persistente.
+        const localStorageKey = 'masterstudio_sorteo_end_time';
+        let endTime;
+
+        if (localStorage.getItem(localStorageKey)) {
+            // Si ya existe en localStorage, usa esa hora de finalización
+            endTime = new Date(localStorage.getItem(localStorageKey));
+        } else {
+            // Si es la primera vez que se carga, establece el final a 48 horas desde ahora
+            const now = new Date();
+            // La fecha de finalización será 48 horas desde el momento actual de la primera visita
+            endTime = new Date(now.getTime() + (48 * 60 * 60 * 1000)); 
+            localStorage.setItem(localStorageKey, endTime.toString());
+        }
+
+        // 2. NOMBRE DEL GANADOR (¡MODIFICA ESTA VARIABLE CUANDO TENGAS EL GANADOR!)
+        // Si lo dejas vacío (''), se mostrará un mensaje genérico al finalizar.
+        const WINNER_USERNAME = ''; // Cambia a, por ejemplo: 'TuNombreDeUsuario'
+        // ********************************
+
+
+        // Lógica del Contador
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = endTime - now;
+            
+            const countdownEl = document.getElementById('countdown');
+            const titleEl = document.getElementById('sorteo-title');
+            const winnerRevealEl = document.getElementById('winner-reveal');
+            const winnerNameEl = document.getElementById('winner-name');
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                countdownEl.style.display = 'none';
+
+                if (WINNER_USERNAME && WINNER_USERNAME.trim() !== '') {
+                    // Revelar el ganador
+                    titleEl.textContent = '¡GANADOR REVELADO!';
+                    winnerNameEl.textContent = WINNER_USERNAME;
+                    winnerRevealEl.style.display = 'block';
+                } else {
+                    // Mensaje genérico de finalización si no hay nombre
+                    titleEl.textContent = '¡SORTEO FINALIZADO!';
+                    countdownEl.textContent = '¡Gracias por participar!';
+                    countdownEl.style.display = 'block';
+                }
+                return;
+            }
+
+            // Cálculo de tiempo (Días, Horas, Minutos, Segundos)
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Formato de dos dígitos, combinando días y horas
+            const h = String(hours + (days * 24)).padStart(2, '0');
+            const m = String(minutes).padStart(2, '0');
+            const s = String(seconds).padStart(2, '0');
+            
+            countdownEl.textContent = `${h}:${m}:${s}`;
+        }
+
+        // Iniciar el contador cada segundo
+        const countdownInterval = setInterval(updateCountdown, 1000);
+        // Llamada inicial para evitar un segundo de retraso
+        updateCountdown();
+
         // JavaScript para mostrar/ocultar secciones y botón home
-        // Ahora el script selecciona todos los botones sin importar su contenedor
         document.querySelectorAll('.nav-button').forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-section');
@@ -566,25 +766,28 @@
             try {
                 const response = await fetch(JSON_URL);
                 if (!response.ok) {
+                    // Si el archivo no existe o no se puede acceder, simplemente continuamos
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
-                // Si el JSON está vacío (solo []), parseará una lista vacía
-                const posts = await response.json();	
+                
+                const posts = await response.json();
 
                 // Limpiar contenedores
                 document.querySelectorAll('.posts-container').forEach(container => {
                     container.innerHTML = '';
                 });
+                
+                let postsLoadedCount = 0; // Contador para saber si se cargó algo
 
                 posts.forEach(post => {
-                    const category = post.categoria || 'dificultad';	
+                    const category = post.categoria || 'dificultad';
                     const container = document.getElementById(`posts-${category}`);
 
                     if (container) {
                         const postElement = document.createElement('div');
                         postElement.className = 'post';
 
-                        let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
+                        let badge = post.esNuevo ? '<span class="new-badge">NEW!</span>' : '';
                         
                         postElement.innerHTML = `
                             ${badge}
@@ -596,28 +799,33 @@
                             </div>
                         `;
                         // Insertamos el post al inicio para que el más nuevo esté arriba
-                        container.prepend(postElement);	
+                        container.prepend(postElement);
+                        postsLoadedCount++;
                         
-                        // Ocultamos el texto 'Contenido próximamente...' si ya hay posts en esa categoría
+                        // Ocultamos el texto 'placeholder-text' si se cargó al menos un post en esa categoría
                         const placeholderText = container.parentElement.querySelector('.placeholder-text');
                         if (placeholderText) {
                             placeholderText.style.display = 'none';
                         }
                     }
                 });
+                
+                // Si no se cargó nada (posts.json estaba vacío), nos aseguramos de que los placeholders sean visibles
+                if (postsLoadedCount === 0 && posts.length > 0) {
+                     // Si el JSON no estaba vacío, pero los posts no tenían categorías válidas
+                     throw new Error('Posts loaded, but missing valid categories. Check posts.json structure.');
+                }
+
+
             } catch (e) {
                 console.error('Error al cargar posts:', e);
                 
+                // Si hay un error al cargar o si el JSON estaba vacío, nos aseguramos de que el placeholder esté visible
                 document.querySelectorAll('section[data-category]').forEach(section => {
-                    const h1 = section.querySelector('h1');
-                    if (h1) {
-                            const container = section.querySelector('.posts-container');
-                            if (container && container.innerHTML === '') {
-                                h1.insertAdjacentHTML('afterend', `
-                                    <p style="color: red; margin-top: 20px;">Error al cargar los datos: ${e.message}. Asegúrate de que posts.json en GitHub esté configurado a **[ ]**.</p>
-                                `);
-                            }
-                    }
+                     const placeholderText = section.querySelector('.placeholder-text');
+                     if (placeholderText) {
+                         placeholderText.style.display = 'block';
+                     }
                 });
             }
         }
