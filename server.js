@@ -1,7 +1,7 @@
 // AÑADE ESTA LÍNEA CERCA DEL INICIO DE TU server.js
 // --------------------------------------------------
 // Para activar el mantenimiento, cambia 'false' a 'true'.
-const MAINTENANCE_MODE = false; 
+const MAINTENANCE_MODE = true; 
 
 // AÑADE ESTA RUTA DEBAJO DE LAS OTRAS RUTAS DE LA API (ej: /api/quiz/status)
 // --------------------------------------------------------------------------
