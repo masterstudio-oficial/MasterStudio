@@ -498,6 +498,40 @@
     </style>
 </head>
 <body class="halloween-fog-effect">
+    <style>
+        .maintenance-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95); /* Fondo oscuro semitransparente */
+            color: #ff6600; /* Texto naranja Halloween */
+            z-index: 99999; /* Asegura que cubra todo */
+            display: none; /* Por defecto, estará oculta */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Creepster', cursive; /* Fuente espeluznante */
+        }
+        .maintenance-overlay h1 {
+            font-size: 5rem;
+            text-shadow: 4px 4px 0px #1e0028, 0 0 15px rgba(255, 102, 0, 0.7);
+            margin-bottom: 20px;
+        }
+        .maintenance-overlay p {
+            font-size: 1.5rem;
+            font-family: 'VT323', monospace;
+            color: #00ff00;
+        }
+    </style>
+    
+    <div id="maintenance-screen" class="maintenance-overlay">
+        <h1>👻 PÁGINA EN MANTENIMIENTO 🛠️</h1>
+        <p>Volveremos pronto para el evento de Halloween. Estamos ajustando los últimos sustos.</p>
+        <p style="margin-top: 20px;">Gracias por tu paciencia.</p>
+    </div>
     <header>
         <div class="logo">MasterStudio</div>
         <div class="icon">👻</div>
@@ -664,6 +698,34 @@
     </main>
 
     <script>
+        // *** LÓGICA DE MANTENIMIENTO Y ACCESO DEV ***
+        const MAINTENANCE_ACTIVE = true; // CAMBIAR A 'false' cuando ya no haya mantenimiento
+        const BYPASS_KEY = 'master';     // Clave secreta para que tú puedas ver la página
+
+        // Función para obtener parámetros de la URL
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            const results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        const maintenanceScreen = document.getElementById('maintenance-screen');
+        const bypassValue = getUrlParameter('dev');
+
+        // Determina si el usuario tiene la clave secreta
+        const isDeveloper = bypassValue === BYPASS_KEY;
+
+        if (MAINTENANCE_ACTIVE && !isDeveloper) {
+            // Si el mantenimiento está activo Y NO eres el desarrollador, muestra la pantalla
+            maintenanceScreen.style.display = 'flex';
+        } else if (MAINTENANCE_ACTIVE && isDeveloper) {
+            // Si el mantenimiento está activo Y ERES el desarrollador, notificar en consola y ocultar la pantalla
+            console.warn('Modo Desarrollador Activo. La pantalla de mantenimiento está oculta para ti.');
+            maintenanceScreen.style.display = 'none';
+        }
+        // **********************************************
+        
 // *** CONFIGURACIÓN DEL SORTEO ***
         // 1. FECHA DE FINALIZACIÓN: Fija el contador a 48:00:00 para la medianoche del 3 de Noviembre (UTC-5)
         // Usamos una fecha y hora fija para que el contador sea consistente.
