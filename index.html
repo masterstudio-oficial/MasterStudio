@@ -150,7 +150,7 @@
         .castigos.active-nav { border-color: #F44336; box-shadow: 0 0 15px rgba(244, 67, 54, 0.8); }
         .launcher.active-nav { border-color: #00BCD4; box-shadow: 0 0 15px rgba(0, 188, 212, 0.8); }
         
-        /* NUEVO ESTILO ESPECIAL PARA EL BOTÓN DE SORTEO */
+        /* NUEVO ESTILO ESPECIAL PARA BOTONES IMPORTANTES (SORTEO Y QUIZ) */
         .special-nav-button {
             background: linear-gradient(135deg, #8A2BE2 0%, #4B0082 100%); /* Degradado morado */
             border: 3px solid #DA70D6; /* Borde rosado-morado brillante */
@@ -162,8 +162,15 @@
             transition: all 0.4s ease-in-out;
             position: relative;
             overflow: hidden;
-            z-index: 1; /* Asegurar que esté por encima de otros elementos menores */
-            margin: 10px; /* Asegurar que mantenga el margen de la lista de navegación */
+            z-index: 1; 
+            margin: 10px; 
+        }
+        
+        /* Estilo específico para Daily Quiz cuando está activo */
+        .daily-quiz.active-nav { 
+            border-color: #00ff00; 
+            box-shadow: 0 0 35px rgba(0, 255, 0, 1);
+            background: linear-gradient(135deg, #4CAF50 0%, #1E8449 100%); 
         }
 
         /* Efecto de brillo al pasar el ratón */
@@ -194,7 +201,7 @@
         .sorteo.active-nav.special-nav-button { 
             border-color: #DA70D6; 
             box-shadow: 0 0 35px rgba(218, 112, 214, 1);
-            transform: scale(1.05); /* Que se mantenga un poco más grande cuando esté activo */
+            transform: scale(1.05); 
             background: linear-gradient(135deg, #9932CC 0%, #6A0DAD 100%); 
         }
 
@@ -416,7 +423,7 @@
             padding: 50px;
         }
 
-        /* INICIO: Estilos de la NUEVA Sección SORTEO */
+        /* INICIO: Estilos de la NUEVA Sección SORTEO y QUIZ */
         .sorteo-container {
             background-color: rgba(50, 0, 50, 0.8);
             border: 3px solid #9400D3; /* Borde Morado Oscuro */
@@ -428,6 +435,13 @@
             overflow: hidden;
             max-width: 800px;
             margin: 40px auto;
+        }
+        
+        /* Estilos de la sección Quiz */
+        #daily-quiz .sorteo-container {
+             background-color: rgba(0, 50, 0, 0.8); /* Fondo más verde para diferenciar */
+             border: 3px solid #00ff00;
+             box-shadow: 0 0 30px rgba(0, 255, 0, 0.5);
         }
 
         /* Decoración de Telaraña (Esquinas) */
@@ -493,45 +507,76 @@
             color: #00ff00;
             margin-top: 10px;
         }
-        /* FIN: Estilos de la NUEVA Sección SORTEO */
+        
+        /* Estilos para el código del ticket */
+        .winner-username.ticket-code {
+            font-size: 4rem;
+            color: #FFD700;
+            text-shadow: 3px 3px 0px #8B0000, 0 0 20px rgba(255, 215, 0, 1);
+        }
+        
+        /* Estilos para las opciones de respuesta del Quiz */
+        #daily-quiz input[type="radio"] {
+            /* Ocultar el radio button nativo */
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        #daily-quiz label {
+            display: block;
+            margin: 15px 0;
+            padding: 15px 25px;
+            background-color: rgba(10, 50, 10, 0.7); /* Fondo verde oscuro */
+            border: 2px solid rgba(0, 255, 0, 0.3);
+            border-radius: 10px;
+            font-size: 1.1rem;
+            color: #cccccc;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+            position: relative;
+        }
+
+        /* Estilo visual para el círculo del radio (simulación) */
+        #daily-quiz label::before {
+            content: '';
+            display: inline-block;
+            width: 15px;
+            height: 15px;
+            margin-right: 15px;
+            border-radius: 50%;
+            border: 2px solid #ff6600; /* Borde naranja */
+            background-color: transparent;
+            vertical-align: middle;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        
+        /* ESTADO: Checked */
+        #daily-quiz input[type="radio"]:checked + label::before {
+            background-color: #00ff00; /* Color cuando está seleccionado */
+            border-color: #00ff00;
+            box-shadow: 0 0 8px #00ff00;
+        }
+        
+        #daily-quiz label:hover {
+            background-color: rgba(10, 70, 10, 0.8);
+            border-color: #DA70D6;
+        }
+        
+        #daily-quiz input[type="radio"]:checked + label {
+            border-color: #00ff00;
+            box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+            background-color: rgba(0, 50, 0, 0.5);
+            color: #ffffff;
+        }
+
+        /* FIN: Estilos de la NUEVA Sección SORTEO y QUIZ */
         
     </style>
 </head>
 <body class="halloween-fog-effect">
-    <style>
-        .maintenance-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95); /* Fondo oscuro semitransparente */
-            color: #ff6600; /* Texto naranja Halloween */
-            z-index: 99999; /* Asegura que cubra todo */
-            display: none; /* Por defecto, estará oculta */
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            font-family: 'Creepster', cursive; /* Fuente espeluznante */
-        }
-        .maintenance-overlay h1 {
-            font-size: 5rem;
-            text-shadow: 4px 4px 0px #1e0028, 0 0 15px rgba(255, 102, 0, 0.7);
-            margin-bottom: 20px;
-        }
-        .maintenance-overlay p {
-            font-size: 1.5rem;
-            font-family: 'VT323', monospace;
-            color: #00ff00;
-        }
-    </style>
-    
-    <div id="maintenance-screen" class="maintenance-overlay">
-        <h1>👻 PÁGINA EN MANTENIMIENTO 🛠️</h1>
-        <p>Volveremos pronto para el evento de Halloween. Estamos ajustando los últimos sustos.</p>
-        <p style="margin-top: 20px;">Gracias por tu paciencia.</p>
-    </div>
     <header>
         <div class="logo">MasterStudio</div>
         <div class="icon">👻</div>
@@ -549,6 +594,7 @@
             <button class="nav-button actualizaciones" data-section="actualizaciones">Actualizaciones</button>
             <button class="nav-button recompensas" data-section="recompensas">Recompensas</button>
             <button class="nav-button castigos" data-section="castigos">Castigos</button>
+            <button class="nav-button daily-quiz special-nav-button" data-section="daily-quiz">💡 Pregunta Diaria</button>
             <button class="nav-button sorteo special-nav-button" data-section="sorteo">🕸️ Sorteo</button>
         </nav>
     </div>
@@ -626,6 +672,68 @@
             
         </section>
         
+        <section id="daily-quiz" data-category="daily-quiz">
+            <h1>💡 Pregunta Diaria de MasterStudio</h1>
+            <div class="sorteo-container">
+                
+                <div id="quiz-auth-container" style="margin-bottom: 30px;">
+                    <p style="color: #cccccc; font-size: 1.2rem; margin-bottom: 20px;">
+                        Debes iniciar sesión para participar en la pregunta diaria. Solo una respuesta por usuario.
+                    </p>
+                    <div class="button-container">
+                        <button id="google-login-button" class="discord-button" style="background-color: #DB4437; border-color: #DB4437; box-shadow: 0 0 15px rgba(219, 68, 55, 0.8);">
+                            <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">🔒 Iniciar con Google/Gmail (Simulado)</span>
+                        </button>
+                    </div>
+                    <p id="user-display" style="color: #00ff00; font-size: 1.2rem; margin-top: 20px; display: none;">
+                        ¡Hola, <span id="logged-in-username">Usuario</span>!
+                    </p>
+                </div>
+
+                <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 30px 0;">
+
+                <div id="quiz-question-container" style="display: none; text-align: left;">
+                    <p style="color: #ff6600; font-size: 1.5rem; text-align: center; margin-bottom: 25px;">
+                        Pregunta de hoy (<span id="quiz-date">YYYY-MM-DD</span>)
+                    </p>
+
+                    <h2 id="question-text" style="color: #ffffff; font-size: 1.8rem; margin-bottom: 30px; font-family: 'Creepster', cursive; text-shadow: 2px 2px 0px #1e0028;">
+                        [Aquí va la pregunta]
+                    </h2>
+
+                    <form id="answer-form">
+                        </form>
+
+                    <div class="button-container" style="margin-top: 40px;">
+                        <button type="submit" form="answer-form" class="download-button" id="submit-quiz-button" style="padding: 15px 50px;">
+                            ENVIAR RESPUESTA
+                        </button>
+                    </div>
+                    
+                    <p id="quiz-message" style="text-align: center; margin-top: 30px; font-size: 1.3rem; color: #ff6600; font-family: 'Creepster', cursive; display: none;"></p>
+                </div>
+
+                <div id="quiz-result-container" style="display: none; text-align: center;">
+                    <p id="result-message" class="countdown-title" style="margin-bottom: 20px;">¡GANASTE UN TICKET! 🎟️</p>
+                    <p id="ticket-code-display" class="winner-username ticket-code">TICKET-ABCD-EFGH</p>
+                    <p style="color: #cccccc; font-size: 1.1rem; margin-top: 30px;">
+                        <span style="color: #00ff00; font-weight: bold;">PASO FINAL:</span> Toma una captura de pantalla de este código y dirígete a nuestro Discord.
+                    </p>
+                    <div class="button-container" style="margin-top: 20px;">
+                        <a href="https://discord.gg/AyAfBn42Nm" class="discord-button" target="_blank">
+                            RECLAMAR PREMIO EN DISCORD
+                        </a>
+                    </div>
+                    <p style="color: #DA70D6; font-size: 1rem; margin-top: 10px;">
+                        Abre un ticket con la razón **"Reclamar Beneficios"** y adjunta la captura de tu ticket.
+                    </p>
+                </div>
+
+            </div>
+            <div class="footer">
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
         <section id="sorteo">
             <h1>Sorteo Especial Halloween 🎃</h1>
             <div class="sorteo-container">
@@ -698,81 +806,17 @@
     </main>
 
     <script>
-        // *** LÓGICA DE MANTENIMIENTO ***
-        const MAINTENANCE_ACTIVE = true; // CAMBIAR A 'false' cuando ya no haya mantenimiento
-        const BYPASS_KEY = 'master';
-
-        // Función para obtener parámetros de la URL
-        function getUrlParameter(name) {
-            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-            const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
-            const results = regex.exec(location.search);
-            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
-        }
-
-        const maintenanceScreen = document.getElementById('maintenance-screen');
-        const bypassValue = getUrlParameter('dev');
-
-        // Determina si el usuario tiene la clave secreta
-        const isDeveloper = bypassValue === BYPASS_KEY;
-
-        if (MAINTENANCE_ACTIVE && !isDeveloper) {
-            // Si el mantenimiento está activo Y NO eres el desarrollador, muestra la pantalla
-            maintenanceScreen.style.display = 'flex';
-        } else if (MAINTENANCE_ACTIVE && isDeveloper) {
-            // Si el mantenimiento está activo Y ERES el desarrollador, notificar en consola y ocultar la pantalla
-            console.warn('Modo Desarrollador Activo. La pantalla de mantenimiento está oculta para ti.');
-            maintenanceScreen.style.display = 'none';
-        }
-        // **********************************************
-        
-        // *** CONFIGURACIÓN DEL SORTEO ***
-
-        // Lista de Participantes del Sorteo
-        const PARTICIPANTS = [
-            "99al0nzo99", "whitev7", "_s1lcotxr_", "bobuso123", "jos123p5._._02968", 
-            "neonthethinker", "gafassx", "carretero._34294", "jafetrl_23330", "axellsora", 
-            "pou_gamer12", "alberto6124", "rous___", "angelopaiyt", "destnty", 
-            "lapslap.", "breccsito14", "focuszegar", "swtyb", "agente_w23", 
-            "zanoratvt", "sr.piedra.", "gorgos_82882", "dijimon_yt_32935", "brian_yt_o", 
-            "elfer12", "tini_591", "narytavt", "alexis4lokos", "yaxlien_46010", 
-            "rodrixd6", "emimexx_"
-        ];
-        
-        // FECHA DE FINALIZACIÓN: Se usa esta fecha fija para que el contador baje consistentemente.
-        const TARGET_END_DATE_STRING = 'November 1, 2025 15:00:00 GMT-0600';
+// *** CONFIGURACIÓN DEL SORTEO ***
+        // 1. FECHA DE FINALIZACIÓN: Fija el contador a 48:00:00 para la medianoche del 3 de Noviembre (UTC-5)
+        const TARGET_END_DATE_STRING = 'November 2, 2025 00:00:00 GMT-0500'; // Finalizará el 2 de Noviembre a las 12:00 AM (UTC-5)
         let endTime = new Date(TARGET_END_DATE_STRING).getTime();
-        const WINNER_STORAGE_KEY = 'masterstudio_sorteo_winner';
         
-        /**
-         * Selecciona un ganador al azar de la lista y lo guarda en localStorage.
-         * Si ya existe un ganador guardado, lo recupera para asegurar persistencia.
-         * @returns {string | null} El nombre del ganador o null si la lista está vacía.
-         */
-        function getWinner() {
-            // 1. Intentar recuperar el ganador guardado (para que no cambie al refrescar)
-            let winner = localStorage.getItem(WINNER_STORAGE_KEY);
+        // 2. NOMBRE DEL GANADOR (¡MODIFICA ESTA VARIABLE CUANDO TENGAS EL GANADOR!)
+        const WINNER_USERNAME = ''; // Cambia a, por ejemplo: 'TuNombreDeUsuario'
+        // ********************************
 
-            if (!winner) {
-                // 2. Si no hay ganador guardado, elegir uno al azar
-                if (PARTICIPANTS.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * PARTICIPANTS.length);
-                    winner = PARTICIPANTS[randomIndex];
-                    
-                    // 3. Guardar el ganador para futuras recargas (persistencia)
-                    localStorage.setItem(WINNER_STORAGE_KEY, winner);
-                    console.log(`¡Ganador seleccionado al azar y guardado! Ganador: ${winner}`);
-                } else {
-                    console.error("No hay participantes en la lista para el sorteo.");
-                    winner = null; 
-                }
-            } else {
-                console.log(`Ganador recuperado de la memoria: ${winner}`);
-            }
-            return winner;
-        }
 
-        // Lógica del Contador
+        // Lógica del Contador del Sorteo
         function updateCountdown() {
             const now = new Date().getTime();
             const distance = endTime - now;
@@ -786,16 +830,13 @@
                 clearInterval(countdownInterval);
                 countdownEl.style.display = 'none';
 
-                // *** LLAMADA CLAVE: Selecciona o recupera el ganador ***
-                const finalWinner = getWinner(); 
-
-                // Revelar el ganador
-                if (finalWinner) {
+                if (WINNER_USERNAME && WINNER_USERNAME.trim() !== '') {
+                    // Revelar el ganador
                     titleEl.textContent = '¡GANADOR REVELADO!';
-                    winnerNameEl.textContent = finalWinner;
+                    winnerNameEl.textContent = WINNER_USERNAME;
                     winnerRevealEl.style.display = 'block';
                 } else {
-                    // Mensaje genérico de finalización si no hay nombre (o lista vacía)
+                    // Mensaje genérico de finalización si no hay nombre
                     titleEl.textContent = '¡SORTEO FINALIZADO!';
                     countdownEl.textContent = '¡Gracias por participar!';
                     countdownEl.style.display = 'block';
@@ -921,6 +962,228 @@
 
         // Cargar los posts al inicio
         loadPosts();
+        
+        // ---------------------------------------------
+        // NUEVA LÓGICA: PREGUNTA DIARIA (CLIENTE)
+        // ---------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            const authContainer = document.getElementById('quiz-auth-container');
+            const loginButton = document.getElementById('google-login-button');
+            const userDisplay = document.getElementById('user-display');
+            const usernameEl = document.getElementById('logged-in-username');
+            const questionContainer = document.getElementById('quiz-question-container');
+            const answerForm = document.getElementById('answer-form');
+            const quizMessage = document.getElementById('quiz-message');
+            const resultContainer = document.getElementById('quiz-result-container');
+            const ticketCodeDisplay = document.getElementById('ticket-code-display');
+            const quizDateEl = document.getElementById('quiz-date');
+
+            // Estado local para simular la sesión del usuario (cambiarías esto con el resultado del backend)
+            let currentUser = null; 
+
+            // URL del backend para la API (DEBES CREAR ESTO EN TU SERVIDOR REAL)
+            // **¡IMPORTANTE!: Asegúrate de que esta URL coincida con la dirección donde ejecutas server.js**
+            const API_BASE_URL = 'http://localhost:3000/api'; 
+
+            /**
+             * SIMULACIÓN DE LOGIN. Pide el Nick de Discord para usarlo como 'usuario'.
+             */
+            loginButton.addEventListener('click', async () => {
+                // En un entorno real, Google devolvería un token o ID. Aquí simulamos el ID:
+                const simulatedUserId = 'user_' + Math.floor(Math.random() * 1000000);
+                const simulatedUsername = prompt('Por favor, ingresa tu Nick de Discord para simular el login:');
+                
+                if (simulatedUsername) {
+                    currentUser = { id: simulatedUserId, name: simulatedUsername };
+                    // Guardar localmente para 'recordar' al usuario entre refrescos.
+                    localStorage.setItem('masterstudio_quiz_user', JSON.stringify(currentUser));
+                    
+                    // Ocultar login, mostrar usuario y cargar quiz
+                    authContainer.style.display = 'none';
+                    usernameEl.textContent = currentUser.name;
+                    userDisplay.style.display = 'block';
+                    
+                    await loadDailyQuiz(currentUser.id, currentUser.name);
+                } else {
+                    alert('Debes ingresar un nombre para participar.');
+                }
+            });
+
+            /**
+             * Verifica si el usuario ya está 'logueado' localmente al cargar la página.
+             */
+            function checkLocalStorageUser() {
+                const user = localStorage.getItem('masterstudio_quiz_user');
+                if (user) {
+                    currentUser = JSON.parse(user);
+                    authContainer.style.display = 'none';
+                    usernameEl.textContent = currentUser.name;
+                    userDisplay.style.display = 'block';
+                    return true;
+                }
+                return false;
+            }
+
+            /**
+             * Llama al backend para obtener la pregunta del día y el estado del usuario.
+             */
+            async function loadDailyQuiz(userId, username) {
+                // Ocultamos todo antes de cargar
+                questionContainer.style.display = 'none';
+                resultContainer.style.display = 'none';
+                quizMessage.style.display = 'none';
+                
+                try {
+                    // Llama a la API para obtener el estado del quiz para el usuario
+                    const response = await fetch(`${API_BASE_URL}/quiz/status?userId=${userId}&username=${username}`);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Error HTTP: ${response.status}`);
+                    }
+                    
+                    const data = await response.json();
+
+                    if (!data.quiz) {
+                         quizMessage.textContent = '❌ No hay pregunta configurada para hoy.';
+                         quizMessage.style.display = 'block';
+                         return;
+                    }
+
+                    // Muestra la fecha actual del quiz
+                    quizDateEl.textContent = data.currentDate; 
+
+                    if (data.hasResponded) {
+                        // El usuario ya respondió hoy
+                        
+                        if (data.isWinner && data.ticketCode) {
+                            // Si ya ganó hoy y ya tiene un código (lo obtiene de la BD)
+                            showWinScreen(data.ticketCode);
+                        } else {
+                            // Ya respondió, pero perdió (o ganó y no tiene ticket)
+                            quizMessage.textContent = `Ya has respondido la pregunta de hoy. Vuelve mañana.`;
+                            quizMessage.style.display = 'block';
+                            quizMessage.style.color = '#F44336';
+                        }
+                    } else {
+                        // El usuario NO ha respondido hoy
+                        displayQuestion(data.quiz.pregunta, data.quiz.opciones);
+                    }
+
+                } catch (e) {
+                    console.error('Error al cargar el Quiz:', e);
+                    quizMessage.textContent = '⛔ Error de conexión con el servidor del Quiz. Asegúrate de que tu `server.js` esté corriendo.';
+                    quizMessage.style.display = 'block';
+                    quizMessage.style.color = '#F44336';
+                }
+            }
+
+            /**
+             * Muestra la pregunta y las opciones en el formulario.
+             */
+            function displayQuestion(question, options) {
+                document.getElementById('question-text').textContent = question;
+                answerForm.innerHTML = ''; // Limpiar opciones anteriores
+                
+                for (const [key, value] of Object.entries(options)) {
+                    // Usamos la nueva estructura de radio button con estilos personalizados
+                    const newOptionHTML = `
+                        <input type="radio" name="answer" value="${key}" id="opt-${key}" required>
+                        <label for="opt-${key}">
+                            ${key.toUpperCase()}) ${value}
+                        </label>
+                    `;
+                    answerForm.innerHTML += newOptionHTML; 
+                }
+                
+                questionContainer.style.display = 'block';
+            }
+
+            /**
+             * Muestra la pantalla de victoria con el código de ticket.
+             */
+            function showWinScreen(ticketCode) {
+                questionContainer.style.display = 'none';
+                resultContainer.style.display = 'block';
+                ticketCodeDisplay.textContent = ticketCode;
+                // Ocultar mensaje genérico
+                quizMessage.style.display = 'none';
+            }
+
+            /**
+             * Maneja el envío del formulario. Llama al backend para validar.
+             */
+            answerForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                if (!currentUser) {
+                    alert('Debes iniciar sesión primero.');
+                    return;
+                }
+
+                const selectedOption = answerForm.querySelector('input[name="answer"]:checked');
+                if (!selectedOption) {
+                    alert('Por favor, selecciona una opción.');
+                    return;
+                }
+                
+                const answer = selectedOption.value;
+                const submitButton = document.getElementById('submit-quiz-button');
+                submitButton.disabled = true; // Deshabilitar para evitar spam
+
+                quizMessage.style.display = 'block';
+                quizMessage.textContent = 'Enviando respuesta...';
+                quizMessage.style.color = '#ff6600'; // Naranja
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/quiz/submit`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            userId: currentUser.id,
+                            username: currentUser.name,
+                            answer: answer
+                        })
+                    });
+
+                    const data = await response.json();
+                    submitButton.disabled = false;
+
+                    if (data.success) {
+                        if (data.isCorrect) {
+                            // ¡Respuesta CORRECTA!
+                            showWinScreen(data.ticketCode);
+                            quizMessage.style.display = 'none';
+                        } else {
+                            // ¡Respuesta INCORRECTA!
+                            questionContainer.style.display = 'none';
+                            quizMessage.textContent = '❌ Respuesta incorrecta. ¡Vuelve mañana por otra oportunidad! 💀';
+                            quizMessage.style.color = '#F44336'; // Rojo
+                        }
+                    } else {
+                        // Caso: Ya había respondido o error del servidor
+                         if (data.message && data.message.includes('Ya has respondido')) {
+                             await loadDailyQuiz(currentUser.id, currentUser.name); // Vuelve a cargar el estado
+                         } else {
+                             quizMessage.textContent = `❌ Error: ${data.message || 'Error desconocido'}`;
+                             quizMessage.style.color = '#F44336';
+                         }
+                    }
+
+                } catch (e) {
+                    console.error('Error al enviar respuesta:', e);
+                    quizMessage.textContent = '⛔ Error de red al enviar la respuesta.';
+                    quizMessage.style.color = '#F44336';
+                    submitButton.disabled = false;
+                }
+            });
+
+
+            // Lógica de inicio: comprueba si el usuario ya está logueado
+            if (checkLocalStorageUser()) {
+                loadDailyQuiz(currentUser.id, currentUser.name);
+            }
+
+        });
     </script>
 </body>
 </html>
