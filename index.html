@@ -574,9 +574,52 @@
 
         /* FIN: Estilos de la NUEVA Sección SORTEO y QUIZ */
         
+        /* INICIO: Estilos de MODO MANTENIMIENTO */
+        #maintenance-mode {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #0d0115; /* Fondo negro oscuro */
+            z-index: 1000; /* Asegura que esté por encima de todo */
+            display: flex; /* Usamos flexbox para centrar contenido */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-family: 'Creepster', cursive;
+        }
+
+        #maintenance-mode h1 {
+            color: #F44336; /* Rojo de Alerta */
+            font-size: 6rem;
+            text-shadow: 5px 5px 0px #000, 0 0 20px #F44336;
+            margin-bottom: 20px;
+        }
+
+        #maintenance-mode p {
+            font-size: 2rem;
+            color: #ff6600;
+            margin-top: 15px;
+            font-family: 'VT323', monospace;
+        }
+
+        #maintenance-mode p.minor {
+            font-size: 1.5rem;
+            color: #cccccc;
+            margin-top: 30px;
+        }
+        /* FIN: Estilos de MODO MANTENIMIENTO */
     </style>
 </head>
 <body class="halloween-fog-effect">
+    
+    <section id="maintenance-mode" style="display: none;">
+        <h1>⚠️ MANTENIMIENTO ⚠️</h1>
+        <p>El servidor de MasterStudio está siendo actualizado para mejorar la experiencia.</p>
+        <p class="minor">Volveremos pronto. ¡Gracias por tu paciencia, Master!</p>
+    </section>
     <header>
         <div class="logo">MasterStudio</div>
         <div class="icon">👻</div>
@@ -806,17 +849,50 @@
     </main>
 
     <script>
-// *** CONFIGURACIÓN DEL SORTEO ***
-        // 1. FECHA DE FINALIZACIÓN: Fija el contador a 48:00:00 para la medianoche del 3 de Noviembre (UTC-5)
-        const TARGET_END_DATE_STRING = 'November 2, 2025 00:00:00 GMT-0500'; // Finalizará el 2 de Noviembre a las 12:00 AM (UTC-5)
-        let endTime = new Date(TARGET_END_DATE_STRING).getTime();
+        // ---------------------------------------------
+        // *** LÓGICA ORIGINAL DEL SORTEO RESTAURADA ***
+        // ---------------------------------------------
         
-        // 2. NOMBRE DEL GANADOR (¡MODIFICA ESTA VARIABLE CUANDO TENGAS EL GANADOR!)
-        const WINNER_USERNAME = ''; // Cambia a, por ejemplo: 'TuNombreDeUsuario'
-        // ********************************
+        // 1. CONFIGURACIÓN: Lista de Participantes (Ejemplo)
+        const PARTICIPANTS = [
+            "usuario1", "usuario2", "usuario3", "usuario4", "usuario5", "usuario6", "usuario7", "usuario8", "usuario9", "usuario10"
+            // ¡AGREGA TUS PARTICIPANTES REALES AQUÍ!
+        ];
+        const WINNER_STORAGE_KEY = 'masterstudio_sorteo_winner';
+        
+        // 2. FECHA DE FINALIZACIÓN Y REVELACIÓN (1/11/2025 a las 3PM hora MX)
+        // Usamos GMT-0600 (hora estándar de la Ciudad de México/MX)
+        const TARGET_END_DATE_STRING = 'November 1, 2025 15:00:00 GMT-0600'; 
+        let endTime = new Date(TARGET_END_DATE_STRING).getTime();
 
+        // Lógica del Sorteo (función clave: selecciona un ganador si no existe y lo guarda)
+        function getWinner() {
+            let winner = localStorage.getItem(WINNER_STORAGE_KEY);
 
-        // Lógica del Contador del Sorteo
+            if (!winner) {
+                // Solo seleccionar un ganador si no hay uno guardado
+                if (PARTICIPANTS.length > 0) {
+                    // 1. Seleccionar un índice al azar
+                    const randomIndex = Math.floor(Math.random() * PARTICIPANTS.length);
+                    
+                    // 2. Obtener el ganador
+                    winner = PARTICIPANTS[randomIndex];
+                    
+                    // 3. Guardar el ganador para futuras recargas (persistencia)
+                    localStorage.setItem(WINNER_STORAGE_KEY, winner);
+                    console.log(`¡Ganador seleccionado al azar y guardado! Ganador: ${winner}`);
+                } else {
+                    console.error("No hay participantes en la lista para el sorteo.");
+                    winner = null; 
+                }
+            } else {
+                console.log(`Ganador recuperado de la memoria: ${winner}`);
+            }
+            return winner;
+        }
+
+        // Lógica del Contador
+        let countdownInterval;
         function updateCountdown() {
             const now = new Date().getTime();
             const distance = endTime - now;
@@ -830,13 +906,16 @@
                 clearInterval(countdownInterval);
                 countdownEl.style.display = 'none';
 
-                if (WINNER_USERNAME && WINNER_USERNAME.trim() !== '') {
-                    // Revelar el ganador
+                // *** LLAMADA CLAVE: Selecciona o recupera el ganador ***
+                const finalWinner = getWinner(); 
+
+                // Revelar el ganador
+                if (finalWinner) {
                     titleEl.textContent = '¡GANADOR REVELADO!';
-                    winnerNameEl.textContent = WINNER_USERNAME;
+                    winnerNameEl.textContent = finalWinner;
                     winnerRevealEl.style.display = 'block';
                 } else {
-                    // Mensaje genérico de finalización si no hay nombre
+                    // Mensaje genérico de finalización si no hay nombre (o lista vacía)
                     titleEl.textContent = '¡SORTEO FINALIZADO!';
                     countdownEl.textContent = '¡Gracias por participar!';
                     countdownEl.style.display = 'block';
@@ -858,11 +937,6 @@
             countdownEl.textContent = `${h}:${m}:${s}`;
         }
 
-        // Iniciar el contador cada segundo
-        const countdownInterval = setInterval(updateCountdown, 1000);
-        // Llamada inicial para evitar un segundo de retraso
-        updateCountdown();
-
         // JavaScript para mostrar/ocultar secciones y botón home
         document.querySelectorAll('.nav-button').forEach(button => {
             button.addEventListener('click', function() {
@@ -878,7 +952,10 @@
 
                 // 3. Ocultar todas las secciones
                 document.querySelectorAll('section').forEach(section => {
-                    section.classList.remove('active');
+                    // Solo ocultar secciones que no sean de mantenimiento
+                    if (section.id !== 'maintenance-mode') {
+                        section.classList.remove('active');
+                    }
                 });
                 
                 // 4. Mostrar la sección seleccionada
@@ -961,12 +1038,77 @@
         }
 
         // Cargar los posts al inicio
-        loadPosts();
+        // loadPosts(); -> Se moverá al DOMContentLoaded para ejecutar después del check de mantenimiento
         
         // ---------------------------------------------
-        // NUEVA LÓGICA: PREGUNTA DIARIA (CLIENTE)
+        // NUEVA LÓGICA: MODO MANTENIMIENTO (CLIENTE)
         // ---------------------------------------------
-        document.addEventListener('DOMContentLoaded', () => {
+
+        /**
+         * Llama al backend para obtener el estado de mantenimiento.
+         * Si está activo, oculta la navegación y el contenido principal.
+         * @returns {Promise<boolean>} Retorna true si está en mantenimiento, false si no.
+         */
+        async function checkMaintenanceStatus() {
+            const API_MAINTENANCE_URL = 'http://localhost:3000/api/maintenance/status';
+            const mainContent = document.querySelector('main');
+            const headerContent = document.querySelector('header');
+            const navigationContainer = document.querySelector('.main-navigation-container');
+            const maintenanceSection = document.getElementById('maintenance-mode');
+            
+            try {
+                const response = await fetch(API_MAINTENANCE_URL);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    if (data.status === true) {
+                        // ACTIVAR MANTENIMIENTO
+                        if (mainContent) mainContent.style.display = 'none';
+                        if (navigationContainer) navigationContainer.style.display = 'none';
+                        if (headerContent) headerContent.style.display = 'none';
+                        if (maintenanceSection) maintenanceSection.style.display = 'flex';
+                        return true;
+                    }
+                }
+            } catch (e) {
+                // Si hay un error de conexión, el servidor podría estar caído (mantenimiento no controlado).
+                // Por seguridad, si falla la conexión al endpoint, asumimos que no es mantenimiento programado
+                // y dejamos el sitio visible, ya que el error de conexión será visible en la consola.
+                console.warn('Error al verificar el estado de mantenimiento. Asumiendo que el servidor está online o el endpoint no existe. (Error:', e.message, ')');
+            }
+            
+            // Si no hay mantenimiento, aseguramos que el contenido principal se muestre.
+            if (mainContent) mainContent.style.display = 'block';
+            if (navigationContainer) navigationContainer.style.display = 'flex';
+            if (headerContent) headerContent.style.display = 'flex';
+            if (maintenanceSection) maintenanceSection.style.display = 'none';
+            return false;
+        }
+
+
+        // ---------------------------------------------
+        // LÓGICA DE INICIO GENERAL (DOMContentLoaded)
+        // ---------------------------------------------
+        document.addEventListener('DOMContentLoaded', async () => {
+            
+            // 1. **VERIFICAR MODO MANTENIMIENTO**
+            const isMaintenance = await checkMaintenanceStatus();
+            if (isMaintenance) {
+                // Si está en mantenimiento, detenemos toda la ejecución del script.
+                return; 
+            }
+            
+            // 2. **INICIAR EL RESTO DE LÓGICA**
+            
+            // Iniciar el contador del sorteo (ahora que sabemos que el sitio está online)
+            countdownInterval = setInterval(updateCountdown, 1000);
+            updateCountdown();
+            
+            // Cargar los posts (ahora que sabemos que el sitio está online)
+            loadPosts(); 
+
+            // Variables para la Lógica del Quiz
             const authContainer = document.getElementById('quiz-auth-container');
             const loginButton = document.getElementById('google-login-button');
             const userDisplay = document.getElementById('user-display');
@@ -981,8 +1123,7 @@
             // Estado local para simular la sesión del usuario (cambiarías esto con el resultado del backend)
             let currentUser = null; 
 
-            // URL del backend para la API (DEBES CREAR ESTO EN TU SERVIDOR REAL)
-            // **¡IMPORTANTE!: Asegúrate de que esta URL coincida con la dirección donde ejecutas server.js**
+            // URL del backend para la API
             const API_BASE_URL = 'http://localhost:3000/api'; 
 
             /**
