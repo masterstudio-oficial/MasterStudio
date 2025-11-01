@@ -1,1 +1,22 @@
-
+{
+  "2025-11-01": {
+    "pregunta": "¿Quién gano la final del mundial de futbol en 2022?",
+    "opciones": {
+      "a": "Francia",
+      "b": "Italia",
+      "c": "Argentina",
+      "d": "Paises Bajos"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-02": {
+    "pregunta": "¿Cómo se llama el servidor?",
+    "opciones": {
+      "a": "MasterSafio",
+      "b": "Studios Master",
+      "c": "ESPECIAL HALLOWEEN",
+      "d": "MasterStudio"
+    },
+    "respuesta_correcta": "d"
+  }
+}
