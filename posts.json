@@ -1,5 +1,14 @@
 [
     {
+        "id": 4,
+        "categoria": "eventos",
+        "titulo": "ESPECIAL HALLOWEEN",
+        "descripcion": "Como agradecimiento por permanecer en nuestro servidor de MasterStudio, realizamos el 1/11/2025 un sorteo totalmente gratuito, que no requiere requisitos especificos, más que simplemente tener rango PARTICIPANTE en el discord de MasterStudio, este sorteo contara con solo 1 ganador que se revelara el 1/11/2025 a las 3:00PM hora MX",
+        "fecha": "2025-11-01",
+        "imagenUrl": "https://i.postimg.cc/LXzjdGSp/halloween.webp",
+        "esNuevo": true
+    },
+    {
         "id": 3,
         "categoria": "mobs",
         "titulo": "DRAGON DE FUEGO",
