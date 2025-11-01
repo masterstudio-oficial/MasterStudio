@@ -726,28 +726,51 @@
         }
         // **********************************************
         
-// *** CONFIGURACIÓN DEL SORTEO ***
-        // 1. FECHA DE FINALIZACIÓN: Fija el contador a 48:00:00 para la medianoche del 3 de Noviembre (UTC-5)
-        // Usamos una fecha y hora fija para que el contador sea consistente.
-        // Establecido a 48 horas (2 días) a partir de la noche de Halloween (31/10 00:00).
-        // Si quieres que el contador inicie en 48:00:00 y baje, debes establecer una fecha fija 48 horas en el futuro.
+        // *** CONFIGURACIÓN DEL SORTEO ***
+
+        // Lista de Participantes del Sorteo
+        const PARTICIPANTS = [
+            "99al0nzo99", "whitev7", "_s1lcotxr_", "bobuso123", "jos123p5._._02968", 
+            "neonthethinker", "gafassx", "carretero._34294", "jafetrl_23330", "axellsora", 
+            "pou_gamer12", "alberto6124", "rous___", "angelopaiyt", "destnty", 
+            "lapslap.", "breccsito14", "focuszegar", "swtyb", "agente_w23", 
+            "zanoratvt", "sr.piedra.", "gorgos_82882", "dijimon_yt_32935", "brian_yt_o", 
+            "elfer12", "tini_591", "narytavt", "alexis4lokos", "yaxlien_46010", 
+            "rodrixd6", "emimexx_"
+        ];
         
-        // **IMPORTANTE**: Si quieres que inicie con 48:00:00 y no cambie al refrescar:
-        // Opción 1 (Fecha fija):
+        // FECHA DE FINALIZACIÓN: Se usa esta fecha fija para que el contador baje consistentemente.
         const TARGET_END_DATE_STRING = 'November 1, 2025 15:00:00 GMT-0600';
         let endTime = new Date(TARGET_END_DATE_STRING).getTime();
+        const WINNER_STORAGE_KEY = 'masterstudio_sorteo_winner';
         
-        // Opción 2 (Contador de 48 horas persistente - El que tenías, pero con una fecha de inicio fija):
-        // Para que el contador sea más preciso, usaremos una fecha fija de inicio.
-        // La fecha de inicio debe ser la medianoche del 31/10.
-        // const START_DATE = new Date('October 31, 2025 00:00:00 GMT-0500').getTime();
-        // let endTime = START_DATE + (48 * 60 * 60 * 1000); // 48 horas desde el 31 de Octubre.
+        /**
+         * Selecciona un ganador al azar de la lista y lo guarda en localStorage.
+         * Si ya existe un ganador guardado, lo recupera para asegurar persistencia.
+         * @returns {string | null} El nombre del ganador o null si la lista está vacía.
+         */
+        function getWinner() {
+            // 1. Intentar recuperar el ganador guardado (para que no cambie al refrescar)
+            let winner = localStorage.getItem(WINNER_STORAGE_KEY);
 
-        // 2. NOMBRE DEL GANADOR (¡MODIFICA ESTA VARIABLE CUANDO TENGAS EL GANADOR!)
-        // Si lo dejas vacío (''), se mostrará un mensaje genérico al finalizar.
-        const WINNER_USERNAME = ''; // Cambia a, por ejemplo: 'TuNombreDeUsuario'
-        // ********************************
-
+            if (!winner) {
+                // 2. Si no hay ganador guardado, elegir uno al azar
+                if (PARTICIPANTS.length > 0) {
+                    const randomIndex = Math.floor(Math.random() * PARTICIPANTS.length);
+                    winner = PARTICIPANTS[randomIndex];
+                    
+                    // 3. Guardar el ganador para futuras recargas (persistencia)
+                    localStorage.setItem(WINNER_STORAGE_KEY, winner);
+                    console.log(`¡Ganador seleccionado al azar y guardado! Ganador: ${winner}`);
+                } else {
+                    console.error("No hay participantes en la lista para el sorteo.");
+                    winner = null; 
+                }
+            } else {
+                console.log(`Ganador recuperado de la memoria: ${winner}`);
+            }
+            return winner;
+        }
 
         // Lógica del Contador
         function updateCountdown() {
@@ -763,13 +786,16 @@
                 clearInterval(countdownInterval);
                 countdownEl.style.display = 'none';
 
-                if (WINNER_USERNAME && WINNER_USERNAME.trim() !== '') {
-                    // Revelar el ganador
+                // *** LLAMADA CLAVE: Selecciona o recupera el ganador ***
+                const finalWinner = getWinner(); 
+
+                // Revelar el ganador
+                if (finalWinner) {
                     titleEl.textContent = '¡GANADOR REVELADO!';
-                    winnerNameEl.textContent = WINNER_USERNAME;
+                    winnerNameEl.textContent = finalWinner;
                     winnerRevealEl.style.display = 'block';
                 } else {
-                    // Mensaje genérico de finalización si no hay nombre
+                    // Mensaje genérico de finalización si no hay nombre (o lista vacía)
                     titleEl.textContent = '¡SORTEO FINALIZADO!';
                     countdownEl.textContent = '¡Gracias por participar!';
                     countdownEl.style.display = 'block';
