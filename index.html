@@ -664,21 +664,22 @@
     </main>
 
     <script>
-        // *** CONFIGURACIÓN DEL SORTEO ***
-        // 1. FECHA DE FINALIZACIÓN: Utiliza localStorage para un contador de 48 horas persistente.
-        const localStorageKey = 'masterstudio_sorteo_end_time';
-        let endTime;
-
-        if (localStorage.getItem(localStorageKey)) {
-            // Si ya existe en localStorage, usa esa hora de finalización
-            endTime = new Date(localStorage.getItem(localStorageKey));
-        } else {
-            // Si es la primera vez que se carga, establece el final a 48 horas desde ahora
-            const now = new Date();
-            // La fecha de finalización será 48 horas desde el momento actual de la primera visita
-            endTime = new Date(now.getTime() + (48 * 60 * 60 * 1000)); 
-            localStorage.setItem(localStorageKey, endTime.toString());
-        }
+// *** CONFIGURACIÓN DEL SORTEO ***
+        // 1. FECHA DE FINALIZACIÓN: Fija el contador a 48:00:00 para la medianoche del 3 de Noviembre (UTC-5)
+        // Usamos una fecha y hora fija para que el contador sea consistente.
+        // Establecido a 48 horas (2 días) a partir de la noche de Halloween (31/10 00:00).
+        // Si quieres que el contador inicie en 48:00:00 y baje, debes establecer una fecha fija 48 horas en el futuro.
+        
+        // **IMPORTANTE**: Si quieres que inicie con 48:00:00 y no cambie al refrescar:
+        // Opción 1 (Fecha fija):
+        const TARGET_END_DATE_STRING = 'November 2, 2025 00:00:00 GMT-0500'; // Finalizará el 2 de Noviembre a las 12:00 AM (UTC-5)
+        let endTime = new Date(TARGET_END_DATE_STRING).getTime();
+        
+        // Opción 2 (Contador de 48 horas persistente - El que tenías, pero con una fecha de inicio fija):
+        // Para que el contador sea más preciso, usaremos una fecha fija de inicio.
+        // La fecha de inicio debe ser la medianoche del 31/10.
+        // const START_DATE = new Date('October 31, 2025 00:00:00 GMT-0500').getTime();
+        // let endTime = START_DATE + (48 * 60 * 60 * 1000); // 48 horas desde el 31 de Octubre.
 
         // 2. NOMBRE DEL GANADOR (¡MODIFICA ESTA VARIABLE CUANDO TENGAS EL GANADOR!)
         // Si lo dejas vacío (''), se mostrará un mensaje genérico al finalizar.
