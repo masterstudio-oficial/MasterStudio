@@ -629,7 +629,6 @@
         }
         /* FIN: Estilos de MODO MANTENIMIENTO */
     </style>
-    <script src="https://accounts.google.com/gsi/client" async defer></script> 
 </head>
 <body class="halloween-fog-effect">
     
@@ -644,7 +643,7 @@
             <div class="logo">MasterStudio</div>
             <div class="icon">👻</div>
         </div>
-        <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem;" onclick="document.querySelector('.nav-button.daily-quiz').click()">
+        <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem;">
             Iniciar Sesión 🔒
         </button>
     </header>
@@ -743,72 +742,58 @@
             <h1>💡 Pregunta Diaria de MasterStudio</h1>
             <div class="sorteo-container">
                 
-                <div id="quiz-auth-container" style="margin-bottom: 30px;">
+                <div id="unauthenticated-message" style="text-align: center;">
+                    <p class="countdown-title" style="color: #F44336; animation: none; font-size: 3rem;">¡ACCESO RESTRINGIDO!</p>
                     <p style="color: #cccccc; font-size: 1.2rem; margin-bottom: 20px;">
-                        Debes iniciar sesión para participar en la pregunta diaria. Solo una respuesta por usuario.
-                    </p>
-                    
-                    <div class="button-container">
-                        <div id="g_id_onload"
-                            data-client_id="876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com"
-                            data-callback="handleCredentialResponse"
-                            data-auto_prompt="false">
-                        </div>
-                        <div class="g_id_signin"
-                            data-type="standard"
-                            data-size="large"
-                            data-theme="outline"
-                            data-text="sign_in_with"
-                            data-shape="rectangular"
-                            data-locale="es"
-                            data-logo_alignment="left">
-                        </div>
-                    </div>
-                    <p id="user-display" style="color: #00ff00; font-size: 1.2rem; margin-top: 20px; display: none;">
-                        ¡Hola, <span id="logged-in-username">Usuario</span>!
+                        Debes iniciar sesión con tu cuenta en el botón superior derecho para participar.
                     </p>
                 </div>
+                <p id="user-display" style="color: #00ff00; font-size: 1.2rem; margin-top: 20px; display: none; text-align: center;">
+                    ¡Hola, <span id="logged-in-username">Usuario</span>!
+                </p>
 
-                <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 30px 0;">
+                <div id="authenticated-quiz-content" style="display: none;">
+                    
+                    <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 30px 0;">
 
-                <div id="quiz-question-container" style="display: none; text-align: left;">
-                    <p style="color: #ff6600; font-size: 1.5rem; text-align: center; margin-bottom: 25px;">
-                        Pregunta de hoy (<span id="quiz-date">YYYY-MM-DD</span>)
-                    </p>
+                    <div id="quiz-question-container" style="display: none; text-align: left;">
+                        <p style="color: #ff6600; font-size: 1.5rem; text-align: center; margin-bottom: 25px;">
+                            Pregunta de hoy (<span id="quiz-date">YYYY-MM-DD</span>)
+                        </p>
 
-                    <h2 id="question-text" style="color: #ffffff; font-size: 1.8rem; margin-bottom: 30px; font-family: 'Creepster', cursive; text-shadow: 2px 2px 0px #1e0028;">
-                        [Aquí va la pregunta]
-                    </h2>
+                        <h2 id="question-text" style="color: #ffffff; font-size: 1.8rem; margin-bottom: 30px; font-family: 'Creepster', cursive; text-shadow: 2px 2px 0px #1e0028;">
+                            [Aquí va la pregunta]
+                        </h2>
 
-                    <form id="answer-form">
+                        <form id="answer-form">
                         </form>
 
-                    <div class="button-container" style="margin-top: 40px;">
-                        <button type="submit" form="answer-form" class="download-button" id="submit-quiz-button" style="padding: 15px 50px;">
-                            ENVIAR RESPUESTA
-                        </button>
+                        <div class="button-container" style="margin-top: 40px;">
+                            <button type="submit" form="answer-form" class="download-button" id="submit-quiz-button" style="padding: 15px 50px;">
+                                ENVIAR RESPUESTA
+                            </button>
+                        </div>
+                        
+                        <p id="quiz-message" style="text-align: center; margin-top: 30px; font-size: 1.3rem; color: #ff6600; font-family: 'Creepster', cursive; display: none;"></p>
                     </div>
-                    
-                    <p id="quiz-message" style="text-align: center; margin-top: 30px; font-size: 1.3rem; color: #ff6600; font-family: 'Creepster', cursive; display: none;"></p>
-                </div>
 
-                <div id="quiz-result-container" style="display: none; text-align: center;">
-                    <p id="result-message" class="countdown-title" style="margin-bottom: 20px;">¡GANASTE UN TICKET! 🎟️</p>
-                    <p id="ticket-code-display" class="winner-username ticket-code">TICKET-ABCD-EFGH</p>
-                    <p style="color: #cccccc; font-size: 1.1rem; margin-top: 30px;">
-                        <span style="color: #00ff00; font-weight: bold;">PASO FINAL:</span> Toma una captura de pantalla de este código y dirígete a nuestro Discord.
-                    </p>
-                    <div class="button-container" style="margin-top: 20px;">
-                        <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
-                            RECLAMAR PREMIO EN DISCORD
-                        </a>
+                    <div id="quiz-result-container" style="display: none; text-align: center;">
+                        <p id="result-message" class="countdown-title" style="margin-bottom: 20px;">¡GANASTE UN TICKET! 🎟️</p>
+                        <p id="ticket-code-display" class="winner-username ticket-code">TICKET-ABCD-EFGH</p>
+                        <p style="color: #cccccc; font-size: 1.1rem; margin-top: 30px;">
+                            <span style="color: #00ff00; font-weight: bold;">PASO FINAL:</span> Toma una captura de pantalla de este código y dirígete a nuestro Discord.
+                        </p>
+                        <div class="button-container" style="margin-top: 20px;">
+                            <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
+                                RECLAMAR PREMIO EN DISCORD
+                            </a>
+                        </div>
+                        <p style="color: #DA70D6; font-size: 1rem; margin-top: 10px;">
+                            Abre un ticket con la razón **"Reclamar Beneficios"** y adjunta la captura de tu ticket.
+                        </p>
                     </div>
-                    <p style="color: #DA70D6; font-size: 1rem; margin-top: 10px;">
-                        Abre un ticket con la razón **"Reclamar Beneficios"** y adjunta la captura de tu ticket.
-                    </p>
-                </div>
 
-            </div>
+                </div> </div>
             <div class="footer">
                 <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
             </div>
@@ -1107,12 +1092,14 @@
         }
         
         // ---------------------------------------------
-        // LÓGICA DEL QUIZ DIARIO (Real con Google GSI)
+        // LÓGICA DEL QUIZ DIARIO (Simulado)
         // ---------------------------------------------
         
         // Variables para la Lógica del Quiz
-        const authContainer = document.getElementById('quiz-auth-container');
-        // const loginButton = document.getElementById('google-login-button'); // ELIMINADO: Ya no existe
+        const headerLoginButton = document.getElementById('header-login-button'); // NUEVO: Botón de la cabecera
+        const unauthenticatedMessage = document.getElementById('unauthenticated-message'); // NUEVO: Mensaje de no autenticado
+        const authenticatedQuizContent = document.getElementById('authenticated-quiz-content'); // NUEVO: Contenido del Quiz
+        
         const userDisplay = document.getElementById('user-display');
         const usernameEl = document.getElementById('logged-in-username');
         const questionContainer = document.getElementById('quiz-question-container');
@@ -1141,45 +1128,6 @@
 
         let currentUser = null; 
 
-        // PASO 3 AÑADIDO: Implementación de la función de callback de Google
-        /**
-         * FUNCIÓN CLAVE: Maneja la respuesta de la credencial de Google.
-         * Esta función es llamada automáticamente por Google.
-         * @param {object} response - Objeto con el token JWT de Google.
-         */
-        function handleCredentialResponse(response) {
-            // 1. Decodificar el token JWT para obtener la información del usuario
-            const token = response.credential;
-            const base64Url = token.split('.')[1];
-            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-            // Nota: window.atob() puede fallar con caracteres Unicode. Usar librerías si es para producción.
-            const payload = JSON.parse(window.atob(base64)); 
-            
-            // 2. Extraer los datos que nos interesan
-            const userId = payload.sub; // ID único de Google (usado como ID en tu lógica)
-            const username = payload.name; // Nombre completo del usuario
-            
-            // 3. Crear el objeto de usuario local
-            currentUser = { 
-                id: userId, 
-                name: username 
-            };
-            
-            // 4. Integrar con tu lógica existente (guardar y mostrar)
-            localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
-            
-            // Ocultar login, mostrar usuario y cargar quiz
-            authContainer.style.display = 'none';
-            usernameEl.textContent = currentUser.name;
-            userDisplay.style.display = 'block';
-            
-            loadDailyQuiz(currentUser.id);
-            
-            // Ocultar el contenedor GSI después del login
-            document.querySelectorAll('.g_id_signin').forEach(el => el.style.display = 'none');
-        }
-        // FIN DE handleCredentialResponse
-
         /**
          * Genera un código de ticket único (simulado)
          */
@@ -1189,26 +1137,91 @@
         }
 
         /**
+         * Controla la visibilidad de los elementos del Quiz basado en el estado de autenticación.
+         * También gestiona el estado del botón de login de la cabecera.
+         * @param {boolean} isAuthenticated 
+         */
+        function updateQuizDisplayForAuth(isAuthenticated) {
+            if (isAuthenticated) {
+                // Estado Autenticado
+                unauthenticatedMessage.style.display = 'none';
+                userDisplay.style.display = 'block';
+                authenticatedQuizContent.style.display = 'block';
+                
+                // Actualiza el botón de la cabecera
+                if (currentUser) {
+                     headerLoginButton.textContent = `¡Hola, ${currentUser.name}!`;
+                     headerLoginButton.disabled = true;
+                }
+            } else {
+                // Estado NO Autenticado
+                unauthenticatedMessage.style.display = 'block';
+                userDisplay.style.display = 'none';
+                authenticatedQuizContent.style.display = 'none';
+                
+                // Restaura el botón de la cabecera
+                headerLoginButton.textContent = 'Iniciar Sesión 🔒';
+                headerLoginButton.disabled = false;
+            }
+        }
+
+        /**
+         * SIMULACIÓN DE LOGIN. Pide el Nick de Discord para usarlo como 'usuario'.
+         */
+        function attemptLogin() {
+            // En un entorno real, Google devolvería un token o ID. Aquí simulamos el ID:
+            const simulatedUserId = 'user_' + Math.floor(Math.random() * 1000000);
+            const simulatedUsername = prompt('Por favor, ingresa tu Nick de Discord para simular el login con Google/Gmail:');
+            
+            if (simulatedUsername) {
+                currentUser = { id: simulatedUserId, name: simulatedUsername };
+                // Guardar localmente para 'recordar' al usuario entre refrescos.
+                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
+                
+                // Mostrar el nombre en el display del quiz
+                usernameEl.textContent = currentUser.name;
+                
+                // Actualizar la interfaz (botón y quiz)
+                updateQuizDisplayForAuth(true); 
+                
+                // Si la sección de Daily Quiz está activa, la cargamos (mostrando pregunta/resultado)
+                const dailyQuizSection = document.getElementById('daily-quiz');
+                if (dailyQuizSection && dailyQuizSection.classList.contains('active')) {
+                    loadDailyQuiz(currentUser.id);
+                }
+
+            } else {
+                alert('Debes ingresar un nombre para participar.');
+            }
+        }
+        
+        // ASIGNAMOS EL LISTENER AL BOTÓN DE LA CABECERA
+        headerLoginButton.addEventListener('click', attemptLogin);
+
+
+        /**
          * Verifica si el usuario ya está 'logueado' localmente al cargar la página.
          */
         function checkLocalStorageUser() {
             const user = localStorage.getItem(QUIZ_STORAGE_KEY);
             if (user) {
                 currentUser = JSON.parse(user);
-                authContainer.style.display = 'none';
                 usernameEl.textContent = currentUser.name;
-                userDisplay.style.display = 'block';
-                // Ocultar el botón de Google si ya hay sesión iniciada
-                document.querySelectorAll('.g_id_signin').forEach(el => el.style.display = 'none');
+                
+                // Actualiza el estado del botón de login en el header y el display del Quiz
+                updateQuizDisplayForAuth(true); 
+
                 return true;
             }
+            
+            // Si no hay usuario, asegura el estado de NO autenticado
+            updateQuizDisplayForAuth(false);
             return false;
         }
 
         /**
          * Verifica si el usuario ya respondió el quiz de hoy.
          */
-        // Función existente: No necesita cambio
         function hasUserRespondedToday(userId) {
             const responseKey = RESPONSE_STORAGE_KEY_PREFIX + userId + '_' + QUIZ_DATA.currentDate;
             return localStorage.getItem(responseKey) !== null;
@@ -1217,7 +1230,6 @@
         /**
          * Marca al usuario como ganador y guarda su ticket.
          */
-        // Función existente: No necesita cambio
         function markUserAsWinner(userId) {
             const responseKey = RESPONSE_STORAGE_KEY_PREFIX + userId + '_' + QUIZ_DATA.currentDate;
             const existingData = JSON.parse(localStorage.getItem(responseKey));
@@ -1236,7 +1248,6 @@
         /**
          * Carga el estado del quiz para el usuario.
          */
-        // Función existente: No necesita cambio
         function loadDailyQuiz(userId) {
             // Ocultamos todo antes de cargar
             questionContainer.style.display = 'none';
@@ -1269,7 +1280,6 @@
         /**
          * Muestra la pregunta y las opciones en el formulario.
          */
-        // Función existente: No necesita cambio
         function displayQuestion(question, options) {
             document.getElementById('question-text').textContent = question;
             answerForm.innerHTML = ''; // Limpiar opciones anteriores
@@ -1291,7 +1301,6 @@
         /**
          * Muestra la pantalla de victoria con el código de ticket.
          */
-        // Función existente: No necesita cambio
         function showWinScreen(ticketCode) {
             questionContainer.style.display = 'none';
             resultContainer.style.display = 'block';
@@ -1303,11 +1312,11 @@
         /**
          * Maneja el envío del formulario. Valida la respuesta localmente.
          */
-        // Función existente: No necesita cambio
         answerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
             if (!currentUser) {
+                // Esto no debería pasar con la nueva lógica, pero por seguridad
                 alert('Debes iniciar sesión primero.');
                 return;
             }
@@ -1370,7 +1379,11 @@
 
             // Lógica de inicio del Quiz: comprueba si el usuario ya está logueado
             if (checkLocalStorageUser()) {
-                loadDailyQuiz(currentUser.id);
+                 // Si está logueado y la sección de Quiz es la activa, la cargamos
+                 const dailyQuizSection = document.getElementById('daily-quiz');
+                 if (dailyQuizSection && dailyQuizSection.classList.contains('active')) {
+                    loadDailyQuiz(currentUser.id);
+                 }
             }
 
         });
