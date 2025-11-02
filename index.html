@@ -814,7 +814,7 @@
                     <p>El ganador es:</p>
                     <p id="winner-username" class="winner-username">MasterUsuario</p>
                     <p style="margin-top: 15px; font-size: 1.2rem; color: #DA70D6;">Tu código de ticket ganador es:</p>
-                    <p id="ticket-code" class="winner-username ticket-code">MSTR-123456</p>
+                    <p id="ticket-code" class="winner-username ticket-code">MSTR-998765</p>
                     <p style="margin-top: 20px;">¡Reclama tu premio en el canal de soporte de Discord!</p>
                 </div>
                 
@@ -862,7 +862,8 @@
         let currentUser = null;
         let countdownInterval;
         const QUIZ_STORAGE_KEY = 'masterstudio_quiz_user';
-        const maintenanceKey = 'masterstudio_maintenance_bypass';
+        // CAMBIO: Definición de la clave de bypass
+        const maintenanceKey = 'master'; 
 
         // Elementos del Header para el Login/Usuario
         const headerAuthArea = document.getElementById('header-auth-area');
@@ -1122,7 +1123,7 @@
                 if (countdownElement) countdownElement.style.display = 'block';
                 if (winnerAnnouncement) winnerAnnouncement.style.display = 'none';
                 
-                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 60 * 24));
                 const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
@@ -1138,12 +1139,12 @@
          * Verifica el estado del modo mantenimiento y lo aplica si es necesario.
          */
         function checkMaintenanceStatus() {
-            // Simulación: Cambia 'false' a 'true' para activar el mantenimiento
+            // Simulación: El mantenimiento ya está ACTIVO (true)
             const isMaintenanceActive = true;
             
-            // Bypass de mantenimiento (para desarrolladores/admins)
+            // Bypass de mantenimiento: Busca "?dev=master" en la URL
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('bypass') === maintenanceKey) {
+            if (urlParams.get('dev') === maintenanceKey) { // Se cambió 'bypass' por 'dev'
                 console.log("Modo Mantenimiento evitado por bypass.");
                 document.body.style.display = 'block';
                 return false; 
