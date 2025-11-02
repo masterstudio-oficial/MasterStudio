@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MasterStudio - Edición Halloween 👻</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Creepster&display=swap" rel="stylesheet">
-    <script src="https://accounts.google.com/gsi/client" async defer data-client_id="[SU_GOOGLE_CLIENT_ID_AQUI]"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer data-client_id="876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com"></script>
     <style>
         /* INICIO: Animación de Fondo de Niebla (Fog/Mist) */
         @keyframes fog-movement {
@@ -644,7 +644,7 @@
             <div class="logo">MasterStudio</div>
             <div class="icon">👻</div>
         </div>
-        <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem;" onclick="document.querySelector('.nav-button.daily-quiz').click()">
+        <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem;" onclick="openGoogleLogin()">
             Iniciar Sesión 🔒
         </button>
     </header>
@@ -670,7 +670,7 @@
             <h1>¡Truco o Trato en MasterStudio!</h1>
             <p>En **MasterStudio**, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🎮⚔️ fusionando creatividad, dinamismo y diversión para todos los jugadores ✨.</p>
             <p>Nuestra Misión:</p>
-            <p>Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🔥. ¡Prepárate para la temporada más aterradora! 💀🕯️</p>
+            <p>Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🔥. ¡Prépárate para la temporada más aterradora! 💀🕯️</p>
             <div class="footer">
                 <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
                 <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
@@ -1011,11 +1011,33 @@
             countdownEl.textContent = `${h}:${m}:${s}`;
         }
 
+        // ---------------------------------------------
+        // FUNCIÓN CLAVE PARA ABRIR EL PROMPT DE GOOGLE
+        // ---------------------------------------------
+        /**
+         * Abre la ventana emergente de inicio de sesión de Google (One Tap o Pop-up).
+         */
+        function openGoogleLogin() {
+             if (typeof google !== 'undefined' && google.accounts && google.accounts.id) {
+                // Muestra la ventana de inicio de sesión de Google
+                google.accounts.id.prompt(); 
+            } else {
+                // En caso de que el script de Google no se haya cargado, intenta navegar.
+                document.querySelector('.nav-button.daily-quiz').click();
+            }
+        }
+
         // JavaScript para mostrar/ocultar secciones y botón home
         document.querySelectorAll('.nav-button').forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-section');
                 
+                // NUEVA LÓGICA: Si es la sección Quiz y el usuario NO está logueado,
+                // abrimos el prompt de Google.
+                if (targetId === 'daily-quiz' && !currentUser) {
+                    openGoogleLogin();
+                }
+
                 // 1. Remover la clase 'active-nav' de todos los botones
                 document.querySelectorAll('.nav-button').forEach(btn => {
                     btn.classList.remove('active-nav');
@@ -1379,6 +1401,7 @@
             if (checkLocalStorageUser()) {
                 loadDailyQuiz(currentUser.id);
             }
+
         });
     </script>
 </body>
