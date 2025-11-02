@@ -628,34 +628,8 @@
             margin-top: 30px;
         }
         /* FIN: Estilos de MODO MANTENIMIENTO */
-
-        /* ESTILOS DEL BOTÓN GOOGLE */
-        .google-login-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #ffffff;
-            color: #000000;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            padding: 10px 15px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            /* Eliminamos max-width para centrado relativo */
-            width: 100%; 
-        }
-
-        .google-login-button img {
-            width: 18px;
-            height: 18px;
-            margin-right: 10px;
-        }
-
-        .google-login-button:hover {
-            background-color: #f0f0f0;
-        }
     </style>
+    <script src="https://accounts.google.com/gsi/client" async defer></script> 
 </head>
 <body class="halloween-fog-effect">
     
@@ -670,21 +644,32 @@
             <div class="logo">MasterStudio</div>
             <div class="icon">👻</div>
         </div>
-        <div id="header-auth-container" style="position: relative; z-index: 5;">
-            <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem;" onclick="toggleGoogleButton()">
-                Iniciar Sesión 🔒
-            </button>
+        
+        <div id="header-auth-area" class="login-button">
             
-            <div id="google-login-wrapper" style="position: absolute; top: 100%; right: 0; margin-top: 5px; background: #262626; padding: 10px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); display: none; min-width: 250px;">
-                <button id="google-login-btn" class="google-login-button">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1024px-Google_%22G%22_logo.svg.png" alt="Google Logo">
-                    Iniciar sesión con Google
-                </button>
+            <div id="header-login-container">
+                <div id="g_id_onload"
+                     data-client_id="876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com"
+                     data-callback="handleCredentialResponse"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-size="medium" 
+                     data-theme="outline"
+                     data-text="sign_in_with"
+                     data-shape="rectangular"
+                     data-locale="es"
+                     data-logo_alignment="left">
+                </div>
             </div>
             
-             <button id="logged-in-display" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem; display: none; cursor: default;" disabled>
-                ¡Hola, <span id="logged-in-username">Usuario</span>!
-            </button>
+            <div id="header-user-display" style="display:none; text-align: right;">
+                <p style="color: #00ff00; margin-bottom: 5px; font-size: 0.8rem;">Bienvenido,</p>
+                <span id="header-username-el" class="logo" style="font-size: 1.2rem; margin-right: 0; text-shadow: 0 0 8px #00ff00;"></span>
+                <button onclick="logout()" class="nav-button" style="margin-top: 5px; padding: 5px 10px; font-size: 0.8rem; background-color: #F44336; border-color: #F44336;">Cerrar Sesión</button>
+            </div>
+            
         </div>
         </header>
 
@@ -740,711 +725,454 @@
             <div class="guide-step">
                 <h2>PASO 2: Ejecución e Instalación</h2>
                 <p>Luego de completar el primer paso, pasaremos al segundo paso, donde tendrás que abrir el archivo que acabaste de descargar para proseguir a la instalación. Lo más seguro es que te salga una advertencia de Windows Protect; comúnmente siempre sale cuando intentas instalar cualquier programa de internet. Simplemente le daremos click en "Más Información" y una vez desplegado, nos habilitará la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalación de MasterClient.</p>
-                <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/SNYR7Fh8/Diseno-sin-titulo-33.png" alt="Imagen del Paso 2" style="max-width: 600px;">
-                </div>
-            </div>
-
-            <div class="guide-step">
-                <h2>Finalización PASO 2: Ejecución e Instalación</h2>
-                <p>Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, donde se nos abrirá automáticamente una ventana del instalador del MasterClient - MasterStudio Launcher. La primera ventana nos mostrará los Términos de uso del launcher, los cuales leeremos para estar de acuerdo, y como siguiente paso le daremos a "Acepto". Luego pasaremos a la segunda ventana, donde nos preguntará en qué usuario de nuestra PC queremos instalar el MasterClient o si lo instalarás en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos "Instalar".</p>
-                <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/8CZfXRn4/Diseno-sin-titulo-34.png" alt="Imagen del Paso 2.1" style="max-width: 600px;">
-                </div>
             </div>
             
-            <div class="guide-step">
-                <h2>PASO 3: Configuración e Instancia</h2>
-                <p>Seguramente cuando se nos abra el Launcher, no nos saldrá Jugar directamente, nos saldrá sin Instancias o sin nada simplemente. Primero que todo, nos dirigiremos a la esquina superior derecha e iniciaremos sesión, sea con cuenta Premium (Microsoft) o como Invitado (Solo el nombre de Usuario del juego). En caso de haber seleccionado con Microsoft, pues iniciarás sesión como comúnmente lo haces como usuario Premium, pero en caso de seleccionar Invitado, se abrirá una pestaña donde pondrás tu Nick Name que saldrá en Minecraft. Luego de iniciar sesión, nos dirigiremos a la tuerca de configuración del Launcher y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods). Luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dándole de nuevo a la tuerca.</p>
-                <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/Sssdg7kD/Diseno-sin-titulo-36.png" alt="Imagen del Paso 3" style="max-width: 600px;">
+            <div class="footer">
+                <p>¿Necesitas ayuda con la instalación? Visita nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a>.</p>
+            </div>
+        </section>
+
+        <section id="mobs">
+            <h1>👻 Mobs y Entidades Nuevas</h1>
+            <div class="post">
+                <img src="https://i.postimg.cc/Pq0wY4q2/Diseno-sin-titulo-29.png" alt="Imagen del post 1">
+                <div class="post-content">
+                    <h3>El Jinete Espectral ha Llegado</h3>
+                    <p class="date">Publicado: 25 de Octubre, 2025</p>
+                    <p>Un nuevo jefe ha sido liberado en el servidor. Enfréntate al Jinete Espectral en el bioma maldito y obtén recompensas legendarias.</p>
                 </div>
             </div>
+            <div class="post">
+                <img src="https://i.postimg.cc/Qt29G8x4/Diseno-sin-titulo-28.png" alt="Imagen del post 2">
+                <div class="post-content">
+                    <h3>Invasión de Murciélagos Vampiro</h3>
+                    <p class="date">Publicado: 15 de Octubre, 2025</p>
+                    <p>Los murciélagos comunes han mutado y ahora drenan tu vitalidad. ¡Cuidado en la noche!</p>
+                </div>
+            </div>
+            <div class="footer">
+                <p>Más información en nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a>.</p>
+            </div>
+        </section>
 
-            <div class="guide-step">
-                <h2>Finalización PASO 3: Instancia</h2>
-                <p style="color: #00ff00; text-align: center; max-width: 100%;">TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERÁN INFORMADOS EN EL DISCORD!</p>
+        <section id="dificultad">
+            <h1>💀 Cambio de Dificultad</h1>
+            <p class="placeholder-text">Próximamente: Sistema de dificultad dinámico basado en la actividad del servidor.</p>
+            <div class="footer">
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="eventos">
+            <h1>🚨 Eventos de la Semana</h1>
+            <p class="placeholder-text">¡Mantente atento! El próximo gran evento de Caza de Brujas se anunciará pronto.</p>
+            <div class="footer">
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="actualizaciones">
+            <h1>⚙️ Novedades y Actualizaciones</h1>
+            <div class="post">
+                <img src="https://i.postimg.cc/RVYd1m6J/Diseno-sin-titulo-30.png" alt="Imagen del post 3">
+                <div class="post-content">
+                    <h3>Sistema de Crafteo Místico <span class="new-badge" style="padding: 5px; border-radius: 5px;">¡NUEVO!</span></h3>
+                    <p class="date">Publicado: 31 de Octubre, 2025</p>
+                    <p>Hemos implementado un nuevo sistema para craftear objetos únicos de Halloween usando ingredientes especiales. ¡Descubre las recetas!</p>
+                </div>
+            </div>
+            <div class="footer">
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="recompensas">
+            <h1>🌟 Tabla de Recompensas</h1>
+            <p class="placeholder-text">¡Gana tickets de sorteo y recompensas exclusivas participando en el **Quiz Diario**!</p>
+            <div class="footer">
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="castigos">
+            <h1>⛔ Sistema de Castigos</h1>
+            <p class="placeholder-text">Mantenemos la comunidad segura. Consulta las normas de MasterStudio en Discord.</p>
+            <div class="footer">
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="sorteo">
+            <div class="sorteo-container">
+                <h1 class="countdown-title">🎉 Próximo Sorteo</h1>
+                <p>El próximo gran sorteo se llevará a cabo en:</p>
+                <div id="countdown-timer" class="countdown-timer">Cargando...</div>
+                <p>¡El premio de este sorteo es una **Caja Misteriosa Legendaria**!</p>
                 
-                <div class="button-container">
-                    <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank" style="padding: 15px 30px; font-size: 1.3rem; border-radius: 10px;">
-                        ÚNETE A NUESTRO DISCORD 📢
-                    </a>
+                <div id="winner-announcement" style="display:none;">
+                    <p class="winner-announcement">¡FELICIDADES!</p>
+                    <p>El ganador es:</p>
+                    <p id="winner-username" class="winner-username">MasterUsuario</p>
+                    <p style="margin-top: 15px; font-size: 1.2rem; color: #DA70D6;">Tu código de ticket ganador es:</p>
+                    <p id="ticket-code" class="winner-username ticket-code">MSTR-123456</p>
+                    <p style="margin-top: 20px;">¡Reclama tu premio en el canal de soporte de Discord!</p>
+                </div>
+                
+                <p class="minor" style="margin-top: 30px; font-size: 1rem; color: #888888;">Para participar, acumula tickets respondiendo la **Pregunta Diaria**.</p>
+            </div>
+            <div class="footer">
+                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="daily-quiz">
+            <div class="sorteo-container">
+                <h1 class="countdown-title">💡 Pregunta Diaria de MasterStudio</h1>
+                
+                <div id="quiz-auth-container">
+                    <p style="font-size: 1.2rem; color: #ff6600;">Por favor, **inicia sesión con Google** usando el botón en la esquina superior derecha para poder participar en la pregunta diaria y ganar recompensas.</p>
                 </div>
 
-                <div class="footer">
-                    <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
+                <div id="quiz-user-info" style="display:none;">
+                    <p style="font-size: 1.2rem; color: #cccccc;">¡Bienvenido, <strong id="quiz-username-el" style="color: #00ff00;"></strong>! Responde la pregunta de hoy:</p>
                 </div>
+                
+                <div id="question-container" style="display:none;">
+                    <div id="daily-quiz-content">
+                        </div>
+                    <div class="button-container">
+                        <button id="submit-quiz" class="download-button" style="background: linear-gradient(135deg, #4CAF50 0%, #1E8449 100%); border-color: #00ff00;">ENVIAR RESPUESTA</button>
+                    </div>
+                </div>
+                
+                <p id="quiz-message" style="margin-top: 20px; font-size: 1.5rem;"></p>
+
             </div>
-            
+            <div class="footer">
+                <p>Reglas del Quiz: Solo una respuesta por día. Responde correctamente para obtener un ticket de sorteo. ¡Buena suerte!</p>
+            </div>
         </section>
         
-        <section id="daily-quiz" data-category="daily-quiz">
-            <h1>💡 Pregunta Diaria de MasterStudio</h1>
-            <div class="sorteo-container">
-                
-                <div id="unauthenticated-message" style="text-align: center;">
-                    <p class="countdown-title" style="color: #F44336; animation: none; font-size: 3rem;">¡ACCESO RESTRINGIDO!</p>
-                    <p style="color: #cccccc; font-size: 1.2rem; margin-bottom: 20px;">
-                        Debes iniciar sesión con tu cuenta en el botón superior derecho para participar.
-                    </p>
-                </div>
-
-                <p id="user-display" style="color: #00ff00; font-size: 1.2rem; margin-top: 20px; display: none; text-align: center;">
-                    ¡Hola, <span id="quiz-logged-in-username">Usuario</span>!
-                </p>
-
-                <div id="authenticated-quiz-content" style="display: none;">
-                    
-                    <hr style="border-color: rgba(255, 255, 255, 0.1); margin: 30px 0;">
-
-                    <div id="quiz-question-container" style="display: none; text-align: left;">
-                        <p style="color: #ff6600; font-size: 1.5rem; text-align: center; margin-bottom: 25px;">
-                            Pregunta de hoy (<span id="quiz-date">YYYY-MM-DD</span>)
-                        </p>
-
-                        <h2 id="question-text" style="color: #ffffff; font-size: 1.8rem; margin-bottom: 30px; font-family: 'Creepster', cursive; text-shadow: 2px 2px 0px #1e0028;">
-                            [Aquí va la pregunta]
-                        </h2>
-
-                        <form id="answer-form">
-                        </form>
-
-                        <div class="button-container" style="margin-top: 40px;">
-                            <button type="submit" form="answer-form" class="download-button" id="submit-quiz-button" style="padding: 15px 50px;">
-                                ENVIAR RESPUESTA
-                            </button>
-                        </div>
-                        
-                        <p id="quiz-message" style="text-align: center; margin-top: 30px; font-size: 1.3rem; color: #ff6600; font-family: 'Creepster', cursive; display: none;"></p>
-                    </div>
-
-                    <div id="quiz-result-container" style="display: none; text-align: center;">
-                        <p id="result-message" class="countdown-title" style="margin-bottom: 20px;">¡GANASTE UN TICKET! 🎟️</p>
-                        <p id="ticket-code-display" class="winner-username ticket-code">TICKET-ABCD-EFGH</p>
-                        <p style="color: #cccccc; font-size: 1.1rem; margin-top: 30px;">
-                            <span style="color: #00ff00; font-weight: bold;">PASO FINAL:</span> Toma una captura de pantalla de este código y dirígete a nuestro Discord.
-                        </p>
-                        <div class="button-container" style="margin-top: 20px;">
-                            <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
-                                RECLAMAR PREMIO EN DISCORD
-                            </a>
-                        </div>
-                        <p style="color: #DA70D6; font-size: 1rem; margin-top: 10px;">
-                            Abre un ticket con la razón **"Reclamar Beneficios"** y adjunta la captura de tu ticket.
-                        </p>
-                    </div>
-
-                </div> </div>
-            <div class="footer">
-                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-        <section id="sorteo">
-            <h1>Sorteo Especial Halloween 🎃</h1>
-            <div class="sorteo-container">
-                <p class="countdown-title" id="sorteo-title">Se revelará el ganador en:</p>
-                <div class="countdown-timer" id="countdown">48:00:00</div>
-                <div id="winner-reveal" style="display: none;">
-                    <p class="winner-announcement">¡FELICIDADES - ESPECIAL HALLOWEEN!</p>
-                    <p class="winner-username" id="winner-name"></p>
-                </div>
-                <p style="color: #cccccc; margin-top: 20px;">Mantente atento a nuestro Discord para participar en el sorteo de Halloween. ¡Mucha suerte!</p>
-            </div>
-            <div class="footer">
-                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-        <section id="mobs" data-category="mobs">
-            <h1>Mobs Espeluznantes Nuevos</h1>
-            <div id="posts-mobs" class="posts-container"></div>
-            <p class="placeholder-text">¡Cuidado con lo que acecha en la oscuridad! 🐺</p>
-            <div class="footer">
-                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="dificultad" data-category="dificultad">
-            <h1>Cambio de Dificultad (Noche de Terror)</h1>
-            <div id="posts-dificultad" class="posts-container"></div>
-            <p class="placeholder-text">¡El nivel de miedo subirá pronto! 😈</p>
-            <div class="footer">
-                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="eventos" data-category="eventos">
-            <h1>Eventos de Calabaza y Fantasmas</h1>
-            <div id="posts-eventos" class="posts-container"></div>
-            <p class="placeholder-text">¡Mantente al tanto de las cacerías de brujas! 🧙‍♀️</p>
-            <div class="footer">
-                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="actualizaciones" data-category="actualizaciones">
-            <h1>Actualizaciones Terroríficas</h1>
-            <div id="posts-actualizaciones" class="posts-container"></div>
-            <p class="placeholder-text">Próximas actualizaciones en el cementerio... 🪦</p>
-            <div class="footer">
-                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="recompensas" data-category="recompensas">
-            <h1>Recompensas de Halloween</h1>
-            <div id="posts-recompensas" class="posts-container"></div>
-            <p class="placeholder-text">¡Dulces o baneos! 🍬</p>
-            <div class="footer">
-                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="castigos" data-category="castigos">
-            <h1>Castigos de la Cripta</h1>
-            <div id="posts-castigos" class="posts-container"></div>
-            <p class="placeholder-text">¡No dejes que el Conde Master te atrape! 🧛</p>
-            <div class="footer">
-                <p>&copy; 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
     </main>
 
     <script>
-        // ---------------------------------------------
-        // NUEVA LÓGICA: MODO MANTENIMIENTO (CLIENTE ESTATICO)
-        // ---------------------------------------------
-
-        // *** 1. CONTROL PRINCIPAL: CAMBIA ESTO PARA ACTIVAR/DESACTIVAR EL MANTENIMIENTO ***
-        // true: Mantenimiento ACTIVO (se activa para todos menos el bypass)
-        // false: Mantenimiento INACTIVO (el sitio funciona normal)
-        const IS_MAINTENANCE_ACTIVE = true; // <-- Mantenimiento ACTIVO
-        // 2. CLAVE DE BYPASS: Necesita ser parte de la cadena de consulta (ej: ?dev=master)
-        const DEV_BYPASS_KEY = 'dev=master'; 
-
-        /**
-         * Verifica si el modo de mantenimiento está activo y aplica el bypass.
-         * Si el mantenimiento está activo Y la clave de bypass NO está en la URL,
-         * oculta el contenido principal y muestra la pantalla de mantenimiento.
-         * @returns {boolean} Retorna true si está en mantenimiento, false si no.
-         */
-        function checkMaintenanceStatus() {
-            const mainContent = document.querySelector('main');
-            const headerContent = document.querySelector('header');
-            const navigationContainer = document.querySelector('.main-navigation-container');
-            const maintenanceSection = document.getElementById('maintenance-mode');
-            
-            // 1. Verificar si la clave de bypass está presente en la URL
-            const isDevBypass = window.location.search.includes(DEV_BYPASS_KEY);
-
-            // 2. Si el mantenimiento está activo Y no hay bypass, ACTIVAMOS la pantalla
-            if (IS_MAINTENANCE_ACTIVE && !isDevBypass) {
-                // Ocultar todo el contenido principal
-                if (mainContent) mainContent.style.display = 'none';
-                if (navigationContainer) navigationContainer.style.display = 'none';
-                if (headerContent) headerContent.style.display = 'none';
-                // Mostrar la pantalla de mantenimiento (usando flex para el centrado)
-                if (maintenanceSection) maintenanceSection.style.display = 'flex'; 
-                
-                return true;
-            }
-            
-            // Si no hay mantenimiento o si el bypass está activo: Mostrar el sitio normal
-            if (mainContent) mainContent.style.display = 'block';
-            if (navigationContainer) navigationContainer.style.display = 'flex';
-            if (headerContent) headerContent.style.display = 'flex';
-            if (maintenanceSection) maintenanceSection.style.display = 'none';
-            return false;
-        }
-
-
-        // ---------------------------------------------
-        // *** LÓGICA DEL SORTEO CON PARTICIPANTES Y FECHA FIJA ***
-        // ---------------------------------------------
-        
-        // 1. CONFIGURACIÓN: Lista de Participantes (TU LISTA)
-        const PARTICIPANTS = [
-            "99al0nzo99", "whitev7", "_s1lcotxr_", "bobuso123", "jos123p5._._02968", "neonthethinker", 
-            "gafassx", "carretero._34294", "jafetrl_23330", "axellsora", "pou_gamer12", "alberto6124", 
-            "rous___", "angelopaiyt", "destnty", "lapslap.", "breccsito14", "focuszegar", "swtyb", 
-            "agente_w23", "zanoratvt", "sr.piedra.", "gorgos_82882", "dijimon_yt_32935", "brian_yt_o", 
-            "elfer12", "tini_591", "narytavt", "alexis4lokos", "yaxlien_46010", "rodrixd6", "emimexx_"
-        ];
-
-        // 2. FECHA DE FINALIZACIÓN Y REVELACIÓN (1/11/2025 a las 3PM hora MX)
-        const TARGET_END_DATE_STRING = 'November 1, 2025 15:00:00 GMT-0600'; 
-        let endTime = new Date(TARGET_END_DATE_STRING).getTime();
-        const WINNER_STORAGE_KEY = 'masterstudio_sorteo_winner'; // Clave para persistir el ganador
-        
-        // Lógica del Sorteo (función clave: selecciona un ganador si no existe y lo guarda)
-        function getWinner() {
-            let winner = localStorage.getItem(WINNER_STORAGE_KEY);
-
-            if (!winner) {
-                // Solo seleccionar un ganador si no hay uno guardado
-                if (PARTICIPANTS.length > 0) {
-                    const randomIndex = Math.floor(Math.random() * PARTICIPANTS.length);
-                    winner = PARTICIPANTS[randomIndex];
-                    localStorage.setItem(WINNER_STORAGE_KEY, winner);
-                } else {
-                    winner = null; 
-                }
-            }
-            return winner;
-        }
-
-        // Lógica del Contador
+        // --------------------------------------------
+        // DEFINICIÓN DE VARIABLES GLOBALES
+        // --------------------------------------------
+        let currentUser = null;
         let countdownInterval;
-        function updateCountdown() {
-            const now = new Date().getTime();
-            const distance = endTime - now;
-            
-            const countdownEl = document.getElementById('countdown');
-            const titleEl = document.getElementById('sorteo-title');
-            const winnerRevealEl = document.getElementById('winner-reveal');
-            const winnerNameEl = document.getElementById('winner-name');
+        const QUIZ_STORAGE_KEY = 'masterstudio_quiz_user';
+        const maintenanceKey = 'masterstudio_maintenance_bypass';
 
-            if (distance < 0) {
-                clearInterval(countdownInterval);
-                countdownEl.style.display = 'none';
+        // Elementos del Header para el Login/Usuario
+        const headerAuthArea = document.getElementById('header-auth-area');
+        const headerLoginContainer = document.getElementById('header-login-container');
+        const headerUserDisplay = document.getElementById('header-user-display');
+        const headerUsernameEl = document.getElementById('header-username-el');
 
-                // *** LLAMADA CLAVE: Selecciona o recupera el ganador ***
-                const finalWinner = getWinner(); 
-
-                // Revelar el ganador
-                if (finalWinner) {
-                    titleEl.textContent = '¡GANADOR REVELADO!';
-                    winnerNameEl.textContent = finalWinner;
-                    winnerRevealEl.style.display = 'block';
-                } else {
-                    titleEl.textContent = '¡SORTEO FINALIZADO!';
-                    countdownEl.textContent = '¡Gracias por participar!';
-                    countdownEl.style.display = 'block';
-                }
-                return;
-            }
-
-            // Cálculo de tiempo (Días, Horas, Minutos, Segundos)
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // Formato de dos dígitos, combinando días y horas
-            const h = String(hours + (days * 24)).padStart(2, '0');
-            const m = String(minutes).padStart(2, '0');
-            const s = String(seconds).padStart(2, '0');
-            
-            countdownEl.textContent = `${h}:${m}:${s}`;
-        }
-
-        // JavaScript para mostrar/ocultar secciones y botón home
-        document.querySelectorAll('.nav-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-section');
-                
-                // 1. Remover la clase 'active-nav' de todos los botones
-                document.querySelectorAll('.nav-button').forEach(btn => {
-                    btn.classList.remove('active-nav');
-                });
-                
-                // 2. Añadir la clase 'active-nav' al botón que fue clickeado
-                this.classList.add('active-nav');
-
-                // 3. Ocultar todas las secciones
-                document.querySelectorAll('section').forEach(section => {
-                    // Solo ocultar secciones que NO sean de mantenimiento
-                    if (section.id !== 'maintenance-mode') { 
-                        section.classList.remove('active');
-                    }
-                });
-                
-                // 4. Mostrar la sección seleccionada
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.classList.add('active');
-                    
-                    // Si se hace clic en Daily Quiz, cargar su estado si está logueado
-                    if (targetId === 'daily-quiz' && currentUser) {
-                        loadDailyQuiz(currentUser.id);
-                    }
-                }
-                
-                // 5. Ocultar el wrapper de Google si estaba abierto
-                document.getElementById('google-login-wrapper').style.display = 'none';
-
-            });
-        });
-        
-        // Función para cargar los posts dinámicamente
-        async function loadPosts() {
-            const JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
-
-            try {
-                const response = await fetch(JSON_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const posts = await response.json();
-
-                document.querySelectorAll('.posts-container').forEach(container => {
-                    container.innerHTML = '';
-                });
-                
-                let postsLoadedCount = 0; 
-
-                posts.forEach(post => {
-                    const category = post.categoria || 'dificultad';
-                    const container = document.getElementById(`posts-${category}`);
-
-                    if (container) {
-                        const postElement = document.createElement('div');
-                        postElement.className = 'post';
-
-                        let badge = post.esNuevo ? '<span class="new-badge">NEW!</span>' : '';
-                        
-                        postElement.innerHTML = `
-                            ${badge}
-                            <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
-                            <div class="post-content">
-                                <h3>${post.titulo}</h3>
-                                <span class="date">Fecha: ${post.fecha}</span>
-                                <p>${post.descripcion}</p>
-                            </div>
-                        `;
-                        container.prepend(postElement);
-                        postsLoadedCount++;
-                        
-                        const placeholderText = container.parentElement.querySelector('.placeholder-text');
-                        if (placeholderText) {
-                            placeholderText.style.display = 'none';
-                        }
-                    }
-                });
-                
-                if (postsLoadedCount === 0 && posts.length > 0) {
-                     throw new Error('Posts loaded, but missing valid categories. Check posts.json structure.');
-                }
-
-
-            } catch (e) {
-                console.error('Error al cargar posts:', e);
-                
-                document.querySelectorAll('section[data-category]').forEach(section => {
-                     const placeholderText = section.querySelector('.placeholder-text');
-                     if (placeholderText) {
-                         placeholderText.style.display = 'block';
-                     }
-                });
-            }
-        }
-        
-        // ---------------------------------------------
-        // LÓGICA DEL QUIZ DIARIO (Simulado)
-        // ---------------------------------------------
-        
-        // Variables para la Lógica del Quiz
-        const headerLoginButton = document.getElementById('header-login-button'); // Botón 'Iniciar Sesión'
-        const googleLoginBtn = document.getElementById('google-login-btn'); // Botón 'Iniciar Sesión con Google'
-        const googleLoginWrapper = document.getElementById('google-login-wrapper'); // Contenedor del botón de Google
-        const loggedInDisplay = document.getElementById('logged-in-display'); // Display del usuario logueado
-
-        const unauthenticatedMessage = document.getElementById('unauthenticated-message'); // Mensaje de no autenticado
-        const authenticatedQuizContent = document.getElementById('authenticated-quiz-content'); // Contenido del Quiz
-        
-        const usernameEl = document.getElementById('logged-in-username');
-        const quizUsernameEl = document.getElementById('quiz-logged-in-username'); // Nuevo elemento para el Quiz
-        const userDisplay = document.getElementById('user-display');
-        const questionContainer = document.getElementById('quiz-question-container');
-        const answerForm = document.getElementById('answer-form');
+        // Elementos de la sección Quiz
+        const quizAuthContainer = document.getElementById('quiz-auth-container');
+        const quizUserInfo = document.getElementById('quiz-user-info');
+        const quizUsernameEl = document.getElementById('quiz-username-el');
+        const questionContainer = document.getElementById('question-container');
         const quizMessage = document.getElementById('quiz-message');
-        const resultContainer = document.getElementById('quiz-result-container');
-        const ticketCodeDisplay = document.getElementById('ticket-code-display');
-        const quizDateEl = document.getElementById('quiz-date');
-        
-        // Simulación de la base de datos/backend del Quiz
-        const QUIZ_DATA = {
-            pregunta: "¿Cuál es el nombre del nuevo jefe final añadido en la Edición Halloween de MasterStudio?",
-            opciones: {
-                a: "El Jinete sin Cabeza",
-                b: "La Calavera de Master",
-                c: "El Devorador de Almas",
-                d: "El Conde Drácula"
-            },
-            respuestaCorrecta: 'b', // Ejemplo de respuesta correcta
-            currentDate: new Date().toLocaleDateString('es-MX', { year: 'numeric', month: '2-digit', day: '2-digit' })
+        const quizContent = document.getElementById('daily-quiz-content');
+        const submitButton = document.getElementById('submit-quiz');
+
+        // Definición de datos simulados (para el Quiz)
+        const dailyQuizData = {
+            id: 'quiz_halloween_2025_10_31',
+            date: '2025-10-31',
+            question: '¿Cuál es el nombre del nuevo jefe que aparece en el bioma maldito?',
+            options: [
+                { text: 'El Espectro de Medianoche', isCorrect: false, id: 'opt1' },
+                { text: 'El Jinete Espectral', isCorrect: true, id: 'opt2' },
+                { text: 'El Rey Calabaza', isCorrect: false, id: 'opt3' },
+                { text: 'El Segador de Almas', isCorrect: false, id: 'opt4' }
+            ]
         };
         
-        // Simulación de almacenamiento de respuestas (cambiarías esto por una API real)
-        const QUIZ_STORAGE_KEY = 'masterstudio_quiz_user';
-        const RESPONSE_STORAGE_KEY_PREFIX = 'masterstudio_quiz_response_'; // key + userID + date
+        // Simulación de la hora del sorteo (Ejemplo: Sorteo el 1 de Noviembre a las 20:00 UTC-5)
+        const raffleDate = new Date('2025-11-01T20:00:00-05:00'); 
+        
+        // Simulación del ganador
+        const mockWinner = {
+            name: 'MasterWinner99',
+            ticket: 'MSTR-998765'
+        };
 
-        let currentUser = null; 
-        let isGoogleButtonVisible = false;
-
-        /**
-         * Alterna la visibilidad del botón de Google al hacer clic en 'Iniciar Sesión 🔒'.
-         */
-        function toggleGoogleButton() {
-             // Si no estamos logueados, alternamos la visibilidad del pop-up de Google
-             if (!currentUser) {
-                 isGoogleButtonVisible = !isGoogleButtonVisible;
-                 googleLoginWrapper.style.display = isGoogleButtonVisible ? 'block' : 'none';
-             }
-        }
+        // --------------------------------------------
+        // FUNCIONES PRINCIPALES
+        // --------------------------------------------
         
         /**
-         * Genera un código de ticket único (simulado)
+         * FUNCIÓN CLAVE: Maneja la respuesta de la credencial de Google.
+         * Esta función es llamada automáticamente por Google.
+         * @param {object} response - Objeto con el token JWT de Google.
          */
-        function generateTicketCode() {
-            const S4 = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1).toUpperCase();
-            return `TICKET-${S4()}-${S4()}`;
-        }
-
-        /**
-         * Controla la visibilidad de los elementos del Quiz basado en el estado de autenticación.
-         * También gestiona el estado del botón de login de la cabecera.
-         * @param {boolean} isAuthenticated 
-         */
-        function updateQuizDisplayForAuth(isAuthenticated) {
-            if (isAuthenticated) {
-                // Estado Autenticado
-                unauthenticatedMessage.style.display = 'none';
-                userDisplay.style.display = 'block';
-                authenticatedQuizContent.style.display = 'block';
-                
-                // Actualiza el botón de la cabecera
-                if (currentUser) {
-                     // OCULTAR botón de Iniciar Sesión y MOSTRAR display de usuario
-                     headerLoginButton.style.display = 'none'; 
-                     googleLoginWrapper.style.display = 'none'; // Asegura que el pop-up se oculte
-                     loggedInDisplay.style.display = 'block';
-                     usernameEl.textContent = currentUser.name;
-                     quizUsernameEl.textContent = currentUser.name; // Actualiza también el quiz display
-                }
-            } else {
-                // Estado NO Autenticado
-                unauthenticatedMessage.style.display = 'block';
-                userDisplay.style.display = 'none';
-                authenticatedQuizContent.style.display = 'none';
-                
-                // Restaura el botón de la cabecera
-                headerLoginButton.style.display = 'block';
-                loggedInDisplay.style.display = 'none';
-            }
-        }
-
-        /**
-         * LÓGICA DE LOGIN. SIMULA LA AUTENTICACIÓN REAL DE GOOGLE SIN PEDIR NINGÚN DATO ADICIONAL.
-         * En un entorno real, aquí se llamaría al SDK de Google para abrir el pop-up:
-         * gapi.auth2.getAuthInstance().signIn().then(handleSuccess, handleError);
-         */
-        function handleGoogleLogin() {
+        function handleCredentialResponse(response) {
+            // 1. Decodificar el token JWT para obtener la información del usuario
+            const token = response.credential;
+            const base64Url = token.split('.')[1];
+            // Reemplazo de caracteres para decodificación URL-safe base64
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); 
+            const payload = JSON.parse(window.atob(base64));
             
-            // 1. Simulación del Pop-up y el proceso de autenticación de Google exitoso
-            // En la vida real, el pop-up de Google se abriría aquí, y esta función se ejecutaría
-            // en un callback de éxito tras el cierre del pop-up.
-            alert('Abriendo ventana de Google para autenticación...');
+            // 2. Extraer los datos que nos interesan
+            const userId = payload.sub; // ID único de Google
+            const username = payload.name; // Nombre completo del usuario
             
-            // OCULTAR el wrapper después de "abrir" el pop-up (como si la interacción iniciara)
-            googleLoginWrapper.style.display = 'none'; 
-            isGoogleButtonVisible = false;
-
-            // 2. Simulación de la respuesta exitosa de Google:
-            const fixedSimulatedUserId = 'user_masterstudio_authed';
-            const fixedSimulatedUsername = 'JugadorVerificado'; 
-
-            currentUser = { id: fixedSimulatedUserId, name: fixedSimulatedUsername };
+            // 3. Crear el objeto de usuario local
+            currentUser = { 
+                id: userId, 
+                name: username 
+            };
             
-            // 3. Guardar localmente para 'recordar' al usuario.
+            // 4. Integrar con tu lógica existente (Guardar usuario y actualizar UI)
             localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
             
-            // 4. Actualizar la interfaz (botón y quiz)
-            updateQuizDisplayForAuth(true); 
-            
-            // Opcional: Notificar al usuario que la simulación fue exitosa
-            // alert(`¡Bienvenido, ${currentUser.name}! Has iniciado sesión.`);
-            
-            // 5. Si la sección de Daily Quiz está activa, la cargamos.
-            const dailyQuizSection = document.getElementById('daily-quiz');
-            if (dailyQuizSection && dailyQuizSection.classList.contains('active')) {
-                loadDailyQuiz(currentUser.id);
-            }
-        }
-        
-        // ASIGNAMOS EL LISTENER AL BOTÓN DE GOOGLE (el que está en el pop-up del header)
-        googleLoginBtn.addEventListener('click', handleGoogleLogin);
-        
-        // ASIGNAMOS EL LISTENER PARA CERRAR EL POPUP SI HACE CLIC FUERA
-        document.addEventListener('click', function(event) {
-            const authContainer = document.getElementById('header-auth-container');
-            // Si el clic no fue dentro del contenedor de auth, y el botón de Google es visible
-            if (authContainer && !authContainer.contains(event.target) && isGoogleButtonVisible) {
-                googleLoginWrapper.style.display = 'none';
-                isGoogleButtonVisible = false;
-            }
-        });
+            // **Lógica de Ocultar/Mostrar en el HEADER**
+            if (headerLoginContainer) headerLoginContainer.style.display = 'none';
+            if (headerUsernameEl) headerUsernameEl.textContent = currentUser.name;
+            if (headerUserDisplay) headerUserDisplay.style.display = 'block';
 
+            // **Lógica de Ocultar/Mostrar en la sección QUIZ**
+            if (quizAuthContainer) quizAuthContainer.style.display = 'none';
+            if (quizUsernameEl) quizUsernameEl.textContent = currentUser.name;
+            if (quizUserInfo) quizUserInfo.style.display = 'block';
+            
+            // 5. Cargar el quiz
+            loadDailyQuiz(currentUser.id);
+        }
 
         /**
-         * Verifica si el usuario ya está 'logueado' localmente al cargar la página.
+         * Maneja el clic en los botones de navegación para cambiar de sección.
+         * @param {string} sectionId - El ID de la sección a mostrar.
          */
-        function checkLocalStorageUser() {
-            const user = localStorage.getItem(QUIZ_STORAGE_KEY);
-            if (user) {
-                currentUser = JSON.parse(user);
+        function navigateToSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+            }
+            
+            // Actualizar botones de navegación
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active-nav');
+                if (btn.getAttribute('data-section') === sectionId) {
+                    btn.classList.add('active-nav');
+                }
+            });
+        }
+        
+        /**
+         * Cierra la sesión del usuario.
+         */
+        function logout() {
+            localStorage.removeItem(QUIZ_STORAGE_KEY);
+            currentUser = null;
+            
+            // Mostrar Login en Header y ocultar usuario
+            if (headerLoginContainer) headerLoginContainer.style.display = 'block';
+            if (headerUserDisplay) headerUserDisplay.style.display = 'none';
+            
+            // Mostrar mensaje de login en Quiz y ocultar información de usuario y quiz
+            if (quizAuthContainer) quizAuthContainer.style.display = 'block';
+            if (quizUserInfo) quizUserInfo.style.display = 'none';
+            if (questionContainer) questionContainer.style.display = 'none';
+            if (quizMessage) quizMessage.textContent = 'Sesión cerrada. Inicia de nuevo para participar en el Quiz.';
+        }
+
+        /**
+         * Verifica si hay un usuario logueado en LocalStorage y actualiza la UI.
+         * @returns {boolean} True si hay un usuario logueado, false en caso contrario.
+         */
+        const checkLocalStorageUser = () => {
+            const storedUser = localStorage.getItem(QUIZ_STORAGE_KEY);
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
                 
-                // Actualiza el estado del botón de login en el header y el display del Quiz
-                updateQuizDisplayForAuth(true); 
+                // **Ajuste para el Header**
+                if (headerLoginContainer) headerLoginContainer.style.display = 'none';
+                if (headerUsernameEl) headerUsernameEl.textContent = currentUser.name;
+                if (headerUserDisplay) headerUserDisplay.style.display = 'block';
+                
+                // **Ajuste para la sección Quiz**
+                if (quizAuthContainer) quizAuthContainer.style.display = 'none';
+                if (quizUsernameEl) quizUsernameEl.textContent = currentUser.name;
+                if (quizUserInfo) quizUserInfo.style.display = 'block';
 
                 return true;
             }
             
-            // Si no hay usuario, asegura el estado de NO autenticado
-            updateQuizDisplayForAuth(false);
+            // Si no está logueado, aseguramos que el botón de login del Header se muestre.
+            if (headerLoginContainer) headerLoginContainer.style.display = 'block'; 
+            if (headerUserDisplay) headerUserDisplay.style.display = 'none';
+            
+            // Y en la sección Quiz, aseguramos que el mensaje de login se muestre.
+            if (quizAuthContainer) quizAuthContainer.style.display = 'block';
+            if (quizUserInfo) quizUserInfo.style.display = 'none';
+
+            return false;
+        };
+        
+        /**
+         * Carga y muestra el quiz diario si el usuario no ha respondido.
+         * @param {string} userId - ID único del usuario.
+         */
+        function loadDailyQuiz(userId) {
+            quizMessage.textContent = '';
+            
+            // Simulación: Comprobar si ya respondió hoy
+            const quizAnsweredKey = `quiz_answered_${dailyQuizData.id}_${userId}`;
+            const answeredToday = localStorage.getItem(quizAnsweredKey);
+            
+            if (answeredToday) {
+                questionContainer.style.display = 'none';
+                
+                const answeredData = JSON.parse(answeredToday);
+                if (answeredData.correct) {
+                     quizMessage.textContent = `✅ ¡Ya has respondido la pregunta de hoy y acertaste! Tu ticket es: ${answeredData.code}. Vuelve mañana. 🎉`;
+                     quizMessage.style.color = '#00ff00';
+                } else {
+                     quizMessage.textContent = '❌ Ya respondiste incorrectamente hoy. ¡Vuelve mañana por otra oportunidad! 💀';
+                     quizMessage.style.color = '#F44336';
+                }
+                return;
+            }
+            
+            // Si no ha respondido, cargar la pregunta
+            questionContainer.style.display = 'block';
+            quizContent.innerHTML = `
+                <p style="font-size: 1.3rem; margin-bottom: 25px;">${dailyQuizData.question}</p>
+                <form id="quiz-form">
+                    ${dailyQuizData.options.map(opt => `
+                        <input type="radio" id="${opt.id}" name="quiz_option" value="${opt.id}">
+                        <label for="${opt.id}">${opt.text}</label>
+                    `).join('')}
+                </form>
+            `;
+            
+            // Añadir el listener para el botón de envío
+            submitButton.onclick = () => {
+                const form = document.getElementById('quiz-form');
+                const selectedOptionId = form.elements['quiz_option'].value;
+                const selectedOption = dailyQuizData.options.find(opt => opt.id === selectedOptionId);
+
+                if (!selectedOption) {
+                    quizMessage.textContent = 'Por favor, selecciona una opción.';
+                    quizMessage.style.color = '#ff6600';
+                    return;
+                }
+                
+                submitButton.disabled = true; // Deshabilitar para evitar doble envío
+
+                if (selectedOption.isCorrect) {
+                    // Simulación: Marcar como respondido correctamente y dar ticket
+                    const newTicketCode = `TICKET-${Math.floor(Math.random() * 99999)}`;
+                    localStorage.setItem(quizAnsweredKey, JSON.stringify({
+                        date: new Date().toISOString(),
+                        code: newTicketCode,
+                        correct: true
+                    }));
+                    
+                    questionContainer.style.display = 'none';
+                    quizMessage.textContent = `🥳 ¡Respuesta Correcta! Has ganado un ticket para el sorteo: ${newTicketCode}. 🎉`;
+                    quizMessage.style.color = '#FFD700'; // Dorado
+                } else {
+                    // Simulación: Marcar como respondido incorrectamente
+                    localStorage.setItem(quizAnsweredKey, JSON.stringify({
+                        date: new Date().toISOString(),
+                        code: null,
+                        correct: false
+                    }));
+                    
+                    questionContainer.style.display = 'none';
+                    quizMessage.textContent = '❌ Respuesta incorrecta. ¡Vuelve mañana por otra oportunidad! 💀';
+                    quizMessage.style.color = '#F44336'; // Rojo
+                }
+                
+                submitButton.disabled = false;
+            };
+        }
+
+        /**
+         * Actualiza el contador del sorteo o muestra el ganador simulado.
+         */
+        function updateCountdown() {
+            const now = new Date();
+            const timeDifference = raffleDate - now;
+
+            const countdownElement = document.getElementById('countdown-timer');
+            const winnerAnnouncement = document.getElementById('winner-announcement');
+            const winnerUsernameEl = document.getElementById('winner-username');
+            const ticketCodeEl = document.getElementById('ticket-code');
+            
+            if (timeDifference < 0) {
+                // Sorteo terminado, mostrar ganador simulado
+                clearInterval(countdownInterval);
+                if (countdownElement) countdownElement.style.display = 'none';
+                if (winnerAnnouncement) winnerAnnouncement.style.display = 'block';
+                if (winnerUsernameEl) winnerUsernameEl.textContent = mockWinner.name;
+                if (ticketCodeEl) ticketCodeEl.textContent = mockWinner.ticket;
+            } else {
+                if (countdownElement) countdownElement.style.display = 'block';
+                if (winnerAnnouncement) winnerAnnouncement.style.display = 'none';
+                
+                const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeDifference % (1000 * 60)) / 1000);
+
+                const countdownText = 
+                    `${days.toString().padStart(2, '0')}:${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                
+                if (countdownElement) countdownElement.textContent = countdownText;
+            }
+        }
+        
+        /**
+         * Verifica el estado del modo mantenimiento y lo aplica si es necesario.
+         */
+        function checkMaintenanceStatus() {
+            // Simulación: Cambia 'false' a 'true' para activar el mantenimiento
+            const isMaintenanceActive = false;
+            
+            // Bypass de mantenimiento (para desarrolladores/admins)
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('bypass') === maintenanceKey) {
+                console.log("Modo Mantenimiento evitado por bypass.");
+                document.body.style.display = 'block';
+                return false; 
+            }
+            
+            if (isMaintenanceActive) {
+                document.getElementById('maintenance-mode').style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                // Ocultar elementos principales
+                const header = document.querySelector('header');
+                const mainNav = document.querySelector('.main-navigation-container');
+                const mainContent = document.querySelector('main');
+                
+                if (header) header.style.display = 'none';
+                if (mainNav) mainNav.style.display = 'none';
+                if (mainContent) mainContent.style.display = 'none';
+                
+                return true; 
+            }
+
+            // Si no está en mantenimiento, nos aseguramos de que todo esté visible
+            document.getElementById('maintenance-mode').style.display = 'none';
+            document.body.style.display = 'block';
             return false;
         }
 
-        /**
-         * Verifica si el usuario ya respondió el quiz de hoy.
-         */
-        function hasUserRespondedToday(userId) {
-            const responseKey = RESPONSE_STORAGE_KEY_PREFIX + userId + '_' + QUIZ_DATA.currentDate;
-            return localStorage.getItem(responseKey) !== null;
-        }
-        
-        /**
-         * Marca al usuario como ganador y guarda su ticket.
-         */
-        function markUserAsWinner(userId) {
-            const responseKey = RESPONSE_STORAGE_KEY_PREFIX + userId + '_' + QUIZ_DATA.currentDate;
-            const existingData = JSON.parse(localStorage.getItem(responseKey));
-            
-            let ticketCode = existingData && existingData.ticketCode ? existingData.ticketCode : generateTicketCode();
-            
-            localStorage.setItem(responseKey, JSON.stringify({
-                responded: true,
-                isCorrect: true,
-                ticketCode: ticketCode
-            }));
-            
-            return ticketCode;
-        }
-        
-        /**
-         * Carga el estado del quiz para el usuario.
-         */
-        function loadDailyQuiz(userId) {
-            // Ocultamos todo antes de cargar
-            questionContainer.style.display = 'none';
-            resultContainer.style.display = 'none';
-            quizMessage.style.display = 'none';
-            
-            quizDateEl.textContent = QUIZ_DATA.currentDate;
-
-            const responseKey = RESPONSE_STORAGE_KEY_PREFIX + userId + '_' + QUIZ_DATA.currentDate;
-            const existingResponse = JSON.parse(localStorage.getItem(responseKey));
-            
-            if (existingResponse && existingResponse.responded) {
-                // El usuario ya respondió hoy
-                
-                if (existingResponse.isCorrect && existingResponse.ticketCode) {
-                    // Si ya ganó hoy y tiene un ticket
-                    showWinScreen(existingResponse.ticketCode);
-                } else {
-                    // Ya respondió, pero perdió
-                    quizMessage.textContent = `Ya has respondido la pregunta de hoy. Vuelve mañana.`;
-                    quizMessage.style.display = 'block';
-                    quizMessage.style.color = '#F44336';
-                }
-            } else {
-                // El usuario NO ha respondido hoy
-                displayQuestion(QUIZ_DATA.pregunta, QUIZ_DATA.opciones);
-            }
-        }
-
-        /**
-         * Muestra la pregunta y las opciones en el formulario.
-         */
-        function displayQuestion(question, options) {
-            document.getElementById('question-text').textContent = question;
-            answerForm.innerHTML = ''; // Limpiar opciones anteriores
-            
-            for (const [key, value] of Object.entries(options)) {
-                // Usamos la nueva estructura de radio button con estilos personalizados
-                const newOptionHTML = `
-                    <input type="radio" name="answer" value="${key}" id="opt-${key}" required>
-                    <label for="opt-${key}">
-                        ${key.toUpperCase()}) ${value}
-                    </label>
-                `;
-                answerForm.innerHTML += newOptionHTML; 
-            }
-            
-            questionContainer.style.display = 'block';
-        }
-
-        /**
-         * Muestra la pantalla de victoria con el código de ticket.
-         */
-        function showWinScreen(ticketCode) {
-            questionContainer.style.display = 'none';
-            resultContainer.style.display = 'block';
-            ticketCodeDisplay.textContent = ticketCode;
-            // Ocultar mensaje genérico
-            quizMessage.style.display = 'none';
-        }
-
-        /**
-         * Maneja el envío del formulario. Valida la respuesta localmente.
-         */
-        answerForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            if (!currentUser) {
-                // Esto no debería pasar con la nueva lógica, pero por seguridad
-                alert('Debes iniciar sesión primero.');
-                return;
-            }
-
-            const selectedOption = answerForm.querySelector('input[name="answer"]:checked');
-            if (!selectedOption) {
-                alert('Por favor, selecciona una opción.');
-                return;
-            }
-            
-            const answer = selectedOption.value;
-            const submitButton = document.getElementById('submit-quiz-button');
-            submitButton.disabled = true;
-
-            quizMessage.style.display = 'block';
-            
-            // 1. Simulación de la validación
-            if (answer === QUIZ_DATA.respuestaCorrecta) {
-                // Respuesta CORRECTA: Marcar como ganador y generar ticket
-                const ticket = markUserAsWinner(currentUser.id);
-                showWinScreen(ticket);
-            } else {
-                // Respuesta INCORRECTA: Marcar como respondido y fallido
-                const responseKey = RESPONSE_STORAGE_KEY_PREFIX + currentUser.id + '_' + QUIZ_DATA.currentDate;
-                localStorage.setItem(responseKey, JSON.stringify({
-                    responded: true,
-                    isCorrect: false,
-                    ticketCode: null
-                }));
-                
-                questionContainer.style.display = 'none';
-                quizMessage.textContent = '❌ Respuesta incorrecta. ¡Vuelve mañana por otra oportunidad! 💀';
-                quizMessage.style.color = '#F44336'; // Rojo
-            }
-            
-            submitButton.disabled = false;
-        });
-
-        // ---------------------------------------------
+        // --------------------------------------------
         // LÓGICA DE INICIO GENERAL (DOMContentLoaded)
-        // ---------------------------------------------
+        // --------------------------------------------
         document.addEventListener('DOMContentLoaded', () => {
             
             // 1. **VERIFICAR MODO MANTENIMIENTO**
@@ -1460,18 +1188,23 @@
             // Iniciar el contador del sorteo
             countdownInterval = setInterval(updateCountdown, 1000);
             updateCountdown();
-            
-            // Cargar los posts
-            loadPosts(); 
+
+            // Lógica de navegación
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    // Usar el atributo data-section para la navegación
+                    const sectionId = e.currentTarget.getAttribute('data-section');
+                    if (sectionId) {
+                        navigateToSection(sectionId);
+                    }
+                });
+            });
 
             // Lógica de inicio del Quiz: comprueba si el usuario ya está logueado
-            checkLocalStorageUser();
-            
-            // Si la sección de Daily Quiz está activa, y el usuario está logueado, cargarla.
-            const dailyQuizSection = document.getElementById('daily-quiz');
-            if (dailyQuizSection && dailyQuizSection.classList.contains('active') && currentUser) {
+            if (checkLocalStorageUser()) {
                 loadDailyQuiz(currentUser.id);
             }
+
         });
     </script>
 </body>
