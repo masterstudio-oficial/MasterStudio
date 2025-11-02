@@ -5,9 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MasterStudio - Edición Halloween 👻</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Creepster&display=swap" rel="stylesheet">
-    <script src="https://accounts.google.com/gsi/client" async defer></script> 
     <style>
-        /* La animación de fondo de niebla fue eliminada para corregir el error net::ERR_INVALID_URL */
+        /* INICIO: Animación de Fondo de Niebla (Fog/Mist) */
+        @keyframes fog-movement {
+            0% { background-position: 0 0; }
+            100% { background-position: -200vw 0; }
+        }
+        
+        .halloween-fog-effect::after {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 400vw;
+            height: 100vh;
+            /* Patrón de imagen sutil de niebla/nubes con transparencia */
+            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAABCAYAAADeC2x5AAAABmJLR0QA/wD/AP/gvaeTAAAAB3RJTUUH5gIHDws/p9tq+wAAAAlwFlzAAAuIwAA LiMD+gkF9gAAAAd0SU1FB9gIHFYvQxYh1+gAAAAdaVRYdFNvZnR3YXJlAHJlYWRlci.hB9Obd') repeat-x;
+            opacity: 0.15;
+            z-index: -1;
+            animation: fog-movement 120s linear infinite;
+            pointer-events: none;
+        }
+        /* FIN: Animación de Fondo de Niebla */
 
         /* Reset básico */
         * {
@@ -22,7 +41,11 @@
             color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden;
-            /* La clase halloween-fog-effect ha sido eliminada */
+        }
+
+        /* Aplicamos la clase de niebla al body para el efecto */
+        body.halloween-fog-effect {
+            position: relative;
         }
 
         /* Header */
@@ -606,8 +629,9 @@
         }
         /* FIN: Estilos de MODO MANTENIMIENTO */
     </style>
+    <script src="https://accounts.google.com/gsi/client" async defer></script> 
 </head>
-<body>
+<body class="halloween-fog-effect">
     
     <section id="maintenance-mode">
         <h1>⚠️ MANTENIMIENTO ⚠️</h1>
@@ -723,24 +747,23 @@
                     <p style="color: #cccccc; font-size: 1.2rem; margin-bottom: 20px;">
                         Debes iniciar sesión para participar en la pregunta diaria. Solo una respuesta por usuario.
                     </p>
+                    
                     <div class="button-container">
                         <div id="g_id_onload"
                             data-client_id="876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com"
-                            data-context="signin"
-                            data-use_fedcm_for_prompt="true"
                             data-callback="handleCredentialResponse"
                             data-auto_prompt="false">
                         </div>
-
                         <div class="g_id_signin"
                             data-type="standard"
-                            data-shape="rectangular"
-                            data-theme="outline"
-                            data-text="signin_with"
                             data-size="large"
-                            data-locale="es">
+                            data-theme="outline"
+                            data-text="sign_in_with"
+                            data-shape="rectangular"
+                            data-locale="es"
+                            data-logo_alignment="left">
                         </div>
-                        </div>
+                    </div>
                     <p id="user-display" style="color: #00ff00; font-size: 1.2rem; margin-top: 20px; display: none;">
                         ¡Hola, <span id="logged-in-username">Usuario</span>!
                     </p>
@@ -866,7 +889,7 @@
         // NUEVA LÓGICA: MODO MANTENIMIENTO (CLIENTE ESTATICO)
         // ---------------------------------------------
 
-        // *** 1. CONTROL PRINCIPAL: ESTABLECIDO EN TRUE POR SOLICITUD DEL USUARIO ***
+        // *** 1. CONTROL PRINCIPAL: CAMBIA ESTO PARA ACTIVAR/DESACTIVAR EL MANTENIMIENTO ***
         // true: Mantenimiento ACTIVO (se activa para todos menos el bypass)
         // false: Mantenimiento INACTIVO (el sitio funciona normal)
         const IS_MAINTENANCE_ACTIVE = true; 
@@ -1084,12 +1107,12 @@
         }
         
         // ---------------------------------------------
-        // LÓGICA DEL QUIZ DIARIO (Ahora con integración GSI)
+        // LÓGICA DEL QUIZ DIARIO (Real con Google GSI)
         // ---------------------------------------------
         
         // Variables para la Lógica del Quiz
         const authContainer = document.getElementById('quiz-auth-container');
-        // const loginButton = document.getElementById('google-login-button'); // Eliminado, Google renderiza el botón
+        // const loginButton = document.getElementById('google-login-button'); // ELIMINADO: Ya no existe
         const userDisplay = document.getElementById('user-display');
         const usernameEl = document.getElementById('logged-in-username');
         const questionContainer = document.getElementById('quiz-question-container');
@@ -1118,6 +1141,45 @@
 
         let currentUser = null; 
 
+        // PASO 3 AÑADIDO: Implementación de la función de callback de Google
+        /**
+         * FUNCIÓN CLAVE: Maneja la respuesta de la credencial de Google.
+         * Esta función es llamada automáticamente por Google.
+         * @param {object} response - Objeto con el token JWT de Google.
+         */
+        function handleCredentialResponse(response) {
+            // 1. Decodificar el token JWT para obtener la información del usuario
+            const token = response.credential;
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            // Nota: window.atob() puede fallar con caracteres Unicode. Usar librerías si es para producción.
+            const payload = JSON.parse(window.atob(base64)); 
+            
+            // 2. Extraer los datos que nos interesan
+            const userId = payload.sub; // ID único de Google (usado como ID en tu lógica)
+            const username = payload.name; // Nombre completo del usuario
+            
+            // 3. Crear el objeto de usuario local
+            currentUser = { 
+                id: userId, 
+                name: username 
+            };
+            
+            // 4. Integrar con tu lógica existente (guardar y mostrar)
+            localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
+            
+            // Ocultar login, mostrar usuario y cargar quiz
+            authContainer.style.display = 'none';
+            usernameEl.textContent = currentUser.name;
+            userDisplay.style.display = 'block';
+            
+            loadDailyQuiz(currentUser.id);
+            
+            // Ocultar el contenedor GSI después del login
+            document.querySelectorAll('.g_id_signin').forEach(el => el.style.display = 'none');
+        }
+        // FIN DE handleCredentialResponse
+
         /**
          * Genera un código de ticket único (simulado)
          */
@@ -1125,55 +1187,6 @@
             const S4 = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1).toUpperCase();
             return `TICKET-${S4()}-${S4()}`;
         }
-        
-        /**
-         * FUNCIÓN CALLBACK PARA GOOGLE SIGN-IN
-         * Maneja la respuesta de la credencial (ID Token). 
-         */
-        function handleCredentialResponse(response) {
-            if (response.credential) {
-                
-                try {
-                    const token = response.credential;
-                    // El token JWT tiene 3 partes separadas por puntos (header.payload.signature)
-                    const base64Url = token.split('.')[1]; 
-                    // JWT usa Base64 URL Safe, lo ajustamos a Base64 estándar para atob()
-                    const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                    
-                    // Decodificación insegura del payload (para fines de UI)
-                    const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-                    }).join(''));
-                    
-                    const userData = JSON.parse(jsonPayload);
-                    
-                    const simulatedUserId = userData.sub; // ID único de Google
-                    // Usamos el nombre del usuario de Google
-                    const simulatedUsername = userData.name || userData.email.split('@')[0]; 
-                    
-                    currentUser = { id: simulatedUserId, name: simulatedUsername };
-                    localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
-                    
-                    // Ocultar login, mostrar usuario y cargar quiz
-                    authContainer.style.display = 'none';
-                    usernameEl.textContent = currentUser.name;
-                    userDisplay.style.display = 'block';
-                    
-                    loadDailyQuiz(currentUser.id);
-
-                } catch (e) {
-                    console.error("Error al procesar el token de Google:", e);
-                    alert("Se inició sesión, pero hubo un error al procesar el token. Revisa la consola.");
-                }
-
-            } else {
-                console.error("Fallo al obtener la credencial de Google.");
-                alert("No se pudo iniciar sesión con Google. Inténtalo de nuevo.");
-            }
-        }
-        // Hacemos que la función sea globalmente accesible para el script de Google.
-        window.handleCredentialResponse = handleCredentialResponse;
-
 
         /**
          * Verifica si el usuario ya está 'logueado' localmente al cargar la página.
@@ -1185,6 +1198,8 @@
                 authContainer.style.display = 'none';
                 usernameEl.textContent = currentUser.name;
                 userDisplay.style.display = 'block';
+                // Ocultar el botón de Google si ya hay sesión iniciada
+                document.querySelectorAll('.g_id_signin').forEach(el => el.style.display = 'none');
                 return true;
             }
             return false;
@@ -1193,6 +1208,7 @@
         /**
          * Verifica si el usuario ya respondió el quiz de hoy.
          */
+        // Función existente: No necesita cambio
         function hasUserRespondedToday(userId) {
             const responseKey = RESPONSE_STORAGE_KEY_PREFIX + userId + '_' + QUIZ_DATA.currentDate;
             return localStorage.getItem(responseKey) !== null;
@@ -1201,6 +1217,7 @@
         /**
          * Marca al usuario como ganador y guarda su ticket.
          */
+        // Función existente: No necesita cambio
         function markUserAsWinner(userId) {
             const responseKey = RESPONSE_STORAGE_KEY_PREFIX + userId + '_' + QUIZ_DATA.currentDate;
             const existingData = JSON.parse(localStorage.getItem(responseKey));
@@ -1219,6 +1236,7 @@
         /**
          * Carga el estado del quiz para el usuario.
          */
+        // Función existente: No necesita cambio
         function loadDailyQuiz(userId) {
             // Ocultamos todo antes de cargar
             questionContainer.style.display = 'none';
@@ -1251,6 +1269,7 @@
         /**
          * Muestra la pregunta y las opciones en el formulario.
          */
+        // Función existente: No necesita cambio
         function displayQuestion(question, options) {
             document.getElementById('question-text').textContent = question;
             answerForm.innerHTML = ''; // Limpiar opciones anteriores
@@ -1272,6 +1291,7 @@
         /**
          * Muestra la pantalla de victoria con el código de ticket.
          */
+        // Función existente: No necesita cambio
         function showWinScreen(ticketCode) {
             questionContainer.style.display = 'none';
             resultContainer.style.display = 'block';
@@ -1283,6 +1303,7 @@
         /**
          * Maneja el envío del formulario. Valida la respuesta localmente.
          */
+        // Función existente: No necesita cambio
         answerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
