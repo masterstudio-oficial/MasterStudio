@@ -5,29 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MasterStudio - Edición Halloween 👻</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Creepster&display=swap" rel="stylesheet">
-    <script src="https://accounts.google.com/gsi/client"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script> 
     <style>
-        /* INICIO: Animación de Fondo de Niebla (Fog/Mist) */
-        @keyframes fog-movement {
-            0% { background-position: 0 0; }
-            100% { background-position: -200vw 0; }
-        }
-        
-        .halloween-fog-effect::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 400vw;
-            height: 100vh;
-            /* Patrón de imagen sutil de niebla/nubes con transparencia */
-            background: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAABCAYAAADeC2x5AAAABmJLR0QA/wD/AP/gvaeTAAAAB3RJTUUH5gIHDws/p9tq+wAAAAlwFlzAAAuIwAA LiMD+gkF9gAAAAd0SU1FB9gIHFYvQxYh1+gAAAAdaVRYdFNvZnR3YXJlAHJlYWRlci.hB9Obd') repeat-x;
-            opacity: 0.15;
-            z-index: -1;
-            animation: fog-movement 120s linear infinite;
-            pointer-events: none;
-        }
-        /* FIN: Animación de Fondo de Niebla */
+        /* La animación de fondo de niebla fue eliminada para corregir el error net::ERR_INVALID_URL */
 
         /* Reset básico */
         * {
@@ -42,11 +22,7 @@
             color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden;
-        }
-
-        /* Aplicamos la clase de niebla al body para el efecto */
-        body.halloween-fog-effect {
-            position: relative;
+            /* La clase halloween-fog-effect ha sido eliminada */
         }
 
         /* Header */
@@ -631,7 +607,7 @@
         /* FIN: Estilos de MODO MANTENIMIENTO */
     </style>
 </head>
-<body class="halloween-fog-effect">
+<body>
     
     <section id="maintenance-mode">
         <h1>⚠️ MANTENIMIENTO ⚠️</h1>
@@ -890,7 +866,7 @@
         // NUEVA LÓGICA: MODO MANTENIMIENTO (CLIENTE ESTATICO)
         // ---------------------------------------------
 
-        // *** 1. CONTROL PRINCIPAL: CAMBIA ESTO PARA ACTIVAR/DESACTIVAR EL MANTENIMIENTO ***
+        // *** 1. CONTROL PRINCIPAL: ESTABLECIDO EN TRUE POR SOLICITUD DEL USUARIO ***
         // true: Mantenimiento ACTIVO (se activa para todos menos el bypass)
         // false: Mantenimiento INACTIVO (el sitio funciona normal)
         const IS_MAINTENANCE_ACTIVE = true; 
@@ -1151,16 +1127,11 @@
         }
         
         /**
-         * PASO 3: FUNCIÓN CALLBACK PARA GOOGLE SIGN-IN
+         * FUNCIÓN CALLBACK PARA GOOGLE SIGN-IN
          * Maneja la respuesta de la credencial (ID Token). 
-         * Envía esta credencial a tu servidor para validación y creación de sesión en un entorno REAL.
          */
         function handleCredentialResponse(response) {
             if (response.credential) {
-                
-                // *** ADVERTENCIA: La decodificación del token en el cliente es INSEGURA para producción.
-                // Se hace aquí solo para demostrar la extracción de datos de usuario con fines
-                // de prueba/simulación de la interfaz. ***
                 
                 try {
                     const token = response.credential;
