@@ -628,6 +628,33 @@
             margin-top: 30px;
         }
         /* FIN: Estilos de MODO MANTENIMIENTO */
+
+        /* ESTILOS DEL BOTÓN GOOGLE */
+        .google-login-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #ffffff;
+            color: #000000;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 10px 15px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            /* Eliminamos max-width para centrado relativo */
+            width: 100%; 
+        }
+
+        .google-login-button img {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+        }
+
+        .google-login-button:hover {
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 <body class="halloween-fog-effect">
@@ -643,10 +670,23 @@
             <div class="logo">MasterStudio</div>
             <div class="icon">👻</div>
         </div>
-        <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem;">
-            Iniciar Sesión 🔒
-        </button>
-    </header>
+        <div id="header-auth-container" style="position: relative; z-index: 5;">
+            <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem;" onclick="toggleGoogleButton()">
+                Iniciar Sesión 🔒
+            </button>
+            
+            <div id="google-login-wrapper" style="position: absolute; top: 100%; right: 0; margin-top: 5px; background: #262626; padding: 10px; border-radius: 5px; box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); display: none; min-width: 250px;">
+                <button id="google-login-btn" class="google-login-button">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/1024px-Google_%22G%22_logo.svg.png" alt="Google Logo">
+                    Iniciar sesión con Google
+                </button>
+            </div>
+            
+             <button id="logged-in-display" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem; display: none; cursor: default;" disabled>
+                ¡Hola, <span id="logged-in-username">Usuario</span>!
+            </button>
+        </div>
+        </header>
 
     <div class="main-navigation-container">
         
@@ -748,8 +788,9 @@
                         Debes iniciar sesión con tu cuenta en el botón superior derecho para participar.
                     </p>
                 </div>
+
                 <p id="user-display" style="color: #00ff00; font-size: 1.2rem; margin-top: 20px; display: none; text-align: center;">
-                    ¡Hola, <span id="logged-in-username">Usuario</span>!
+                    ¡Hola, <span id="quiz-logged-in-username">Usuario</span>!
                 </p>
 
                 <div id="authenticated-quiz-content" style="display: none;">
@@ -877,8 +918,7 @@
         // *** 1. CONTROL PRINCIPAL: CAMBIA ESTO PARA ACTIVAR/DESACTIVAR EL MANTENIMIENTO ***
         // true: Mantenimiento ACTIVO (se activa para todos menos el bypass)
         // false: Mantenimiento INACTIVO (el sitio funciona normal)
-        const IS_MAINTENANCE_ACTIVE = true; 
-
+        const IS_MAINTENANCE_ACTIVE = true; // <-- Mantenimiento ACTIVO
         // 2. CLAVE DE BYPASS: Necesita ser parte de la cadena de consulta (ej: ?dev=master)
         const DEV_BYPASS_KEY = 'dev=master'; 
 
@@ -1023,7 +1063,16 @@
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
                     targetSection.classList.add('active');
+                    
+                    // Si se hace clic en Daily Quiz, cargar su estado si está logueado
+                    if (targetId === 'daily-quiz' && currentUser) {
+                        loadDailyQuiz(currentUser.id);
+                    }
                 }
+                
+                // 5. Ocultar el wrapper de Google si estaba abierto
+                document.getElementById('google-login-wrapper').style.display = 'none';
+
             });
         });
         
@@ -1096,12 +1145,17 @@
         // ---------------------------------------------
         
         // Variables para la Lógica del Quiz
-        const headerLoginButton = document.getElementById('header-login-button'); // NUEVO: Botón de la cabecera
-        const unauthenticatedMessage = document.getElementById('unauthenticated-message'); // NUEVO: Mensaje de no autenticado
-        const authenticatedQuizContent = document.getElementById('authenticated-quiz-content'); // NUEVO: Contenido del Quiz
+        const headerLoginButton = document.getElementById('header-login-button'); // Botón 'Iniciar Sesión'
+        const googleLoginBtn = document.getElementById('google-login-btn'); // Botón 'Iniciar Sesión con Google'
+        const googleLoginWrapper = document.getElementById('google-login-wrapper'); // Contenedor del botón de Google
+        const loggedInDisplay = document.getElementById('logged-in-display'); // Display del usuario logueado
+
+        const unauthenticatedMessage = document.getElementById('unauthenticated-message'); // Mensaje de no autenticado
+        const authenticatedQuizContent = document.getElementById('authenticated-quiz-content'); // Contenido del Quiz
         
-        const userDisplay = document.getElementById('user-display');
         const usernameEl = document.getElementById('logged-in-username');
+        const quizUsernameEl = document.getElementById('quiz-logged-in-username'); // Nuevo elemento para el Quiz
+        const userDisplay = document.getElementById('user-display');
         const questionContainer = document.getElementById('quiz-question-container');
         const answerForm = document.getElementById('answer-form');
         const quizMessage = document.getElementById('quiz-message');
@@ -1127,7 +1181,19 @@
         const RESPONSE_STORAGE_KEY_PREFIX = 'masterstudio_quiz_response_'; // key + userID + date
 
         let currentUser = null; 
+        let isGoogleButtonVisible = false;
 
+        /**
+         * Alterna la visibilidad del botón de Google al hacer clic en 'Iniciar Sesión 🔒'.
+         */
+        function toggleGoogleButton() {
+             // Si no estamos logueados, alternamos la visibilidad del pop-up de Google
+             if (!currentUser) {
+                 isGoogleButtonVisible = !isGoogleButtonVisible;
+                 googleLoginWrapper.style.display = isGoogleButtonVisible ? 'block' : 'none';
+             }
+        }
+        
         /**
          * Genera un código de ticket único (simulado)
          */
@@ -1150,8 +1216,12 @@
                 
                 // Actualiza el botón de la cabecera
                 if (currentUser) {
-                     headerLoginButton.textContent = `¡Hola, ${currentUser.name}!`;
-                     headerLoginButton.disabled = true;
+                     // OCULTAR botón de Iniciar Sesión y MOSTRAR display de usuario
+                     headerLoginButton.style.display = 'none'; 
+                     googleLoginWrapper.style.display = 'none'; // Asegura que el pop-up se oculte
+                     loggedInDisplay.style.display = 'block';
+                     usernameEl.textContent = currentUser.name;
+                     quizUsernameEl.textContent = currentUser.name; // Actualiza también el quiz display
                 }
             } else {
                 // Estado NO Autenticado
@@ -1160,43 +1230,61 @@
                 authenticatedQuizContent.style.display = 'none';
                 
                 // Restaura el botón de la cabecera
-                headerLoginButton.textContent = 'Iniciar Sesión 🔒';
-                headerLoginButton.disabled = false;
+                headerLoginButton.style.display = 'block';
+                loggedInDisplay.style.display = 'none';
             }
         }
 
         /**
-         * SIMULACIÓN DE LOGIN. Pide el Nick de Discord para usarlo como 'usuario'.
+         * LÓGICA DE LOGIN. SIMULA LA AUTENTICACIÓN REAL DE GOOGLE SIN PEDIR NINGÚN DATO ADICIONAL.
+         * En un entorno real, aquí se llamaría al SDK de Google para abrir el pop-up:
+         * gapi.auth2.getAuthInstance().signIn().then(handleSuccess, handleError);
          */
-        function attemptLogin() {
-            // En un entorno real, Google devolvería un token o ID. Aquí simulamos el ID:
-            const simulatedUserId = 'user_' + Math.floor(Math.random() * 1000000);
-            const simulatedUsername = prompt('Por favor, ingresa tu Nick de Discord para simular el login con Google/Gmail:');
+        function handleGoogleLogin() {
             
-            if (simulatedUsername) {
-                currentUser = { id: simulatedUserId, name: simulatedUsername };
-                // Guardar localmente para 'recordar' al usuario entre refrescos.
-                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
-                
-                // Mostrar el nombre en el display del quiz
-                usernameEl.textContent = currentUser.name;
-                
-                // Actualizar la interfaz (botón y quiz)
-                updateQuizDisplayForAuth(true); 
-                
-                // Si la sección de Daily Quiz está activa, la cargamos (mostrando pregunta/resultado)
-                const dailyQuizSection = document.getElementById('daily-quiz');
-                if (dailyQuizSection && dailyQuizSection.classList.contains('active')) {
-                    loadDailyQuiz(currentUser.id);
-                }
+            // 1. Simulación del Pop-up y el proceso de autenticación de Google exitoso
+            // En la vida real, el pop-up de Google se abriría aquí, y esta función se ejecutaría
+            // en un callback de éxito tras el cierre del pop-up.
+            alert('Abriendo ventana de Google para autenticación...');
+            
+            // OCULTAR el wrapper después de "abrir" el pop-up (como si la interacción iniciara)
+            googleLoginWrapper.style.display = 'none'; 
+            isGoogleButtonVisible = false;
 
-            } else {
-                alert('Debes ingresar un nombre para participar.');
+            // 2. Simulación de la respuesta exitosa de Google:
+            const fixedSimulatedUserId = 'user_masterstudio_authed';
+            const fixedSimulatedUsername = 'JugadorVerificado'; 
+
+            currentUser = { id: fixedSimulatedUserId, name: fixedSimulatedUsername };
+            
+            // 3. Guardar localmente para 'recordar' al usuario.
+            localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
+            
+            // 4. Actualizar la interfaz (botón y quiz)
+            updateQuizDisplayForAuth(true); 
+            
+            // Opcional: Notificar al usuario que la simulación fue exitosa
+            // alert(`¡Bienvenido, ${currentUser.name}! Has iniciado sesión.`);
+            
+            // 5. Si la sección de Daily Quiz está activa, la cargamos.
+            const dailyQuizSection = document.getElementById('daily-quiz');
+            if (dailyQuizSection && dailyQuizSection.classList.contains('active')) {
+                loadDailyQuiz(currentUser.id);
             }
         }
         
-        // ASIGNAMOS EL LISTENER AL BOTÓN DE LA CABECERA
-        headerLoginButton.addEventListener('click', attemptLogin);
+        // ASIGNAMOS EL LISTENER AL BOTÓN DE GOOGLE (el que está en el pop-up del header)
+        googleLoginBtn.addEventListener('click', handleGoogleLogin);
+        
+        // ASIGNAMOS EL LISTENER PARA CERRAR EL POPUP SI HACE CLIC FUERA
+        document.addEventListener('click', function(event) {
+            const authContainer = document.getElementById('header-auth-container');
+            // Si el clic no fue dentro del contenedor de auth, y el botón de Google es visible
+            if (authContainer && !authContainer.contains(event.target) && isGoogleButtonVisible) {
+                googleLoginWrapper.style.display = 'none';
+                isGoogleButtonVisible = false;
+            }
+        });
 
 
         /**
@@ -1206,7 +1294,6 @@
             const user = localStorage.getItem(QUIZ_STORAGE_KEY);
             if (user) {
                 currentUser = JSON.parse(user);
-                usernameEl.textContent = currentUser.name;
                 
                 // Actualiza el estado del botón de login en el header y el display del Quiz
                 updateQuizDisplayForAuth(true); 
@@ -1378,14 +1465,13 @@
             loadPosts(); 
 
             // Lógica de inicio del Quiz: comprueba si el usuario ya está logueado
-            if (checkLocalStorageUser()) {
-                 // Si está logueado y la sección de Quiz es la activa, la cargamos
-                 const dailyQuizSection = document.getElementById('daily-quiz');
-                 if (dailyQuizSection && dailyQuizSection.classList.contains('active')) {
-                    loadDailyQuiz(currentUser.id);
-                 }
+            checkLocalStorageUser();
+            
+            // Si la sección de Daily Quiz está activa, y el usuario está logueado, cargarla.
+            const dailyQuizSection = document.getElementById('daily-quiz');
+            if (dailyQuizSection && dailyQuizSection.classList.contains('active') && currentUser) {
+                loadDailyQuiz(currentUser.id);
             }
-
         });
     </script>
 </body>
