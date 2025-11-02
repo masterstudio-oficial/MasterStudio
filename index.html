@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MasterStudio - Edición Halloween 👻</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Creepster&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer data-client_id="[SU_GOOGLE_CLIENT_ID_AQUI]"></script>
     <style>
         /* INICIO: Animación de Fondo de Niebla (Fog/Mist) */
         @keyframes fog-movement {
@@ -285,7 +286,7 @@
             max-width: fit-content;
         }
 
-        .guide-step-container img {
+        .guide-image-container img {
             border: 3px solid #ff6600; /* Borde más grueso para las imágenes */
             border-radius: 8px; /* Borde redondeado */
             width: 100%; /* Ajustar al contenedor */
@@ -643,10 +644,10 @@
             <div class="logo">MasterStudio</div>
             <div class="icon">👻</div>
         </div>
-        <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem; display: none !important;" onclick="document.querySelector('.nav-button.daily-quiz').click()">
+        <button id="header-login-button" class="nav-button special-nav-button login-button" style="margin: 0; padding: 10px 20px; font-size: 1rem;" onclick="document.querySelector('.nav-button.daily-quiz').click()">
             Iniciar Sesión 🔒
         </button>
-        </header>
+    </header>
 
     <div class="main-navigation-container">
         
@@ -660,7 +661,7 @@
             <button class="nav-button actualizaciones" data-section="actualizaciones">Actualizaciones</button>
             <button class="nav-button recompensas" data-section="recompensas">Recompensas</button>
             <button class="nav-button castigos" data-section="castigos">Castigos</button>
-            <button class="nav-button daily-quiz special-nav-button" data-section="daily-quiz" style="display: none !important;">💡 Pregunta Diaria</button>
+            <button class="nav-button daily-quiz special-nav-button" data-section="daily-quiz">💡 Pregunta Diaria</button>
             <button class="nav-button sorteo special-nav-button" data-section="sorteo">🕸️ Sorteo</button>
         </nav>
     </div>
@@ -744,13 +745,23 @@
                 
                 <div id="quiz-auth-container" style="margin-bottom: 30px;">
                     <p style="color: #cccccc; font-size: 1.2rem; margin-bottom: 20px;">
-                        Debes iniciar sesión para participar en la pregunta diaria. Solo una respuesta por usuario.
+                        Debes iniciar sesión con Google para participar en la pregunta diaria. Solo una respuesta por usuario.
                     </p>
                     <div class="button-container">
-                        <button id="google-login-button" class="discord-button" style="background-color: #DB4437; border-color: #DB4437; box-shadow: 0 0 15px rgba(219, 68, 55, 0.8);">
-                            <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">🔒 Iniciar con Google/Gmail (Simulado)</span>
-                        </button>
-                    </div>
+                        <div id="g_id_onload"
+                            data-client_id="876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com" 
+                            data-callback="handleCredentialResponse"
+                            data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin"
+                            data-type="standard"
+                            data-size="large"
+                            data-theme="outline"
+                            data-text="sign_in_with"
+                            data-shape="rectangular"
+                            data-locale="es">
+                        </div>
+                        </div>
                     <p id="user-display" style="color: #00ff00; font-size: 1.2rem; margin-top: 20px; display: none;">
                         ¡Hola, <span id="logged-in-username">Usuario</span>!
                     </p>
@@ -879,7 +890,7 @@
         // *** 1. CONTROL PRINCIPAL: CAMBIA ESTO PARA ACTIVAR/DESACTIVAR EL MANTENIMIENTO ***
         // true: Mantenimiento ACTIVO (se activa para todos menos el bypass)
         // false: Mantenimiento INACTIVO (el sitio funciona normal)
-        const IS_MAINTENANCE_ACTIVE = false; 
+        const IS_MAINTENANCE_ACTIVE = true; 
 
         // 2. CLAVE DE BYPASS: Necesita ser parte de la cadena de consulta (ej: ?dev=master)
         const DEV_BYPASS_KEY = 'dev=master'; 
@@ -927,14 +938,14 @@
         // 1. CONFIGURACIÓN: Lista de Participantes (TU LISTA)
         const PARTICIPANTS = [
             "99al0nzo99", "whitev7", "_s1lcotxr_", "bobuso123", "jos123p5._._02968", "neonthethinker", 
-            "gafassx", "carretero._34294", "axellsora", "pou_gamer12", "alberto6124", "azahel546_32160",
+            "gafassx", "carretero._34294", "jafetrl_23330", "axellsora", "pou_gamer12", "alberto6124", 
             "rous___", "angelopaiyt", "destnty", "lapslap.", "breccsito14", "focuszegar", "swtyb", 
             "agente_w23", "zanoratvt", "sr.piedra.", "gorgos_82882", "dijimon_yt_32935", "brian_yt_o", 
             "elfer12", "tini_591", "narytavt", "alexis4lokos", "yaxlien_46010", "rodrixd6", "emimexx_"
         ];
 
         // 2. FECHA DE FINALIZACIÓN Y REVELACIÓN (1/11/2025 a las 3PM hora MX)
-        const TARGET_END_DATE_STRING = 'November 1, 2025 16:10:00 GMT-0600'; 
+        const TARGET_END_DATE_STRING = 'November 1, 2025 15:00:00 GMT-0600'; 
         let endTime = new Date(TARGET_END_DATE_STRING).getTime();
         const WINNER_STORAGE_KEY = 'masterstudio_sorteo_winner'; // Clave para persistir el ganador
         
@@ -1094,12 +1105,11 @@
         }
         
         // ---------------------------------------------
-        // LÓGICA DEL QUIZ DIARIO (Simulado)
+        // LÓGICA DEL QUIZ DIARIO (Login de Google Real)
         // ---------------------------------------------
         
         // Variables para la Lógica del Quiz
         const authContainer = document.getElementById('quiz-auth-container');
-        const loginButton = document.getElementById('google-login-button');
         const userDisplay = document.getElementById('user-display');
         const usernameEl = document.getElementById('logged-in-username');
         const questionContainer = document.getElementById('quiz-question-container');
@@ -1135,30 +1145,54 @@
             const S4 = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1).toUpperCase();
             return `TICKET-${S4()}-${S4()}`;
         }
-
+        
         /**
-         * SIMULACIÓN DE LOGIN. Pide el Nick de Discord para usarlo como 'usuario'.
+         * *** FUNCIÓN DE CALLBACK REAL DE GOOGLE ***
+         * Se llama automáticamente cuando el usuario inicia sesión.
+         * @param {Object} response - Objeto que contiene el token JWT.
          */
-        loginButton.addEventListener('click', () => {
-            // En un entorno real, Google devolvería un token o ID. Aquí simulamos el ID:
-            const simulatedUserId = 'user_' + Math.floor(Math.random() * 1000000);
-            const simulatedUsername = prompt('Por favor, ingresa tu Nick de Discord para simular el login:');
+        function handleCredentialResponse(response) {
+            // El token JWT contiene la información del usuario
+            const token = response.credential;
             
-            if (simulatedUsername) {
-                currentUser = { id: simulatedUserId, name: simulatedUsername };
-                // Guardar localmente para 'recordar' al usuario entre refrescos.
+            try {
+                // 1. Decodificar el token para obtener los datos del usuario
+                // El payload está en la segunda parte del token (índice 1), codificado en Base64
+                const payloadBase64 = token.split('.')[1];
+                const decodedToken = JSON.parse(atob(payloadBase64));
+                
+                const userId = decodedToken.sub;     // ID único de Google (usado como ID de usuario)
+                const userName = decodedToken.name;  // Nombre completo
+                const userEmail = decodedToken.email; // Email (para referencia)
+                
+                // 2. Establecer el usuario actual
+                currentUser = { id: userId, name: userName, email: userEmail };
+                
+                // 3. Guardar localmente para 'recordar' al usuario entre refrescos
                 localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
                 
-                // Ocultar login, mostrar usuario y cargar quiz
+                // 4. Actualizar la UI
                 authContainer.style.display = 'none';
                 usernameEl.textContent = currentUser.name;
                 userDisplay.style.display = 'block';
                 
+                // Ocultar el botón de Google renderizado después del login exitoso
+                const googleSignInButton = document.querySelector('.g_id_signin');
+                if (googleSignInButton) googleSignInButton.style.display = 'none';
+
+                // AÑADIDO: Ocultar el botón del encabezado después del login exitoso
+                const headerLoginButton = document.getElementById('header-login-button');
+                if (headerLoginButton) headerLoginButton.style.display = 'none';
+
+                // 5. Cargar el Quiz con el ID de Google
                 loadDailyQuiz(currentUser.id);
-            } else {
-                alert('Debes ingresar un nombre para participar.');
+
+            } catch (e) {
+                console.error("Error al decodificar el token de Google:", e);
+                alert("Error al procesar el inicio de sesión con Google. Inténtalo de nuevo.");
             }
-        });
+        }
+
 
         /**
          * Verifica si el usuario ya está 'logueado' localmente al cargar la página.
@@ -1170,6 +1204,15 @@
                 authContainer.style.display = 'none';
                 usernameEl.textContent = currentUser.name;
                 userDisplay.style.display = 'block';
+
+                // Ocultar el botón de Google si ya está logueado
+                const googleSignInButton = document.querySelector('.g_id_signin');
+                if (googleSignInButton) googleSignInButton.style.display = 'none';
+
+                // Ocultar el botón del encabezado si el usuario ya está logueado
+                const headerLoginButton = document.getElementById('header-login-button');
+                if (headerLoginButton) headerLoginButton.style.display = 'none';
+
                 return true;
             }
             return false;
@@ -1336,7 +1379,6 @@
             if (checkLocalStorageUser()) {
                 loadDailyQuiz(currentUser.id);
             }
-
         });
     </script>
 </body>
