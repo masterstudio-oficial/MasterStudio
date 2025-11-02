@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MasterStudio - Edición Halloween 👻</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Creepster&display=swap" rel="stylesheet">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         /* INICIO: Animación de Fondo de Niebla (Fog/Mist) */
         @keyframes fog-movement {
@@ -750,7 +751,7 @@
                     </p>
                     <div class="button-container">
                         <button id="google-login-button" class="discord-button" style="background-color: #DB4437; border-color: #DB4437; box-shadow: 0 0 15px rgba(219, 68, 55, 0.8);">
-                            <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">🔒 Iniciar con Google/Gmail (Simulado)</span>
+                            <span style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">🔒 Iniciar con Google/Gmail</span>
                         </button>
                     </div>
                     <p id="user-display" style="color: #00ff00; font-size: 1.2rem; margin-top: 20px; display: none;">
@@ -875,11 +876,10 @@
 
     <script>
         // ---------------------------------------------
-        // NUEVA LÓGICA: MODO MANTENIMIENTO (CLIENTE ESTATICO)
+        // LÓGICA: MODO MANTENIMIENTO (CLIENTE ESTATICO)
         // ---------------------------------------------
 
-        // *** 1. CONTROL PRINCIPAL: CAMBIA ESTO PARA ACTIVAR/DESACTIVAR EL MANTENIMIENTO ***
-        // CAMBIO: Lo desactivamos para que puedas ver el sitio sin usar el bypass.
+        // 1. CONTROL PRINCIPAL: CAMBIA ESTO PARA ACTIVAR/DESACTIVAR EL MANTENIMIENTO
         const IS_MAINTENANCE_ACTIVE = true; 
 
         // 2. CLAVE DE BYPASS: Necesita ser parte de la cadena de consulta (ej: ?dev=master)
@@ -887,9 +887,6 @@
 
         /**
          * Verifica si el modo de mantenimiento está activo y aplica el bypass.
-         * Si el mantenimiento está activo Y la clave de bypass NO está en la URL,
-         * oculta el contenido principal y muestra la pantalla de mantenimiento.
-         * @returns {boolean} Retorna true si está en mantenimiento, false si no.
          */
         function checkMaintenanceStatus() {
             const mainContent = document.querySelector('main');
@@ -897,22 +894,17 @@
             const navigationContainer = document.querySelector('.main-navigation-container');
             const maintenanceSection = document.getElementById('maintenance-mode');
             
-            // 1. Verificar si la clave de bypass está presente en la URL
             const isDevBypass = window.location.search.includes(DEV_BYPASS_KEY);
 
-            // 2. Si el mantenimiento está activo Y no hay bypass, ACTIVAMOS la pantalla
             if (IS_MAINTENANCE_ACTIVE && !isDevBypass) {
-                // Ocultar todo el contenido principal
                 if (mainContent) mainContent.style.display = 'none';
                 if (navigationContainer) navigationContainer.style.display = 'none';
                 if (headerContent) headerContent.style.display = 'none';
-                // Mostrar la pantalla de mantenimiento (usando flex para el centrado)
                 if (maintenanceSection) maintenanceSection.style.display = 'flex'; 
                 
                 return true;
             }
             
-            // Si no hay mantenimiento o si el bypass está activo: Mostrar el sitio normal
             if (mainContent) mainContent.style.display = 'block';
             if (navigationContainer) navigationContainer.style.display = 'flex';
             if (headerContent) headerContent.style.display = 'flex';
@@ -922,7 +914,7 @@
 
 
         // ---------------------------------------------
-        // *** LÓGICA DEL SORTEO CON PARTICIPANTES Y FECHA FIJA ***
+        // LÓGICA DEL SORTEO CON PARTICIPANTES Y FECHA FIJA
         // ---------------------------------------------
         
         // 1. CONFIGURACIÓN: Lista de Participantes (TU LISTA)
@@ -944,7 +936,6 @@
             let winner = localStorage.getItem(WINNER_STORAGE_KEY);
 
             if (!winner) {
-                // Solo seleccionar un ganador si no hay uno guardado
                 if (PARTICIPANTS.length > 0) {
                     const randomIndex = Math.floor(Math.random() * PARTICIPANTS.length);
                     winner = PARTICIPANTS[randomIndex];
@@ -971,10 +962,8 @@
                 clearInterval(countdownInterval);
                 countdownEl.style.display = 'none';
 
-                // *** LLAMADA CLAVE: Selecciona o recupera el ganador ***
                 const finalWinner = getWinner(); 
 
-                // Revelar el ganador
                 if (finalWinner) {
                     titleEl.textContent = '¡GANADOR REVELADO!';
                     winnerNameEl.textContent = finalWinner;
@@ -987,13 +976,11 @@
                 return;
             }
 
-            // Cálculo de tiempo (Días, Horas, Minutos, Segundos)
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // Formato de dos dígitos, combinando días y horas
             const h = String(hours + (days * 24)).padStart(2, '0');
             const m = String(minutes).padStart(2, '0');
             const s = String(seconds).padStart(2, '0');
@@ -1006,23 +993,18 @@
             button.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-section');
                 
-                // 1. Remover la clase 'active-nav' de todos los botones
                 document.querySelectorAll('.nav-button').forEach(btn => {
                     btn.classList.remove('active-nav');
                 });
                 
-                // 2. Añadir la clase 'active-nav' al botón que fue clickeado
                 this.classList.add('active-nav');
 
-                // 3. Ocultar todas las secciones
                 document.querySelectorAll('section').forEach(section => {
-                    // Solo ocultar secciones que NO sean de mantenimiento
                     if (section.id !== 'maintenance-mode') { 
                         section.classList.remove('active');
                     }
                 });
                 
-                // 4. Mostrar la sección seleccionada
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
                     targetSection.classList.add('active');
@@ -1095,8 +1077,12 @@
         }
         
         // ---------------------------------------------
-        // LÓGICA DEL QUIZ DIARIO (Simulado)
+        // LÓGICA DEL QUIZ DIARIO (Google Sign-In CLIENTE)
         // ---------------------------------------------
+        
+        // ⚠️ PASO 1: REEMPLAZA ESTO CON TU CLIENT ID REAL DE GOOGLE CLOUD
+        // ESTO ES CRÍTICO PARA QUE EL DIÁLOGO DE GOOGLE APAREZCA
+        const GOOGLE_CLIENT_ID = '876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com'; 
         
         // Variables para la Lógica del Quiz
         const authContainer = document.getElementById('quiz-auth-container');
@@ -1130,37 +1116,81 @@
         let currentUser = null; 
 
         /**
+         * Maneja la respuesta de credenciales de Google (ID Token).
+         * Este es el punto clave que DEBE comunicarse con un servidor real para la validación.
+         */
+        function handleCredentialResponse(response) {
+            const idToken = response.credential;
+            
+            // 💡 ESTO ES UN **PASO DE SIMULACIÓN TEMPORAL** EN EL CLIENTE
+            //    En un entorno real, enviarías 'idToken' a tu servidor
+            //    para que el servidor lo decodifique y verifique por seguridad,
+            //    y el servidor te devolvería la sesión del usuario.
+            
+            // Usamos un placeholder para simular el éxito y un nombre temporal.
+            const fakeUserId = 'google_' + idToken.slice(-10); // ID Simulado a partir del token
+            
+            // Si quieres intentar decodificar el nombre de Google (no seguro sin backend):
+            // const userData = JSON.parse(atob(idToken.split('.')[1]));
+            // const fakeUserName = userData.name || 'Usuario Google';
+            const fakeUserName = 'Usuario Google'; // Nombre de placeholder simple
+
+            
+            // Asignar el usuario
+            currentUser = { 
+                id: fakeUserId, 
+                name: fakeUserName
+            };
+
+            // 2. **Paso Visual/Local:** Actualizar la UI
+            localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
+            
+            authContainer.style.display = 'none';
+            usernameEl.textContent = currentUser.name;
+            userDisplay.style.display = 'block';
+            
+            loadDailyQuiz(currentUser.id);
+            
+            // **PRÓXIMO PASO CRÍTICO:** Aquí DEBES enviar 'idToken' a tu servidor (backend)
+            // console.log("ID Token obtenido:", idToken);
+            // fetch('/api/verify-google-login', { method: 'POST', body: JSON.stringify({ token: idToken }) }); 
+        }
+        
+        /**
+         * Inicializa la librería de Google Sign-In y asigna el evento al botón.
+         */
+        function initializeGoogleSignIn() {
+            if (typeof google === 'undefined' || !google.accounts || !google.accounts.id) {
+                console.error("La librería de Google Identity Services no está cargada o falló al inicializar.");
+                // Si la librería falla, volvemos a mostrar el botón, pero no funcionará
+                return;
+            }
+
+            if (GOOGLE_CLIENT_ID === '876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com') {
+                console.warn("⚠️ Advertencia: Reemplaza 'REEMPLAZAR_CON_TU_CLIENT_ID' con tu Client ID real de Google Cloud para que funcione.");
+            }
+            
+            google.accounts.id.initialize({
+                client_id: GOOGLE_CLIENT_ID,
+                callback: handleCredentialResponse, // La función que maneja el token
+                // auto_select: true // Puedes usar esto para un inicio de sesión automático
+            });
+            
+            // El botón custom del usuario ahora dispara el flujo de Google
+            loginButton.addEventListener('click', () => {
+                 // Este método activa el "One Tap" o el "selector de cuentas" de Google.
+                 google.accounts.id.prompt(); 
+            });
+        }
+        
+        /**
          * Genera un código de ticket único (simulado)
          */
         function generateTicketCode() {
             const S4 = () => (((1+Math.random())*0x10000)|0).toString(16).substring(1).toUpperCase();
             return `TICKET-${S4()}-${S4()}`;
         }
-
-        /**
-         * SIMULACIÓN DE LOGIN. Pide el Nick de Discord para usarlo como 'usuario'.
-         */
-        loginButton.addEventListener('click', () => {
-            // En un entorno real, Google devolvería un token o ID. Aquí simulamos el ID:
-            const simulatedUserId = 'user_' + Math.floor(Math.random() * 1000000);
-            const simulatedUsername = prompt('Por favor, ingresa tu Nick de Discord para simular el login:');
-            
-            if (simulatedUsername) {
-                currentUser = { id: simulatedUserId, name: simulatedUsername };
-                // Guardar localmente para 'recordar' al usuario entre refrescos.
-                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
-                
-                // Ocultar login, mostrar usuario y cargar quiz
-                authContainer.style.display = 'none';
-                usernameEl.textContent = currentUser.name;
-                userDisplay.style.display = 'block';
-                
-                loadDailyQuiz(currentUser.id);
-            } else {
-                alert('Debes ingresar un nombre para participar.');
-            }
-        });
-
+        
         /**
          * Verifica si el usuario ya está 'logueado' localmente al cargar la página.
          */
@@ -1175,6 +1205,7 @@
             }
             return false;
         }
+
 
         /**
          * Verifica si el usuario ya respondió el quiz de hoy.
@@ -1242,7 +1273,6 @@
             answerForm.innerHTML = ''; // Limpiar opciones anteriores
             
             for (const [key, value] of Object.entries(options)) {
-                // Usamos la nueva estructura de radio button con estilos personalizados
                 const newOptionHTML = `
                     <input type="radio" name="answer" value="${key}" id="opt-${key}" required>
                     <label for="opt-${key}">
@@ -1320,7 +1350,6 @@
             const isMaintenance = checkMaintenanceStatus();
             
             if (isMaintenance) {
-                // Si está en mantenimiento y no hay bypass, detenemos toda la ejecución del script.
                 return; 
             }
             
@@ -1332,16 +1361,13 @@
             
             // Cargar los posts
             loadPosts(); 
+            
+            // 🔑 NUEVO PASO: Inicializar Google Sign-In para que el botón funcione
+            initializeGoogleSignIn();
 
             // Lógica de inicio del Quiz: comprueba si el usuario ya está logueado
-            const isUserLoggedIn = checkLocalStorageUser();
-            
-            if (isUserLoggedIn) {
+            if (checkLocalStorageUser()) {
                 loadDailyQuiz(currentUser.id);
-            } else {
-                // NUEVO PASO: Forzamos el click del botón de login si no hay usuario guardado
-                // Esto hará que aparezca el prompt para ingresar el Nick de Discord.
-                loginButton.click();
             }
 
         });
