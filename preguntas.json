@@ -7,26 +7,276 @@
       "c": "2011",
       "d": "2012"
     },
-    "respuesta_correcta": "a"
+    "respuesta_correcta": "c"
   },
   "2025-11-04": {
-    "pregunta": "¿Cuál es el mob más peligroso del Nether?",
+    "pregunta": "¿Qué país tiene la mayor superficie territorial del mundo (km²)?",
     "opciones": {
-      "a": "Piglin",
-      "b": "Ghast",
-      "c": "Wither Skeleton",
-      "d": "Blaze"
+      "a": "Brasil",
+      "b": "China",
+      "c": "Rusia",
+      "d": "Estados Unidos"
     },
     "respuesta_correcta": "c"
   },
   "2025-11-05": {
-    "pregunta": "¿Cuántos bloques de obsidiana necesitas para hacer un portal al Nether?",
+    "pregunta": "¿Cuál es el propósito del encantamiento 'Toque de Seda' (Silk Touch)?",
     "opciones": {
-      "a": "10 bloques",
-      "b": "12 bloques",
-      "c": "14 bloques",
-      "d": "16 bloques"
+      "a": "Hacer que tus herramientas brillen",
+      "b": "Obtener bloques que normalmente se romperían al romperlos",
+      "c": "Tener mas minerales al picarlos",
+      "d": "Obtener más experiencia de los minerales"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-06": {
+    "pregunta": "¿Cuál es el elemento químico más abundante en el universo?",
+    "opciones": {
+      "a": "Oxígeno",
+      "b": "Helio",
+      "c": "Hidrógeno",
+      "d": "Carbono"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-07": {
+    "pregunta": "¿Cuántos Corazones de daño causa una flecha disparada por un Esqueleto en dificultad Normal?",
+    "opciones": {
+      "a": "1 Corazón",
+      "b": "Entre 2 y 3 Corazones",
+      "c": "La mitad de tu vida",
+      "d": "Nada, porque uso escudo"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-08": {
+    "pregunta": "¿Qué animal terrestre es el más rápido del mundo?",
+    "opciones": {
+      "a": "El león",
+      "b": "El avestruz",
+      "c": "El guepardo",
+      "d": "El humano"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-09": {
+    "pregunta": "¿Qué se obtiene al minar Arena de Almas (Soul Sand) con una pala con 'Fortuna III'?",
+    "opciones": {
+      "a": "Más Arena de Almas",
+      "b": "Polvo de hueso",
+      "c": "Arena de Almas",
+      "d": "Experiencia"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-10": {
+    "pregunta": "¿Qué famoso científico formuló la Teoría de la Relatividad?",
+    "opciones": {
+      "a": "Isaac Newton",
+      "b": "Albert Einstein",
+      "c": "Marie Curie",
+      "d": "Nikola Tesla"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-11": {
+    "pregunta": "¿Cuál es el propósito principal del encantamiento 'Afinidad Acuática' (Aqua Affinity)?",
+    "opciones": {
+      "a": "Permitirte respirar bajo el agua",
+      "b": "Aumentar la velocidad de minería bajo el agua",
+      "c": "Hacer que los peces te sigan",
+      "d": "Hacer que spawneen delfines"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-12": {
+    "pregunta": "¿Cuál es el río más largo del mundo?",
+    "opciones": {
+      "a": "El Misisipi",
+      "b": "El Amazonas",
+      "c": "El Nilo",
+      "d": "El Pacifico"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-13": {
+    "pregunta": "¿Qué material NO es necesario para CRAFTEAR un Beacon?",
+    "opciones": {
+      "a": "Vidrio",
+      "b": "Un Bloque de Hierro",
+      "c": "Una Estrella del Nether y Obsidiana",
+      "d": "Mesa de crafteo"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-14": {
+    "pregunta": "¿Cuántos días tarda la Tierra en dar una vuelta completa alrededor del Sol?",
+    "opciones": {
+      "a": "360 días",
+      "b": "365.25 días",
+      "c": "366 días",
+      "d": "Depende de si está lloviendo"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-15": {
+    "pregunta": "¿Qué mob del Nether tiene la capacidad de disparar bolas de fuego y volar?",
+    "opciones": {
+      "a": "El Wither",
+      "b": "El Ghast",
+      "c": "El Blaze",
+      "d": "El Enderman"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-16": {
+    "pregunta": "¿Quién es el autor de la obra 'Don Quijote de la Mancha'?",
+    "opciones": {
+      "a": "Leonardo da Vinci",
+      "b": "Federico García Lorca",
+      "c": "Miguel de Cervantes",
+      "d": "Gabriel García Márquez"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-17": {
+    "pregunta": "¿Cuál es el único bioma del Overworld donde se genera el mob Slime con mayor frecuencia?",
+    "opciones": {
+      "a": "Las llanuras",
+      "b": "Los pantanos",
+      "c": "Las tundras nevadas",
+      "d": "En el desierto"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-18": {
+    "pregunta": "¿En qué año se disolvió la Unión Soviética (URSS)?",
+    "opciones": {
+      "a": "1945",
+      "b": "1989",
+      "c": "1991",
+      "d": "Nunca"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-19": {
+    "pregunta": "¿Qué se utiliza para hacer una 'Mesa de Herrería' (Smithing Table)?",
+    "opciones": {
+      "a": "Madera y Hierro",
+      "b": "Diamante y Obsidiana",
+      "c": "Cuatro lingotes de oro y dos tablones",
+      "d": "Hilo y Madera"
     },
     "respuesta_correcta": "a"
+  },
+  "2025-11-20": {
+    "pregunta": "¿Qué país está formado por más de 17.000 islas?",
+    "opciones": {
+      "a": "Filipinas",
+      "b": "Japón",
+      "c": "Indonesia",
+      "d": "Grecia"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-21": {
+    "pregunta": "¿Cuál es el único mob pasivo que se puede domesticar y que te puede ayudar a cazar?",
+    "opciones": {
+      "a": "El creeper",
+      "b": "La llama",
+      "c": "El caballo",
+      "d": "El lobo"
+    },
+    "respuesta_correcta": "d"
+  },
+  "2025-11-22": {
+    "pregunta": "¿Qué famoso músico se hacía llamar 'El Rey del Pop'?",
+    "opciones": {
+      "a": "Elvis Presley",
+      "b": "Freddie Mercury",
+      "c": "Michael Jackson",
+      "d": "Badbunny"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-23": {
+    "pregunta": "¿Cuál es el material más resistente para fabricar armadura y herramientas en Minecraft?",
+    "opciones": {
+      "a": "Netherita",
+      "b": "Diamante",
+      "c": "Obsidiana",
+      "d": "Oro"
+    },
+    "respuesta_correcta": "a"
+  },
+  "2025-11-24": {
+    "pregunta": "¿Qué instrumento se utiliza para medir la temperatura?",
+    "opciones": {
+      "a": "EL tacto",
+      "b": "Un termómetro",
+      "c": "Un dinamómetro",
+      "d": "Una regla"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-25": {
+    "pregunta": "¿Qué mobs arrojan pociones cuando se les ataca o están cerca de un jugador?",
+    "opciones": {
+      "a": "Las Brujas",
+      "b": "Los Aldeanos",
+      "c": "Los Slimes",
+      "d": "Los Piglin"
+    },
+    "respuesta_correcta": "a"
+  },
+  "2025-11-26": {
+    "pregunta": "¿Quién fue la primera mujer en ganar un Premio Nobel?",
+    "opciones": {
+      "a": "Malala Yousafzai",
+      "b": "Marie Curie",
+      "c": "La Madre Teresa",
+      "d": "Tu profesora favorita"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-27": {
+    "pregunta": "¿Cuántos corazones de vida tiene el Ender Dragon (el jefe final del End)?",
+    "opciones": {
+      "a": "50",
+      "b": "100",
+      "c": "200",
+      "d": "Depende de la dificultad"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-28": {
+    "pregunta": "¿Cuál es la capital de Italia?",
+    "opciones": {
+      "a": "Milán",
+      "b": "Venecia",
+      "c": "Roma",
+      "d": "Pisa"
+    },
+    "respuesta_correcta": "c"
+  },
+  "2025-11-29": {
+    "pregunta": "¿Cuál es el principal uso del Bloque de Slime (Slime Block)?",
+    "opciones": {
+      "a": "Hacer que tus construcciones brillen",
+      "b": "Actuar como trampolín y adherirse a otros bloques de Redstone",
+      "c": "Usarlo como un colchón",
+      "d": "Usarlo para parkours"
+    },
+    "respuesta_correcta": "b"
+  },
+  "2025-11-30": {
+    "pregunta": "¿Cuál es la lengua más hablada del mundo por número de hablantes nativos?",
+    "opciones": {
+      "a": "Inglés",
+      "b": "Español",
+      "c": "Francés",
+      "d": "Mandarín"
+    },
+    "respuesta_correcta": "d"
   }
 }
