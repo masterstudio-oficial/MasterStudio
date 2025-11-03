@@ -1050,7 +1050,7 @@
             localStorage.setItem(`${QUIZ_WINNER_CODE_KEY}_${userId}_${getTodayDate()}`, JSON.stringify(winnerData));
 
             // Intentar guardar en servidor (si está configurado)
-            if (SAVE_WINNER_CODE_URL && SAVE_WINNER_CODE_URL !== 'TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI') {
+            if (SAVE_WINNER_CODE_URL && SAVE_WINNER_CODE_URL !== 'https://script.google.com/macros/s/AKfycbxK4kyZ_e18qBt4NGY_MqFzCMhreJuLVNJApXP3GCrqdU5jEW6vOFQoziPMhEyNK6k6jg/exec') {
                 try {
                     await fetch(SAVE_WINNER_CODE_URL, {
                         method: 'POST',
