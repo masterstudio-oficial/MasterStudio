@@ -20,7 +20,7 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000000; /* Negro */
+            background-color: #000000;
             color: #ffffff;
             line-height: 1.6;
             overflow-x: hidden;
@@ -49,7 +49,7 @@
         #maintenance-screen h1 {
             font-family: 'VT323', monospace;
             font-size: 5rem;
-            color: #F44336; /* Rojo de Alerta */
+            color: #F44336;
             margin-bottom: 20px;
             text-shadow: 0 0 10px rgba(244, 67, 54, 0.7);
         }
@@ -64,7 +64,6 @@
             font-family: 'VT323', monospace;
         }
 
-        /* Inicialmente oculto por defecto, solo se muestra en JS si IS_MAINTENANCE_ACTIVE es true */
         #maintenance-screen.hidden {
             display: none;
         }
@@ -86,7 +85,6 @@
             z-index: 100;
         }
         
-        /* Contenedor del logo, centrado con absolute */
         .header-logo-group {
             position: absolute;
             left: 50%;
@@ -120,7 +118,6 @@
             position: relative;
         }
 
-        /* GSI button is rendered inside a div. */
         .g_id_signin {
             transition: opacity 0.3s ease;
         }
@@ -141,7 +138,6 @@
             image-rendering: pixelated;
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
-            /* Efecto pixel art en el borde */
             clip-path: polygon(
                 0 4px, 4px 4px, 4px 0,
                 calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
@@ -157,9 +153,9 @@
 
         /* Menú desplegable de perfil */
         .profile-dropdown {
-            position: absolute;
-            top: 60px;
-            right: 0;
+            position: fixed;
+            top: 80px;
+            right: 50px;
             background-color: rgba(26, 26, 26, 0.98);
             backdrop-filter: blur(10px);
             border: 2px solid rgba(0, 188, 212, 0.5);
@@ -246,7 +242,6 @@
             padding: 0;
             flex-grow: 1;
         }
-        /* FIN: CONTENEDOR DE NAVEGACIÓN */
 
         .nav-button {
             margin: 10px;
@@ -264,7 +259,6 @@
             position: relative;
         }
         
-        /* Estilo base para el botón activo */
         .nav-button.active-nav {
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
             background-color: rgba(40, 40, 40, 0.9);
@@ -272,7 +266,6 @@
             transform: translateY(-2px);
         }
 
-        /* ESTILOS POR CATEGORÍA ACTIVA (Originales + Quiz) */
         .home.active-nav { border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
         .mobs.active-nav { border-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
         .dificultad.active-nav { border-color: #FFA500; box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); }
@@ -281,12 +274,7 @@
         .recompensas.active-nav { border-color: #4CAF50; box-shadow: 0 0 15px rgba(76, 175, 80, 0.8); }
         .castigos.active-nav { border-color: #F44336; box-shadow: 0 0 15px rgba(244, 67, 54, 0.8); }
         .launcher.active-nav { border-color: #00BCD4; box-shadow: 0 0 15px rgba(0, 188, 212, 0.8); }
-        
-        /* Pregunta Diaria - Morado (Nuevo estilo normalizado) */
-        .daily-quiz.active-nav { 
-            border-color: #9C27B0; /* Morado */
-            box-shadow: 0 0 15px rgba(156, 39, 176, 0.8); 
-        }
+        .daily-quiz.active-nav { border-color: #9C27B0; box-shadow: 0 0 15px rgba(156, 39, 176, 0.8); }
 
         .nav-button:hover {
             transform: translateY(-2px);
@@ -318,24 +306,45 @@
             text-shadow: none;
         }
         
-        /* INICIO: Estilos para la sección de Quiz (Restaurados y normalizados) */
+        /* INICIO: Estilos para la sección de Quiz */
         .quiz-container h2 {
             font-family: 'VT323', monospace;
-            color: #9C27B0; /* Morado para el título del quiz */
+            color: #9C27B0;
             font-size: 2rem;
             margin-bottom: 20px;
             text-shadow: none;
             text-align: center;
         }
+        
         .quiz-container {
             background-color: rgba(26, 26, 26, 0.8);
             padding: 30px;
             border-radius: 15px;
-            border: 1px solid rgba(156, 39, 176, 0.3); /* Borde morado sutil */
+            border: 1px solid rgba(156, 39, 176, 0.3);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            max-width: 600px;
+            max-width: 700px;
             margin: 30px auto;
         }
+        
+        .quiz-timer {
+            font-family: 'VT323', monospace;
+            font-size: 3rem;
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+        
+        .quiz-timer.warning {
+            color: #F44336;
+            animation: pulse 0.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
         .quiz-option {
             background-color: rgba(40, 40, 40, 0.9);
             color: #ffffff;
@@ -347,33 +356,89 @@
             transition: all 0.2s ease;
             text-align: left;
         }
+        
         .quiz-option:hover {
             background-color: rgba(50, 50, 50, 0.9);
             border-color: #9C27B0;
         }
+        
         .quiz-option.selected {
             background-color: #9C27B0;
             border-color: #FFFFFF;
             box-shadow: 0 0 8px rgba(156, 39, 176, 0.8);
         }
+        
+        .quiz-option.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
         #quiz-message {
             font-weight: bold;
             margin-top: 20px;
             text-align: center;
+            font-size: 1.1rem;
         }
         
-        /* Estilo para el mensaje de "No hay pregunta" */
         #no-quiz-message {
-            color: #aaaaaa; /* Gris bonito */
+            color: #aaaaaa;
             font-size: 1.1rem;
             text-align: center;
             padding: 30px 0;
-            display: none; /* Oculto por defecto */
+            display: none;
         }
-        /* FIN: Estilos para la sección de Quiz */
-
-        /* Otros estilos generales (mantenidos)... */
         
+        /* Ticket Dorado */
+        .golden-ticket {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            border: 3px solid #FF8C00;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 500px;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+            text-align: center;
+            animation: ticketGlow 2s infinite;
+        }
+        
+        @keyframes ticketGlow {
+            0%, 100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
+            50% { box-shadow: 0 0 50px rgba(255, 215, 0, 1); }
+        }
+        
+        .golden-ticket h3 {
+            font-family: 'VT323', monospace;
+            font-size: 2.5rem;
+            color: #000000;
+            margin-bottom: 15px;
+        }
+        
+        .golden-ticket .code {
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+            background-color: #000000;
+            color: #FFD700;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            letter-spacing: 3px;
+            word-break: break-all;
+        }
+        
+        .golden-ticket p {
+            color: #000000;
+            font-weight: bold;
+            margin: 10px 0;
+            font-size: 0.95rem;
+        }
+        
+        .golden-ticket .warning {
+            color: #D32F2F;
+            font-size: 1.1rem;
+            margin-top: 15px;
+        }
+
         .launcher-title-container {
             display: flex;
             align-items: center;
@@ -571,8 +636,6 @@
             text-align: center;
             margin-top: 20px;
         }
-        
-        /* FIN: Estilos generales */
     </style>
 </head>
 <body>
@@ -608,7 +671,6 @@
                  data-logo_alignment="left">
             </div>
             
-            <!-- Icono de perfil y menú desplegable -->
             <div id="profile-container" style="display: none;">
                 <div class="profile-icon" id="profile-icon">
                     👤
@@ -690,8 +752,6 @@
                 </div>
             </div>
             
-            
-            
             <div class="guide-step">
                 <h2>PASO 3: Configuración y Instancia</h2>
                 <p>Seguramente cuando se nos habra el Launcher, no nos saldra Jugar directamente, nos saldra sin Instancias o sin nada simplemente, primero que todo nos dirigiremos a la esquina superior derecha, y iniciaremos sesión, sea con cuenta Premiun (Microsoft) o como Invitado (Solo el nombre de Usuario del juego) En caso de haber seleccionado con Microsoft, pues iniciaras sesión como comunmente lo haces como usuario Premiun, pero en caso de seleccionar Invitado se abrira una pestaña donde pondras tu Nick Name que saldra en Minecraft. Luego de iniciar sesión nos dirigiremos a la tuerca de configuración del Launcher, y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods), luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dandole de nuevo a la tuerca.</p>
@@ -703,8 +763,6 @@
             <div class="guide-step">
                 <h2>Finalización PASO 3: Instancia</h2>
                 <p>TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERAN INFORMADOS EN EL DISCORD!</p>
-                
-                
                 
                 <div class="button-container">
                     <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
@@ -723,18 +781,31 @@
             <h1>Pregunta Diaria</h1>
             <div class="quiz-container">
                 <p style="text-align: center; color: #cccccc; margin-bottom: 20px;" id="login-to-participate">
-                    Por favor, inicia sesión para participar.
+                    🔒 Por favor, inicia sesión para participar en la pregunta diaria y ganar increíbles premios. 🎁
                 </p>
                 <div id="quiz-content" style="display: none;">
+                    <div class="quiz-timer" id="quiz-timer">⏱️ 15</div>
                     <h2 id="quiz-question"></h2>
-                    <div id="quiz-options-container">
-                        </div>
-                    <div class="button-container">
-                        <button id="submit-quiz-button" class="nav-button daily-quiz" style="margin: 20px auto 0; padding: 10px 20px;">Enviar Respuesta</button>
-                    </div>
+                    <div id="quiz-options-container"></div>
                     <p id="quiz-message" style="color: #cccccc;"></p>
                 </div>
-                <p id="no-quiz-message">Hoy no tenemos pregunta diaria, vuelve mañana :)</p> 
+                <div id="winner-section" style="display: none;">
+                    <div class="golden-ticket">
+                        <h3>🎉 ¡FELICIDADES! 🎉</h3>
+                        <p>¡Respondiste correctamente y a tiempo!</p>
+                        <p style="font-size: 1.2rem; margin: 15px 0;">Tu código ganador es:</p>
+                        <div class="code" id="winner-code">CARGANDO...</div>
+                        <p class="warning">⚠️ Este código desaparecerá en 4 horas ⚠️</p>
+                        <p>¡Toma captura de pantalla AHORA!</p>
+                        <div class="button-container">
+                            <a href="https://discord.gg/AyAfBn42Nm" class="discord-button" target="_blank" style="margin: 15px auto; font-size: 1.2rem;">
+                                📩 RECLAMAR EN DISCORD
+                            </a>
+                        </div>
+                        <p style="font-size: 0.9rem;">Abre un ticket en Discord por el motivo:<br><strong>"Reclamar Beneficios"</strong></p>
+                    </div>
+                </div>
+                <p id="no-quiz-message">📅 Hoy no tenemos pregunta diaria disponible.<br>¡Vuelve mañana para participar! 😊</p> 
             </div>
             
             <div id="quiz-footer" class="footer">
@@ -742,6 +813,7 @@
                 <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
             </div>
         </section>
+
         <section id="mobs" data-category="mobs">
             <h1>Mobs nuevos</h1>
             <div id="posts-mobs" class="posts-container"></div>
@@ -799,8 +871,7 @@
     </main>
 
     <script>
-        // LÓGICA DE INICIO DE SESIÓN Y POSTS (Mantenida y adaptada)
-
+        // CONSTANTES Y VARIABLES GLOBALES
         const profileContainer = document.getElementById('profile-container');
         const profileIcon = document.getElementById('profile-icon');
         const profileDropdown = document.getElementById('profile-dropdown');
@@ -811,171 +882,125 @@
         // Elementos del Quiz
         const quizContent = document.getElementById('quiz-content');
         const loginToParticipate = document.getElementById('login-to-participate');
+        const quizTimerEl = document.getElementById('quiz-timer');
         const quizQuestionEl = document.getElementById('quiz-question');
         const quizOptionsContainer = document.getElementById('quiz-options-container');
-        const submitButton = document.getElementById('submit-quiz-button');
         const quizMessage = document.getElementById('quiz-message');
         const noQuizMessage = document.getElementById('no-quiz-message');
+        const winnerSection = document.getElementById('winner-section');
+        const winnerCodeEl = document.getElementById('winner-code');
 
         const QUIZ_STORAGE_KEY = 'masterstudio_quiz_user';
-        const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer'; 
-        const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json'; 
+        const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer';
+        const QUIZ_WINNER_CODE_KEY = 'masterstudio_winner_code';
+        const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json';
+        
+        // URL para guardar códigos ganadores (configurar después)
+        const SAVE_WINNER_CODE_URL = 'TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI'; // <-- Configurar después
         
         let currentUser = null;
         let selectedOption = null;
-        let dailyQuizData = null; // Para almacenar la pregunta del día
+        let dailyQuizData = null;
+        let quizTimer = null;
+        let timeRemaining = 15;
 
         // -------------------------------------
-        // LÓGICA DE MANTENIMIENTO Y BYPASS POR URL (SCRIPT SIN TOCAR)
+        // LÓGICA DE MANTENIMIENTO
         // -------------------------------------
         const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
-        // Define aquí si el mantenimiento está ACTIVO o NO para el público.
-        const IS_MAINTENANCE_ACTIVE = true; // <-- CAMBIAR A 'true' para activar el mantenimiento público
+        const IS_MAINTENANCE_ACTIVE = true;
         const BYPASS_PARAM = 'dev';
         const BYPASS_VALUE = 'master';
 
-        /**
-         * Verifica el estado de mantenimiento y aplica el bypass por URL.
-         * @returns {boolean} True si el modo de mantenimiento está activo para el usuario actual.
-         */
         function checkMaintenanceStatus() {
-            // Obtener los parámetros de la URL
             const urlParams = new URLSearchParams(window.location.search);
             const bypassActive = urlParams.get(BYPASS_PARAM) === BYPASS_VALUE;
 
             if (IS_MAINTENANCE_ACTIVE && !bypassActive) {
-                // Si el mantenimiento está activo Y NO hay bypass en la URL
-                
-                // 1. Ocultar el contenido normal y mostrar la pantalla de mantenimiento
                 MAINTENANCE_SCREEN.classList.remove('hidden');
-                
-                // Indica que el mantenimiento está activo y la ejecución debe parar.
                 return true; 
             } else {
-                // Si no hay mantenimiento O el bypass está activo
                 MAINTENANCE_SCREEN.classList.add('hidden');
                 return false;
             }
         }
+
         // -------------------------------------
-        // FIN: LÓGICA DE MANTENIMIENTO Y BYPASS POR URL
+        // FUNCIONES DE AUTENTICACIÓN
         // -------------------------------------
-        
-        // -------------------------------------
-        // LÓGICA DE GOOGLE SIGN-IN (ACTUALIZADA)
-        // -------------------------------------
-        /**
-         * Función de callback llamada por el SDK de Google después de la autenticación exitosa.
-         * @param {Object} response - Objeto de respuesta que contiene el token de credenciales.
-         */
         function handleCredentialResponse(response) {
             if (response.credential) {
-                // 1. Decodificar el JWT (ID Token)
                 const idToken = response.credential;
                 const base64Url = idToken.split('.')[1];
                 const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
                 const payload = JSON.parse(atob(base64));
 
-                // 2. Establecer el usuario actual
                 currentUser = { 
-                    id: payload.sub, // ID único de Google
-                    name: payload.given_name || payload.name || payload.email, // Nombre del usuario
+                    id: payload.sub,
+                    name: payload.given_name || payload.name || payload.email,
                     email: payload.email 
                 };
                 
-                // 3. Guardar en almacenamiento local
                 localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
-                
-                // 4. Actualizar la interfaz de usuario
                 updateLoginUI();
                 
-                // 5. Cargar el Quiz si la sección está activa
                 if (document.getElementById('daily-quiz').classList.contains('active')) {
                     loadDailyQuiz(currentUser.id);
                 }
             }
         }
 
-        /**
-         * Función para actualizar la interfaz de usuario de inicio de sesión.
-         */
         function updateLoginUI() {
             const gIdOnload = document.getElementById('g_id_onload');
             const gIdSignin = document.querySelector('.g_id_signin');
 
             if (currentUser) {
-                // Ocultar elementos de GSI cuando el usuario está logueado
                 if (gIdOnload) gIdOnload.style.display = 'none';
                 if (gIdSignin) gIdSignin.style.display = 'none';
 
-                // Mostrar icono de perfil
                 profileContainer.style.display = 'block';
                 dropdownUsername.textContent = currentUser.name;
                 dropdownEmail.textContent = currentUser.email;
                 
-                // Ocultar el mensaje "inicia sesión" en la sección de quiz
                 loginToParticipate.style.display = 'none';
-
             } else {
-                // Mostrar elementos de GSI cuando el usuario no está logueado
                 if (gIdOnload) gIdOnload.style.display = 'block';
                 if (gIdSignin) gIdSignin.style.display = 'block';
                 
-                // Ocultar icono de perfil
                 profileContainer.style.display = 'none';
             }
         }
 
-        /**
-         * Toggle del menú desplegable de perfil
-         */
         profileIcon.addEventListener('click', (e) => {
             e.stopPropagation();
             profileDropdown.classList.toggle('show');
         });
 
-        /**
-         * Cerrar el menú si se hace clic fuera de él
-         */
         document.addEventListener('click', (e) => {
             if (!profileContainer.contains(e.target)) {
                 profileDropdown.classList.remove('show');
             }
         });
 
-        /**
-         * Función para cerrar sesión
-         */
         logoutButton.addEventListener('click', () => {
-            // Limpiar datos del usuario
             currentUser = null;
             localStorage.removeItem(QUIZ_STORAGE_KEY);
-            
-            // Cerrar el menú desplegable
             profileDropdown.classList.remove('show');
-            
-            // Actualizar la UI
             updateLoginUI();
             
-            // Si estamos en la sección de quiz, mostrar mensaje de login
             if (document.getElementById('daily-quiz').classList.contains('active')) {
                 loginToParticipate.style.display = 'block';
                 quizContent.style.display = 'none';
                 noQuizMessage.style.display = 'none';
+                winnerSection.style.display = 'none';
             }
             
-            // Recargar la página para restablecer el estado de Google Sign-In
             location.reload();
         });
-        // -------------------------------------
-        // FIN: LÓGICA DE GOOGLE SIGN-IN
-        // -------------------------------------
 
-
-        /**
-         * Obtiene la fecha actual en formato YYYY-MM-DD.
-         * @returns {string} La fecha actual (ej. '2025-11-03').
-         */
+        // -------------------------------------
+        // FUNCIONES DEL QUIZ
+        // -------------------------------------
         function getTodayDate() {
             const now = new Date();
             const year = now.getFullYear();
@@ -984,10 +1009,6 @@
             return `${year}-${month}-${day}`;
         }
 
-        /**
-         * Carga la pregunta diaria desde el JSON externo basada en la fecha.
-         * @returns {Promise<Object|null>} La pregunta del día o null si no existe.
-         */
         async function getDailyQuizData() {
             try {
                 const response = await fetch(QUIZ_JSON_URL);
@@ -998,188 +1019,285 @@
                 const quizData = await response.json();
                 const todayDate = getTodayDate(); 
                 
-                // Retorna la pregunta del día actual o null
                 return quizData[todayDate] || null;
-
             } catch (e) {
                 console.error('Fallo en la petición de preguntas.json:', e);
                 return null;
             }
         }
 
-        /**
-         * Maneja la selección de opciones del quiz.
-         */
+        function generateWinnerCode() {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+            let code = 'MS-';
+            for (let i = 0; i < 12; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
+        }
+
+        async function saveWinnerCode(userId, username, code, question) {
+            // Guardar localmente
+            const winnerData = {
+                code: code,
+                userId: userId,
+                username: username,
+                question: question,
+                date: getTodayDate(),
+                timestamp: Date.now(),
+                expiresAt: Date.now() + (4 * 60 * 60 * 1000) // 4 horas
+            };
+            
+            localStorage.setItem(`${QUIZ_WINNER_CODE_KEY}_${userId}_${getTodayDate()}`, JSON.stringify(winnerData));
+
+            // Intentar guardar en servidor (si está configurado)
+            if (SAVE_WINNER_CODE_URL && SAVE_WINNER_CODE_URL !== 'TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI') {
+                try {
+                    await fetch(SAVE_WINNER_CODE_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(winnerData)
+                    });
+                } catch (error) {
+                    console.log('No se pudo guardar en servidor, código guardado localmente');
+                }
+            }
+        }
+
+        function startQuizTimer() {
+            timeRemaining = 15;
+            updateTimerDisplay();
+            
+            quizTimer = setInterval(() => {
+                timeRemaining--;
+                updateTimerDisplay();
+                
+                if (timeRemaining <= 5) {
+                    quizTimerEl.classList.add('warning');
+                }
+                
+                if (timeRemaining <= 0) {
+                    clearInterval(quizTimer);
+                    handleTimeUp();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            quizTimerEl.textContent = `⏱️ ${timeRemaining}`;
+        }
+
+        function handleTimeUp() {
+            // Guardar respuesta fallida
+            localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'TIMEOUT');
+            
+            // Deshabilitar opciones
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.add('disabled');
+            });
+            
+            // Mostrar mensaje
+            quizMessage.textContent = '⏰ ¡Se acabó el tiempo! No respondiste a tiempo. Vuelve mañana para una nueva oportunidad.';
+            quizMessage.style.color = '#F44336';
+        }
+
         function handleOptionClick(event) {
+            if (timeRemaining <= 0) return;
+            
             document.querySelectorAll('.quiz-option').forEach(opt => {
                 opt.classList.remove('selected');
             });
             event.target.classList.add('selected');
             selectedOption = event.target.textContent;
+            
+            // Auto-submit al seleccionar
+            setTimeout(() => handleQuizSubmit(), 300);
         }
 
-        /**
-         * Carga la pregunta diaria en la interfaz.
-         * @param {string} userId - ID del usuario actual.
-         */
-        async function loadDailyQuiz(userId) {
+        async function handleQuizSubmit() {
+            if (!selectedOption || timeRemaining <= 0) return;
             
-            // Oculta todos los estados inicialmente
+            const selectedElement = document.querySelector('.quiz-option.selected');
+            const selectedKey = selectedElement ? selectedElement.getAttribute('data-key') : null;
+
+            if (!dailyQuizData) return;
+
+            // Detener el temporizador
+            clearInterval(quizTimer);
+
+            // Deshabilitar opciones
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.add('disabled');
+            });
+
+            // Validar respuesta
+            if (selectedKey === dailyQuizData.respuesta_correcta) {
+                // ¡RESPUESTA CORRECTA!
+                const winnerCode = generateWinnerCode();
+                
+                // Guardar código
+                await saveWinnerCode(currentUser.id, currentUser.name, winnerCode, dailyQuizData.pregunta);
+                
+                // Guardar respuesta correcta
+                localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, selectedOption);
+                
+                // Ocultar quiz y mostrar ticket ganador
+                quizContent.style.display = 'none';
+                winnerSection.style.display = 'block';
+                winnerCodeEl.textContent = winnerCode;
+                
+                // Ocultar código después de 4 horas
+                setTimeout(() => {
+                    winnerCodeEl.textContent = 'CÓDIGO EXPIRADO';
+                    winnerCodeEl.style.color = '#F44336';
+                }, 4 * 60 * 60 * 1000);
+                
+            } else {
+                // Respuesta incorrecta
+                localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, selectedOption);
+                
+                quizQuestionEl.textContent = '❌ Respuesta Incorrecta';
+                quizOptionsContainer.innerHTML = '';
+                quizMessage.textContent = '¡Oh no! Tu respuesta fue incorrecta. Vuelve mañana para intentarlo de nuevo con la pregunta diaria del siguiente día. ¡No te rindas! 💪';
+                quizMessage.style.color = '#F44336';
+            }
+        }
+
+        async function loadDailyQuiz(userId) {
+            // Ocultar todos los estados
             loginToParticipate.style.display = 'none';
             quizContent.style.display = 'none';
             noQuizMessage.style.display = 'none';
+            winnerSection.style.display = 'none';
+            quizTimerEl.classList.remove('warning');
             
             dailyQuizData = await getDailyQuizData();
             
             if (!dailyQuizData) {
-                // Caso 1: No hay pregunta para hoy.
                 noQuizMessage.style.display = 'block';
                 return;
             }
 
-            // Clave única para la respuesta del día
+            // Verificar si ya jugó hoy
             const storedAnswer = localStorage.getItem(`${QUIZ_ANSWER_KEY}_${userId}_${getTodayDate()}`);
+            const storedWinner = localStorage.getItem(`${QUIZ_WINNER_CODE_KEY}_${userId}_${getTodayDate()}`);
 
-            if (storedAnswer) {
-                // Caso 2: Ya respondió hoy.
-                quizContent.style.display = 'block';
-                quizQuestionEl.textContent = 'Ya participaste hoy.';
-                quizOptionsContainer.innerHTML = '';
-                submitButton.style.display = 'none';
-                quizMessage.textContent = `¡Gracias por participar! Tu respuesta fue: "${storedAnswer}".`;
-                quizMessage.style.color = '#4CAF50'; 
+            if (storedWinner) {
+                // Ya ganó hoy - mostrar ticket
+                const winnerData = JSON.parse(storedWinner);
+                winnerSection.style.display = 'block';
+                
+                // Verificar si expiró
+                if (Date.now() > winnerData.expiresAt) {
+                    winnerCodeEl.textContent = 'CÓDIGO EXPIRADO';
+                    winnerCodeEl.style.color = '#F44336';
+                } else {
+                    winnerCodeEl.textContent = winnerData.code;
+                }
                 return;
             }
 
-            // Caso 3: Cargar pregunta para responder.
+            if (storedAnswer) {
+                // Ya jugó pero no ganó
+                quizContent.style.display = 'block';
+                quizTimerEl.style.display = 'none';
+                quizQuestionEl.textContent = '✅ Ya participaste hoy';
+                quizOptionsContainer.innerHTML = '';
+                
+                if (storedAnswer === 'TIMEOUT') {
+                    quizMessage.textContent = '⏰ No respondiste a tiempo. ¡Vuelve mañana por otra oportunidad!';
+                } else {
+                    quizMessage.textContent = `Tu respuesta fue: "${storedAnswer}". Vuelve mañana para la nueva pregunta diaria. 😊`;
+                }
+                quizMessage.style.color = '#4CAF50';
+                return;
+            }
+
+            // Cargar pregunta nueva
             quizContent.style.display = 'block';
+            quizTimerEl.style.display = 'block';
             quizQuestionEl.textContent = dailyQuizData.pregunta;
             quizOptionsContainer.innerHTML = '';
             quizMessage.textContent = '';
-            submitButton.style.display = 'block';
-            submitButton.disabled = false;
             selectedOption = null;
 
-            // Mapear opciones de {a: 'opcion A', b: 'opcion B'} a un array para la UI
+            // Crear opciones
             const optionsArray = Object.values(dailyQuizData.opciones);
-
             optionsArray.forEach(option => {
                 const optionEl = document.createElement('div');
                 const optionKey = Object.keys(dailyQuizData.opciones).find(key => dailyQuizData.opciones[key] === option);
                 optionEl.className = 'quiz-option';
-                optionEl.setAttribute('data-key', optionKey); // Asignar la clave de la respuesta
+                optionEl.setAttribute('data-key', optionKey);
                 optionEl.textContent = option;
                 optionEl.addEventListener('click', handleOptionClick);
                 quizOptionsContainer.appendChild(optionEl);
             });
+
+            // Iniciar temporizador
+            startQuizTimer();
         }
-        
-        /**
-         * Verifica si hay un usuario guardado en Local Storage y lo carga.
-         * @returns {boolean} True si hay un usuario guardado.
-         */
+
         function checkLocalStorageUser() {
             const storedUser = localStorage.getItem(QUIZ_STORAGE_KEY);
             if (storedUser) {
                 try {
                     currentUser = JSON.parse(storedUser);
-                    updateLoginUI(); // Actualizar UI inmediatamente si hay un usuario
+                    updateLoginUI();
                     return true;
                 } catch (e) {
                     localStorage.removeItem(QUIZ_STORAGE_KEY);
                 }
             }
             
-            // Si no hay usuario y se está viendo el quiz, mostrar el mensaje de login
             if (document.getElementById('daily-quiz').classList.contains('active')) {
                 loginToParticipate.style.display = 'block';
                 quizContent.style.display = 'none';
                 noQuizMessage.style.display = 'none';
+                winnerSection.style.display = 'none';
             }
             return false;
         }
 
-        // --- Event Listeners del Quiz ---
-        
-        submitButton.addEventListener('click', () => {
-            if (!selectedOption) {
-                quizMessage.textContent = '❌ Por favor, selecciona una opción antes de enviar.';
-                quizMessage.style.color = '#FFD700'; 
-                return;
-            }
-
-            // Encontrar la clave de la opción seleccionada (a, b, c, d)
-            const selectedElement = document.querySelector('.quiz-option.selected');
-            const selectedKey = selectedElement ? selectedElement.getAttribute('data-key') : null;
-
-            if (!dailyQuizData) return; // Freno de seguridad
-
-            submitButton.disabled = true;
-            quizOptionsContainer.querySelectorAll('.quiz-option').forEach(opt => opt.style.pointerEvents = 'none');
-
-            // Lógica de validación
-            if (selectedKey === dailyQuizData.respuesta_correcta) {
-                // Éxito: Guardar respuesta y mostrar mensaje
-                localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, selectedOption);
-                
-                quizQuestionEl.textContent = '¡Respuesta enviada!';
-                quizOptionsContainer.innerHTML = '';
-                submitButton.style.display = 'none';
-                quizMessage.textContent = '✅ ¡Respuesta correcta! ¡Has ganado una entrada para el próximo sorteo! 🎉';
-                quizMessage.style.color = '#4CAF50'; 
-            } else {
-                // Fallo: Guardar respuesta incorrecta (para evitar reintento en el mismo día)
-                localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, selectedOption);
-                
-                quizQuestionEl.textContent = '¡Respuesta enviada!';
-                quizOptionsContainer.innerHTML = '';
-                submitButton.style.display = 'none';
-                quizMessage.textContent = '❌ Respuesta incorrecta. ¡Vuelve mañana por otra oportunidad! 😥';
-                quizMessage.style.color = '#F44336'; 
-            }
-            
-            submitButton.disabled = false;
-        });
-
-        // JavaScript para mostrar/ocultar secciones y botón home
+        // -------------------------------------
+        // NAVEGACIÓN
+        // -------------------------------------
         document.querySelectorAll('.nav-button').forEach(button => {
             button.addEventListener('click', function() {
                 const targetId = this.getAttribute('data-section');
                 
-                // 1. Remover la clase 'active-nav' de todos los botones
                 document.querySelectorAll('.nav-button').forEach(btn => {
                     btn.classList.remove('active-nav');
                 });
                 
-                // 2. Añadir la clase 'active-nav' al botón que fue clickeado
                 this.classList.add('active-nav');
 
-                // 3. Ocultar todas las secciones
                 document.querySelectorAll('section').forEach(section => {
                     section.classList.remove('active');
                 });
                 
-                // 4. Mostrar la sección seleccionada
                 const targetSection = document.getElementById(targetId);
                 if (targetSection) {
                     targetSection.classList.add('active');
                     
-                    // Lógica especial para el quiz al cambiar de sección
                     if (targetId === 'daily-quiz') {
                          if (currentUser) {
                             loadDailyQuiz(currentUser.id);
                         } else {
-                            // Mostrar solo el mensaje de "iniciar sesión"
                             loginToParticipate.style.display = 'block';
                             quizContent.style.display = 'none';
                             noQuizMessage.style.display = 'none';
+                            winnerSection.style.display = 'none';
                         }
                     }
                 }
             });
         });
-        
-        // Función para cargar los posts dinámicamente (Mantenida)
+
+        // -------------------------------------
+        // CARGAR POSTS
+        // -------------------------------------
         async function loadPosts() {
             const POSTS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
 
@@ -1223,40 +1341,20 @@
                 });
             } catch (e) {
                 console.error('Error al cargar posts:', e);
-                
-                document.querySelectorAll('section[data-category]').forEach(section => {
-                    const h1 = section.querySelector('h1');
-                    if (h1) {
-                            const container = section.querySelector('.posts-container');
-                            if (container && container.innerHTML === '') {
-                                h1.insertAdjacentHTML('afterend', `
-                                    <p style="color: #F44336; margin-top: 20px; text-align: center;">Error al cargar los datos: ${e.message}.</p>
-                                `);
-                            }
-                    }
-                });
             }
         }
 
-        // ---------------------------------------------
-        // LÓGICA DE INICIO GENERAL (DOMContentLoaded)
-        // ---------------------------------------------
+        // -------------------------------------
+        // INICIALIZACIÓN
+        // -------------------------------------
         document.addEventListener('DOMContentLoaded', () => {
-            
-            // 1. **VERIFICAR MODO MANTENIMIENTO**
             const isMaintenance = checkMaintenanceStatus();
             
             if (isMaintenance) {
-                // Si está en mantenimiento y no hay bypass, detenemos toda la ejecución del script.
                 return; 
             }
             
-            // 2. **INICIAR EL RESTO DE LÓGICA (Si no hay mantenimiento o hay bypass)**
-            
-            // Cargar los posts
             loadPosts(); 
-
-            // Lógica de inicio del Quiz: comprueba si el usuario ya está logueado
             checkLocalStorageUser();
         });
     </script>
