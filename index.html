@@ -111,7 +111,7 @@
         
         /* INICIO: Estilos de la funcionalidad de inicio de sesión */
         .login-button-container {
-            z-index: 3;
+            z-index: 10000;
             display: flex;
             align-items: center;
             gap: 10px;
@@ -167,7 +167,7 @@
             min-width: 220px;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7);
             display: none;
-            z-index: 9999;
+            z-index: 99999;
         }
 
         .profile-dropdown.show {
@@ -234,6 +234,8 @@
             background-color: rgba(26, 26, 26, 0.6);
             backdrop-filter: blur(10px);
             gap: 20px;
+            position: relative;
+            z-index: 1;
         }
 
         nav {
