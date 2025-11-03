@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MasterStudio</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
     <style>
         /* INICIO: Estilos base */
 
@@ -111,28 +114,23 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            /* Permite que el botón de Google se posicione correctamente */
+            min-height: 40px; 
         }
 
-        .login-button-container button, .login-button-container span {
+        /* Estilo para el texto de usuario logueado */
+        .login-button-container span {
             padding: 10px 15px;
             border-radius: 8px;
             font-size: 0.9rem;
             font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
             white-space: nowrap;
         }
         
-        #login-button {
-            background-color: #2196F3; /* Azul */
-            color: #ffffff;
-            border: 1px solid #2196F3;
-            box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
-        }
-
-        #login-button:hover {
-            background-color: #1976D2;
-            box-shadow: 0 0 15px rgba(33, 150, 243, 0.8);
+        /* GSI button is rendered inside a div. */
+        /* Ensure the GSI elements are hidden when the user is logged in */
+        .g_id_signin {
+            transition: opacity 0.3s ease;
         }
         /* FIN: Estilos de la funcionalidad de inicio de sesión */
         
@@ -488,9 +486,6 @@
     <div id="maintenance-screen" class="hidden">
         <h1>🛠️ ¡MANTENIMIENTO! 🛠️</h1>
         <p>Nuestro sitio web está actualmente fuera de servicio por tareas de mantenimiento y grandes actualizaciones. Estaremos de vuelta muy pronto. ¡Gracias por tu paciencia!</p>
-        <p style="font-size: 1rem; color: #FFA500;">
-            </a>
-        </p>
     </div>
     <header>
         <div class="header-logo-group">
@@ -498,10 +493,24 @@
             <div class="icon">👑</div>
         </div>
 
-        <div class="login-button-container login-button">
-            <button id="login-button" style="display: block;">
-                🔒 Iniciar Sesión (Invitado)
-            </button>
+        <div class="login-button-container">
+            
+            <div id="g_id_onload"
+                 data-client_id="876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="handleCredentialResponse"
+                 data-nonce="">
+            </div>
+            
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="rectangular"
+                 data-theme="outline"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
             
             <span id="user-display" style="color: #00BCD4; font-size: 1.2rem; display: none;">
                 ¡Hola, <span id="logged-in-username">Usuario</span>!
@@ -561,7 +570,7 @@
             
             <div class="guide-step">
                 <h2>PASO 2: Ejecución y Instalación</h2>
-                <p>Luego de completar el primer paso, pasaremos al segundo paso, en donde tendras que abrir el archivo que acabaste de descargar, para proseguir a la instalación. Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en "Más Información" y una vez desplegado nos habilitara la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.</p>
+                <p>Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en "Más Información" y una vez desplegado nos habilitara la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.</p>
                 <div class="guide-image-container">
                     <img src="https://i.postimg.cc/SNYR7Fh8/Diseno-sin-titulo-33.png" alt="Imagen del Paso 2" style="max-width: 600px;">
                 </div>
@@ -686,7 +695,7 @@
     <script>
         // LÓGICA DE INICIO DE SESIÓN Y POSTS (Mantenida y adaptada)
 
-        const loginButton = document.getElementById('login-button');
+        // const loginButton = document.getElementById('login-button'); // ELIMINADO
         const userDisplay = document.getElementById('user-display');
         const usernameEl = document.getElementById('logged-in-username');
         
@@ -701,7 +710,6 @@
 
         const QUIZ_STORAGE_KEY = 'masterstudio_quiz_user';
         const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer'; 
-        // URL de la que se cargan las preguntas (se asume que existe en el mismo repositorio/carpeta)
         const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json'; 
         
         let currentUser = null;
@@ -709,7 +717,7 @@
         let dailyQuizData = null; // Para almacenar la pregunta del día
 
         // -------------------------------------
-        // LÓGICA DE MANTENIMIENTO Y BYPASS POR URL
+        // LÓGICA DE MANTENIMIENTO Y BYPASS POR URL (SCRIPT SIN TOCAR)
         // -------------------------------------
         const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
         // Define aquí si el mantenimiento está ACTIVO o NO para el público.
@@ -747,6 +755,71 @@
         // -------------------------------------
         // FIN: LÓGICA DE MANTENIMIENTO Y BYPASS POR URL
         // -------------------------------------
+        
+        // -------------------------------------
+        // LÓGICA DE GOOGLE SIGN-IN (NUEVA)
+        // -------------------------------------
+        /**
+         * Función de callback llamada por el SDK de Google después de la autenticación exitosa.
+         * @param {Object} response - Objeto de respuesta que contiene el token de credenciales.
+         */
+        function handleCredentialResponse(response) {
+            if (response.credential) {
+                // 1. Decodificar el JWT (ID Token)
+                const idToken = response.credential;
+                const base64Url = idToken.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const payload = JSON.parse(atob(base64));
+
+                // 2. Establecer el usuario actual
+                currentUser = { 
+                    id: payload.sub, // ID único de Google
+                    name: payload.given_name || payload.name || payload.email, // Nombre del usuario
+                    email: payload.email 
+                };
+                
+                // 3. Guardar en almacenamiento local
+                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
+                
+                // 4. Actualizar la interfaz de usuario
+                updateLoginUI();
+                
+                // 5. Cargar el Quiz si la sección está activa
+                if (document.getElementById('daily-quiz').classList.contains('active')) {
+                    loadDailyQuiz(currentUser.id);
+                }
+            }
+        }
+
+        /**
+         * Función para actualizar la interfaz de usuario de inicio de sesión.
+         */
+        function updateLoginUI() {
+            const gIdOnload = document.getElementById('g_id_onload');
+            const gIdSignin = document.querySelector('.g_id_signin');
+
+            if (currentUser) {
+                // Ocultar elementos de GSI cuando el usuario está logueado
+                if (gIdOnload) gIdOnload.style.display = 'none';
+                if (gIdSignin) gIdSignin.style.display = 'none';
+
+                usernameEl.textContent = currentUser.name;
+                userDisplay.style.display = 'block';
+                
+                // Ocultar el mensaje "inicia sesión" en la sección de quiz
+                loginToParticipate.style.display = 'none';
+
+            } else {
+                // Mostrar elementos de GSI cuando el usuario no está logueado
+                if (gIdOnload) gIdOnload.style.display = 'block';
+                if (gIdSignin) gIdSignin.style.display = 'block';
+                
+                userDisplay.style.display = 'none';
+            }
+        }
+        // -------------------------------------
+        // FIN: LÓGICA DE GOOGLE SIGN-IN
+        // -------------------------------------
 
 
         /**
@@ -755,7 +828,6 @@
          */
         function getTodayDate() {
             const now = new Date();
-            // Esto asegura que use la fecha real del cliente.
             const year = now.getFullYear();
             const month = String(now.getMonth() + 1).padStart(2, '0'); 
             const day = String(now.getDate()).padStart(2, '0');
@@ -843,7 +915,9 @@
 
             optionsArray.forEach(option => {
                 const optionEl = document.createElement('div');
+                const optionKey = Object.keys(dailyQuizData.opciones).find(key => dailyQuizData.opciones[key] === option);
                 optionEl.className = 'quiz-option';
+                optionEl.setAttribute('data-key', optionKey); // Asignar la clave de la respuesta
                 optionEl.textContent = option;
                 optionEl.addEventListener('click', handleOptionClick);
                 quizOptionsContainer.appendChild(optionEl);
@@ -859,9 +933,7 @@
             if (storedUser) {
                 try {
                     currentUser = JSON.parse(storedUser);
-                    loginButton.style.display = 'none';
-                    usernameEl.textContent = currentUser.name;
-                    userDisplay.style.display = 'block';
+                    updateLoginUI(); // Actualizar UI inmediatamente si hay un usuario
                     return true;
                 } catch (e) {
                     localStorage.removeItem(QUIZ_STORAGE_KEY);
@@ -886,14 +958,9 @@
                 return;
             }
 
-            // Encuentra la clave de la opción seleccionada (a, b, c, d) para compararla con el JSON
-            let selectedKey = null;
-            for (const [key, value] of Object.entries(dailyQuizData.opciones)) {
-                if (value === selectedOption) {
-                    selectedKey = key;
-                    break;
-                }
-            }
+            // Encontrar la clave de la opción seleccionada (a, b, c, d)
+            const selectedElement = document.querySelector('.quiz-option.selected');
+            const selectedKey = selectedElement ? selectedElement.getAttribute('data-key') : null;
 
             if (!dailyQuizData) return; // Freno de seguridad
 
@@ -922,26 +989,6 @@
             }
             
             submitButton.disabled = false;
-        });
-
-        // --- Event Listeners Generales ---
-
-        loginButton.addEventListener('click', () => {
-            const simulatedUserId = 'user_' + Math.floor(Math.random() * 1000000);
-            const simulatedUsername = prompt('Por favor, ingresa tu Nick de Discord para simular el login:');
-            if (simulatedUsername) {
-                currentUser = { id: simulatedUserId, name: simulatedUsername };
-                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
-                
-                loginButton.style.display = 'none';
-                usernameEl.textContent = currentUser.name;
-                userDisplay.style.display = 'block';
-                
-                // Si el usuario acaba de iniciar sesión y está en la sección del quiz, cárgalo.
-                if (document.getElementById('daily-quiz').classList.contains('active')) {
-                    loadDailyQuiz(currentUser.id);
-                }
-            }
         });
 
         // JavaScript para mostrar/ocultar secciones y botón home
