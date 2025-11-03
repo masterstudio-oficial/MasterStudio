@@ -1,22 +1,1088 @@
-{
-  "2025-11-01": {
-    "pregunta": "¿Quién gano la final del mundial de futbol en 2022?",
-    "opciones": {
-      "a": "Francia",
-      "b": "Italia",
-      "c": "Argentina",
-      "d": "Paises Bajos"
-    },
-    "respuesta_correcta": "c"
-  },
-  "2025-11-02": {
-    "pregunta": "¿Cómo se llama el servidor?",
-    "opciones": {
-      "a": "MasterSafio",
-      "b": "Studios Master",
-      "c": "ESPECIAL HALLOWEEN",
-      "d": "MasterStudio"
-    },
-    "respuesta_correcta": "d"
-  }
-}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterStudio</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <style>
+        /* INICIO: Estilos base sin Halloween */
+
+        /* Reset básico */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #000000; /* Negro */
+            color: #ffffff;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ------------------------------------- */
+        /* INICIO: Estilos de Mantenimiento */
+        /* ------------------------------------- */
+        #maintenance-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        #maintenance-screen h1 {
+            font-family: 'VT323', monospace;
+            font-size: 5rem;
+            color: #F44336; /* Rojo de Alerta */
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(244, 67, 54, 0.7);
+        }
+
+        #maintenance-screen p {
+            font-size: 1.2rem;
+            color: #FFCDD2;
+            margin-bottom: 30px;
+        }
+        
+        #bypass-input {
+            padding: 15px;
+            margin-top: 10px;
+            width: 300px;
+            border-radius: 8px;
+            border: 2px solid #F44336;
+            background-color: #212121;
+            color: #ffffff;
+            font-size: 1rem;
+            text-align: center;
+        }
+        
+        #bypass-input::placeholder {
+            color: #BDBDBD;
+        }
+
+        /* Inicialmente oculto por defecto, solo se muestra en JS si IS_MAINTENANCE_ACTIVE es true */
+        #maintenance-screen.hidden {
+            display: none;
+        }
+        /* ------------------------------------- */
+        /* FIN: Estilos de Mantenimiento */
+        /* ------------------------------------- */
+
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 30px 50px;
+            background-color: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .header-logo-group {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+        }
+
+        .logo {
+            font-family: 'VT323', monospace;
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin-right: 15px;
+            color: #ffffff;
+            text-shadow: none;
+        }
+        
+        .icon {
+            font-size: 2.5rem;
+        }
+        
+        /* INICIO: Estilos de la funcionalidad de inicio de sesión */
+        .login-button-container {
+            z-index: 3;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-button-container button, .login-button-container span {
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+        
+        #login-button {
+            background-color: #2196F3; /* Azul */
+            color: #ffffff;
+            border: 1px solid #2196F3;
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.5);
+        }
+
+        #login-button:hover {
+            background-color: #1976D2;
+            box-shadow: 0 0 15px rgba(33, 150, 243, 0.8);
+        }
+        /* FIN: Estilos de la funcionalidad de inicio de sesión */
+        
+        /* INICIO: CONTENEDOR DE NAVEGACIÓN PRINCIPAL Y BOTÓN LAUNCHER */
+        .main-navigation-container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 30px 50px;
+            background-color: rgba(26, 26, 26, 0.6);
+            backdrop-filter: blur(10px);
+            gap: 20px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            padding: 0;
+            flex-grow: 1;
+        }
+        /* FIN: CONTENEDOR DE NAVEGACIÓN */
+
+        .nav-button {
+            margin: 10px;
+            padding: 15px 30px;
+            background-color: rgba(26, 26, 26, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        /* Estilo base para el botón activo */
+        .nav-button.active-nav {
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
+            background-color: rgba(40, 40, 40, 0.9);
+            border: 1px solid #ffffff;
+            transform: translateY(-2px);
+        }
+
+        /* ESTILOS POR CATEGORÍA ACTIVA (Originales + Quiz) */
+        .home.active-nav { border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
+        .mobs.active-nav { border-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
+        .dificultad.active-nav { border-color: #FFA500; box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); }
+        .eventos.active-nav { border-color: #FF69B4; box-shadow: 0 0 15px rgba(255, 105, 180, 0.8); }
+        .actualizaciones.active-nav { border-color: #2196F3; box-shadow: 0 0 15px rgba(33, 150, 243, 0.8); }
+        .recompensas.active-nav { border-color: #4CAF50; box-shadow: 0 0 15px rgba(76, 175, 80, 0.8); }
+        .castigos.active-nav { border-color: #F44336; box-shadow: 0 0 15px rgba(244, 67, 54, 0.8); }
+        .launcher.active-nav { border-color: #00BCD4; box-shadow: 0 0 15px rgba(0, 188, 212, 0.8); }
+        
+        /* Pregunta Diaria - Morado (Nuevo estilo normalizado) */
+        .daily-quiz.active-nav { 
+            border-color: #9C27B0; /* Morado */
+            box-shadow: 0 0 15px rgba(156, 39, 176, 0.8); 
+        }
+
+        .nav-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .nav-button:not(.active-nav):hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
+
+        /* Main content */
+        main {
+            padding: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        section {
+            display: none;
+            margin-bottom: 40px;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        section h1 {
+            font-family: 'VT323', monospace;
+            font-size: 3rem;
+            color: #ffffff;
+            text-align: center;
+            text-shadow: none;
+        }
+        
+        /* INICIO: Estilos para la sección de Quiz (Restaurados y normalizados) */
+        .quiz-container h2 {
+            font-family: 'VT323', monospace;
+            color: #9C27B0; /* Morado para el título del quiz */
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: none;
+            text-align: center;
+        }
+        .quiz-container {
+            background-color: rgba(26, 26, 26, 0.8);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(156, 39, 176, 0.3); /* Borde morado sutil */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            margin: 30px auto;
+        }
+        .quiz-option {
+            background-color: rgba(40, 40, 40, 0.9);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: left;
+        }
+        .quiz-option:hover {
+            background-color: rgba(50, 50, 50, 0.9);
+            border-color: #9C27B0;
+        }
+        .quiz-option.selected {
+            background-color: #9C27B0;
+            border-color: #FFFFFF;
+            box-shadow: 0 0 8px rgba(156, 39, 176, 0.8);
+        }
+        #quiz-message {
+            font-weight: bold;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        /* Estilo para el mensaje de "No hay pregunta" */
+        #no-quiz-message {
+            color: #aaaaaa; /* Gris bonito */
+            font-size: 1.1rem;
+            text-align: center;
+            padding: 30px 0;
+            display: none; /* Oculto por defecto */
+        }
+        /* FIN: Estilos para la sección de Quiz */
+
+        /* Otros estilos generales (mantenidos)... */
+        
+        .launcher-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .launcher-title-container img {
+            height: 50px;
+            vertical-align: middle;
+        }
+
+        .launcher-title-container img:first-of-type {
+            margin-right: 15px;
+        }
+
+        .launcher-title-container img:last-of-type {
+            margin-left: 15px;
+        }
+
+        #home p {
+            margin-bottom: 20px;
+            color: #cccccc;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .footer {
+            margin-top: 50px;
+            text-align: center;
+            color: #cccccc;
+            font-size: 0.9rem;
+        }
+
+        .footer a {
+            color: #2196F3;
+            text-decoration: none;
+        }
+        
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .post {
+            display: flex;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            align-items: flex-start;
+        }
+
+        .post img {
+            width: 150px;
+            height: 150px;
+            object-fit: cover;
+            margin-right: 20px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .post-content {
+            flex: 1;
+        }
+
+        .post-content h3 {
+            font-family: 'VT323', monospace;
+            margin-bottom: 5px;
+            font-size: 1.6rem;
+            color: #ffffff;
+            display: block;
+        }
+
+        .post-content .date {
+            font-size: 0.9rem;
+            color: #cccccc;
+            margin-bottom: 15px;
+            display: block;
+        }
+        
+        .post-content p {
+            color: #cccccc;
+            display: block;
+        }
+
+        .new-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #FFC107;
+            color: #000000;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .placeholder-text {
+            text-align: center;
+            color: #cccccc;
+            padding: 50px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 1rem;
+        }
+
+        .guide-step {
+            margin-bottom: 50px;
+            padding: 20px;
+            background-color: rgba(26, 26, 26, 0.6);
+            border-radius: 10px;
+            border: 1px solid rgba(0, 188, 212, 0.3);
+        }
+        .guide-step h2 {
+            font-family: 'VT323', monospace;
+            font-size: 2rem;
+            color: #00BCD4;
+            margin-bottom: 15px;
+            text-shadow: none;
+        }
+        .guide-step p {
+            margin-bottom: 20px;
+            color: #cccccc;
+            max-width: none;
+            margin: 15px auto;
+            text-align: left;
+        }
+        .guide-image-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .guide-image-container img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 5px;
+            border: 2px solid #00BCD4;
+        }
+        
+        .download-button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 20px auto;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #000000;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            border: 2px solid #FFD700;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+        
+        .download-button:hover {
+            background: linear-gradient(135deg, #FFC107 0%, #FF8C00 100%);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 1);
+            transform: scale(1.05);
+        }
+        
+        .discord-button {
+            display: inline-block;
+            padding: 15px 30px;
+            margin: 20px auto;
+            background-color: #7289DA;
+            color: #ffffff;
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+            border: 2px solid #99AAB5;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(114, 137, 218, 0.8);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .discord-button:hover {
+            background-color: #677BC4;
+            box-shadow: 0 0 25px rgba(114, 137, 218, 1);
+            transform: scale(1.05);
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        /* FIN: Estilos generales */
+    </style>
+</head>
+<body>
+    
+    <div id="maintenance-screen" class="hidden">
+        <h1>🛠️ ¡MANTENIMIENTO! 🛠️</h1>
+        <p>Nuestro sitio web está actualmente fuera de servicio por tareas de mantenimiento y grandes actualizaciones. Estaremos de vuelta muy pronto. ¡Gracias por tu paciencia!</p>
+        <p>Si eres desarrollador, puedes ingresar un código de bypass:</p>
+        <input type="password" id="bypass-input" placeholder="Código de Bypass">
+    </div>
+    <header>
+        <div class="header-logo-group">
+            <div class="logo">MasterStudio</div>
+            <div class="icon">👑</div>
+        </div>
+
+        <div class="login-button-container login-button">
+            <button id="login-button" style="display: block;">
+                🔒 Iniciar Sesión (Invitado)
+            </button>
+            
+            <span id="user-display" style="color: #00BCD4; font-size: 1.2rem; display: none;">
+                ¡Hola, <span id="logged-in-username">Usuario</span>!
+            </span>
+        </div>
+        </header>
+
+    <div class="main-navigation-container">
+        
+        <button class="nav-button launcher" data-section="launcher" style="margin: 10px 30px 10px 0;">💻 Launcher</button>
+
+        <nav>
+            <button class="nav-button home active-nav" data-section="home">🏠 Inicio</button>
+            <button class="nav-button mobs" data-section="mobs">Mobs nuevos</button>
+            <button class="nav-button dificultad" data-section="dificultad">Cambio de dificultad</button>
+            <button class="nav-button eventos" data-section="eventos">Eventos</button>
+            <button class="nav-button actualizaciones" data-section="actualizaciones">Actualizaciones</button>
+            <button class="nav-button recompensas" data-section="recompensas">Recompensas</button>
+            <button class="nav-button castigos" data-section="castigos">Castigos</button>
+            <button class="nav-button daily-quiz" data-section="daily-quiz">💡 Pregunta Diaria</button>
+        </nav>
+    </div>
+    <main>
+        <section id="home" class="active">
+            <h1>Bienvenido a MasterStudio</h1>
+            <p>En MasterStudio, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🌍, fusionando creatividad, dinamismo y diversión para todos los jugadores 🎮.</p>
+            <p><strong>Nuestra Misión:</strong></p>
+            <p>Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🚀. Diseñamos mundos y sistemas que sorprenden, inspiran y mantienen a los jugadores inmersos en cada aventura 🧭.</p>
+            <div class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
+            </div>
+        </section>
+
+        <section id="launcher">
+            
+            <div class="launcher-title-container">
+                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher Izquierdo">	
+                <h1>Instalación del MasterClient Launcher</h1>
+                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher Derecho">
+            </div>
+            
+            <div class="guide-step">
+                <h2>PASO 1: Descarga del Instalador</h2>
+                <p>Deberás descargar la última versión publicada aca en nuestra pagina, o en nuestro canal de descargas de discord, haciendo click en el botón de descarga, Si te llega a salir un mensaje de error o de advertencia, no te preocupes, es totalmente seguro, dale al boton de descargar para continuar con tu descarga.</p>
+                
+                <div class="button-container">
+                    <a href="http://us-1.fl.hafu.cfd:41421/updates/MasterClient.exe" class="download-button" download>
+                        DESCARGA AQUÍ
+                    </a>
+                </div>
+                
+                <div class="guide-image-container">
+                    <img src="https://i.postimg.cc/qR26GPny/Diseno-sin-titulo-31.png" alt="Imagen del Paso 1" style="max-width: 600px;">
+                </div>
+            </div>
+            
+            <div class="guide-step">
+                <h2>PASO 2: Ejecución y Instalación</h2>
+                <p>Luego de completar el primer paso, pasaremos al segundo paso, en donde tendras que abrir el archivo que acabaste de descargar, para proseguir a la instalación. Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en "Más Información" y una vez desplegado nos habilitara la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.</p>
+                <div class="guide-image-container">
+                    <img src="https://i.postimg.cc/SNYR7Fh8/Diseno-sin-titulo-33.png" alt="Imagen del Paso 2" style="max-width: 600px;">
+                </div>
+            </div>
+
+            <div class="guide-step">
+                <h2>Finalización PASO 2: Ejecución y Instalación</h2>
+                <p>Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, en donde nos abrira automaticamente una ventana del instalador del MasterClient - MasterStudio Launcher, la primera ventana nos saldra los Terminos de uso del launcher, los cuales los leeremos para estar de acuerdo, y como siguiente paso le daremos a "Acepto". Luego pasaremos a la segunda ventana donde nos saldra en que usuario de nuestra PC queremos instalar el MasterClient o si lo instalaremos en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos "Instalar".</p>
+                <div class="guide-image-container">
+                    <img src="https://i.postimg.cc/8CZfXRn4/Diseno-sin-titulo-34.png" alt="Imagen del Paso 2.1" style="max-width: 600px;">	
+                </div>
+            </div>
+            
+            
+            
+            <div class="guide-step">
+                <h2>PASO 3: Configuración y Instancia</h2>
+                <p>Seguramente cuando se nos habra el Launcher, no nos saldra Jugar directamente, nos saldra sin Instancias o sin nada simplemente, primero que todo nos dirigiremos a la esquina superior derecha, y iniciaremos sesión, sea con cuenta Premiun (Microsoft) o como Invitado (Solo el nombre de Usuario del juego) En caso de haber seleccionado con Microsoft, pues iniciaras sesión como comunmente lo haces como usuario Premiun, pero en caso de seleccionar Invitado se abrira una pestaña donde pondras tu Nick Name que saldra en Minecraft. Luego de iniciar sesión nos dirigiremos a la tuerca de configuración del Launcher, y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods), luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dandole de nuevo a la tuerca.</p>
+                <div class="guide-image-container">
+                    <img src="https://i.postimg.cc/Sssdg7kD/Diseno-sin-titulo-36.png" alt="Imagen del Paso 3" style="max-width: 600px;">
+                </div>
+            </div>
+
+            <div class="guide-step">
+                <h2>Finalización PASO 3: Instancia</h2>
+                <p>TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERAN INFORMADOS EN EL DISCORD!</p>
+                
+                
+                
+                <div class="button-container">
+                    <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
+                        ÚNETE A NUESTRO DISCORD 💬
+                    </a>
+                </div>
+
+                <div class="footer">
+                    <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                </div>
+            </div>
+            
+        </section>
+        
+        <section id="daily-quiz">
+            <h1>Pregunta Diaria</h1>
+            <div class="quiz-container">
+                <p style="text-align: center; color: #cccccc; margin-bottom: 20px;" id="login-to-participate">
+                    Por favor, inicia sesión para participar.
+                </p>
+                <div id="quiz-content" style="display: none;">
+                    <h2 id="quiz-question"></h2>
+                    <div id="quiz-options-container">
+                        </div>
+                    <div class="button-container">
+                        <button id="submit-quiz-button" class="nav-button daily-quiz" style="margin: 20px auto 0; padding: 10px 20px;">Enviar Respuesta</button>
+                    </div>
+                    <p id="quiz-message" style="color: #cccccc;"></p>
+                </div>
+                <p id="no-quiz-message">Hoy no tenemos pregunta diaria, vuelve mañana :)</p> 
+            </div>
+            
+            <div id="quiz-footer" class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
+            </div>
+        </section>
+        <section id="mobs" data-category="mobs">
+            <h1>Mobs nuevos</h1>
+            <div id="posts-mobs" class="posts-container"></div>
+            <p class="placeholder-text">Contenido próximamente...</p>
+            <div class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="dificultad" data-category="dificultad">
+            <h1>Cambio de dificultad</h1>
+            <div id="posts-dificultad" class="posts-container"></div>
+            <p class="placeholder-text">Contenido próximamente...</p>
+            <div class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="eventos" data-category="eventos">
+            <h1>Eventos</h1>
+            <div id="posts-eventos" class="posts-container"></div>
+            <p class="placeholder-text">Contenido próximamente...</p>
+            <div class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="actualizaciones" data-category="actualizaciones">
+            <h1>Actualizaciones</h1>
+            <div id="posts-actualizaciones" class="posts-container"></div>
+            <p class="placeholder-text">Contenido próximamente...</p>
+            <div class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="recompensas" data-category="recompensas">
+            <h1>Recompensas</h1>
+            <div id="posts-recompensas" class="posts-container"></div>
+            <p class="placeholder-text">Contenido próximamente...</p>
+            <div class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+
+        <section id="castigos" data-category="castigos">
+            <h1>Castigos</h1>
+            <div id="posts-castigos" class="posts-container"></div>
+            <p class="placeholder-text">Contenido próximamente...</p>
+            <div class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+            </div>
+        </section>
+        
+    </main>
+
+    <script>
+        // LÓGICA DE INICIO DE SESIÓN Y POSTS (Mantenida y adaptada)
+
+        const loginButton = document.getElementById('login-button');
+        const userDisplay = document.getElementById('user-display');
+        const usernameEl = document.getElementById('logged-in-username');
+        
+        // Elementos del Quiz
+        const quizContent = document.getElementById('quiz-content');
+        const loginToParticipate = document.getElementById('login-to-participate');
+        const quizQuestionEl = document.getElementById('quiz-question');
+        const quizOptionsContainer = document.getElementById('quiz-options-container');
+        const submitButton = document.getElementById('submit-quiz-button');
+        const quizMessage = document.getElementById('quiz-message');
+        const noQuizMessage = document.getElementById('no-quiz-message');
+
+        const QUIZ_STORAGE_KEY = 'masterstudio_quiz_user';
+        const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer'; 
+        const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json';
+        
+        let currentUser = null;
+        let selectedOption = null;
+        let dailyQuizData = null; // Para almacenar la pregunta del día
+
+        // -------------------------------------
+        // LÓGICA DE MANTENIMIENTO Y BYPASS
+        // -------------------------------------
+        const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
+        const BYPASS_INPUT = document.getElementById('bypass-input');
+        const BYPASS_CODE = 'masterstudio2025'; 
+        // Simulación de estado de mantenimiento. Se asume OFF para que la página funcione.
+        const IS_MAINTENANCE_ACTIVE = false; 
+        const BYPASS_STORAGE_KEY = 'masterstudio_bypass_active';
+
+
+        /**
+         * Verifica el estado de mantenimiento y aplica el bypass.
+         */
+        function checkMaintenanceStatus() {
+            // 1. Verificar si el bypass está activo en localStorage
+            const bypassActive = localStorage.getItem(BYPASS_STORAGE_KEY) === 'true';
+
+            if (IS_MAINTENANCE_ACTIVE && !bypassActive) {
+                // Si está activo Y no hay bypass
+                MAINTENANCE_SCREEN.classList.remove('hidden');
+                
+                // Añadir listener para el bypass
+                BYPASS_INPUT.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        checkBypassCode(this.value);
+                    }
+                });
+                return true;
+            } else {
+                // Si no hay mantenimiento O el bypass está activo
+                MAINTENANCE_SCREEN.classList.add('hidden');
+                return false;
+            }
+        }
+
+        /**
+         * Intenta aplicar el código de bypass.
+         */
+        function checkBypassCode(code) {
+            if (code === BYPASS_CODE) {
+                localStorage.setItem(BYPASS_STORAGE_KEY, 'true');
+                alert('Bypass activado. Recargando el sitio.');
+                window.location.reload();
+            } else {
+                alert('Código incorrecto. Intenta de nuevo.');
+                BYPASS_INPUT.value = '';
+            }
+        }
+        // -------------------------------------
+        // FIN: LÓGICA DE MANTENIMIENTO Y BYPASS
+        // -------------------------------------
+
+
+        /**
+         * Obtiene la fecha actual en formato YYYY-MM-DD.
+         * @returns {string} La fecha actual (ej. '2025-11-03').
+         */
+        function getTodayDate() {
+            const now = new Date();
+            // Esto asegura que use la fecha real del cliente.
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0'); 
+            const day = String(now.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        /**
+         * Carga la pregunta diaria desde el JSON externo basada en la fecha.
+         * @returns {Promise<Object|null>} La pregunta del día o null si no existe.
+         */
+        async function getDailyQuizData() {
+            try {
+                const response = await fetch(QUIZ_JSON_URL);
+                if (!response.ok) {
+                    console.error('Error al cargar preguntas.json:', response.statusText);
+                    return null;
+                }
+                const quizData = await response.json();
+                const todayDate = getTodayDate(); 
+                
+                return quizData[todayDate] || null;
+
+            } catch (e) {
+                console.error('Fallo en la petición de preguntas.json:', e);
+                return null;
+            }
+        }
+
+        /**
+         * Maneja la selección de opciones del quiz.
+         */
+        function handleOptionClick(event) {
+            document.querySelectorAll('.quiz-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            selectedOption = event.target.textContent;
+        }
+
+        /**
+         * Carga la pregunta diaria en la interfaz.
+         * @param {string} userId - ID del usuario actual.
+         */
+        async function loadDailyQuiz(userId) {
+            
+            // Oculta todos los estados inicialmente
+            loginToParticipate.style.display = 'none';
+            quizContent.style.display = 'none';
+            noQuizMessage.style.display = 'none';
+            
+            dailyQuizData = await getDailyQuizData();
+            
+            if (!dailyQuizData) {
+                // Caso 1: No hay pregunta para hoy.
+                noQuizMessage.style.display = 'block';
+                return;
+            }
+
+            const storedAnswer = localStorage.getItem(`${QUIZ_ANSWER_KEY}_${userId}_${getTodayDate()}`);
+
+            if (storedAnswer) {
+                // Caso 2: Ya respondió hoy.
+                quizContent.style.display = 'block';
+                quizQuestionEl.textContent = 'Ya participaste hoy.';
+                quizOptionsContainer.innerHTML = '';
+                submitButton.style.display = 'none';
+                quizMessage.textContent = `¡Gracias por participar! Tu respuesta fue: "${storedAnswer}".`;
+                quizMessage.style.color = '#4CAF50'; 
+                return;
+            }
+
+            // Caso 3: Cargar pregunta para responder.
+            quizContent.style.display = 'block';
+            quizQuestionEl.textContent = dailyQuizData.pregunta;
+            quizOptionsContainer.innerHTML = '';
+            quizMessage.textContent = '';
+            submitButton.style.display = 'block';
+            submitButton.disabled = false;
+            selectedOption = null;
+
+            // Mapear opciones de {a: 'opcion A', b: 'opcion B'} a un array para la UI
+            const optionsArray = Object.values(dailyQuizData.opciones);
+
+            optionsArray.forEach(option => {
+                const optionEl = document.createElement('div');
+                optionEl.className = 'quiz-option';
+                optionEl.textContent = option;
+                optionEl.addEventListener('click', handleOptionClick);
+                quizOptionsContainer.appendChild(optionEl);
+            });
+        }
+        
+        /**
+         * Verifica si hay un usuario guardado en Local Storage y lo carga.
+         * @returns {boolean} True si hay un usuario guardado.
+         */
+        function checkLocalStorageUser() {
+            const storedUser = localStorage.getItem(QUIZ_STORAGE_KEY);
+            if (storedUser) {
+                try {
+                    currentUser = JSON.parse(storedUser);
+                    loginButton.style.display = 'none';
+                    usernameEl.textContent = currentUser.name;
+                    userDisplay.style.display = 'block';
+                    return true;
+                } catch (e) {
+                    localStorage.removeItem(QUIZ_STORAGE_KEY);
+                }
+            }
+            
+            // Si no hay usuario y se está viendo el quiz, mostrar el mensaje de login
+            if (document.getElementById('daily-quiz').classList.contains('active')) {
+                loginToParticipate.style.display = 'block';
+                quizContent.style.display = 'none';
+                noQuizMessage.style.display = 'none';
+            }
+            return false;
+        }
+
+        // --- Event Listeners del Quiz ---
+        
+        submitButton.addEventListener('click', () => {
+            if (!selectedOption) {
+                quizMessage.textContent = '❌ Por favor, selecciona una opción antes de enviar.';
+                quizMessage.style.color = '#FFD700'; 
+                return;
+            }
+
+            // Encuentra la letra de la opción seleccionada para compararla con el JSON
+            let selectedKey = null;
+            for (const [key, value] of Object.entries(dailyQuizData.opciones)) {
+                if (value === selectedOption) {
+                    selectedKey = key;
+                    break;
+                }
+            }
+
+            if (!dailyQuizData) return; // Freno de seguridad
+
+            submitButton.disabled = true;
+            quizOptionsContainer.querySelectorAll('.quiz-option').forEach(opt => opt.style.pointerEvents = 'none');
+
+            // Lógica de validación
+            if (selectedKey === dailyQuizData.respuesta_correcta) {
+                // Éxito: Guardar respuesta y mostrar mensaje
+                localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, selectedOption);
+                
+                quizQuestionEl.textContent = '¡Respuesta enviada!';
+                quizOptionsContainer.innerHTML = '';
+                submitButton.style.display = 'none';
+                quizMessage.textContent = '✅ ¡Respuesta correcta! ¡Has ganado una entrada para el próximo sorteo! 🎉';
+                quizMessage.style.color = '#4CAF50'; 
+            } else {
+                // Fallo: Guardar respuesta incorrecta (para evitar reintento en el mismo día)
+                localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, selectedOption);
+                
+                quizQuestionEl.textContent = '¡Respuesta enviada!';
+                quizOptionsContainer.innerHTML = '';
+                submitButton.style.display = 'none';
+                quizMessage.textContent = '❌ Respuesta incorrecta. ¡Vuelve mañana por otra oportunidad! 😥';
+                quizMessage.style.color = '#F44336'; 
+            }
+            
+            submitButton.disabled = false;
+        });
+
+        // --- Event Listeners Generales ---
+
+        loginButton.addEventListener('click', () => {
+            const simulatedUserId = 'user_' + Math.floor(Math.random() * 1000000);
+            const simulatedUsername = prompt('Por favor, ingresa tu Nick de Discord para simular el login:');
+            if (simulatedUsername) {
+                currentUser = { id: simulatedUserId, name: simulatedUsername };
+                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
+                
+                loginButton.style.display = 'none';
+                usernameEl.textContent = currentUser.name;
+                userDisplay.style.display = 'block';
+                
+                // Si el usuario acaba de iniciar sesión y está en la sección del quiz, cárgalo.
+                if (document.getElementById('daily-quiz').classList.contains('active')) {
+                    loadDailyQuiz(currentUser.id);
+                }
+            }
+        });
+
+        // JavaScript para mostrar/ocultar secciones y botón home
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const targetId = this.getAttribute('data-section');
+                
+                // 1. Remover la clase 'active-nav' de todos los botones
+                document.querySelectorAll('.nav-button').forEach(btn => {
+                    btn.classList.remove('active-nav');
+                });
+                
+                // 2. Añadir la clase 'active-nav' al botón que fue clickeado
+                this.classList.add('active-nav');
+
+                // 3. Ocultar todas las secciones
+                document.querySelectorAll('section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // 4. Mostrar la sección seleccionada
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                    
+                    // Lógica especial para el quiz al cambiar de sección
+                    if (targetId === 'daily-quiz') {
+                         if (currentUser) {
+                            loadDailyQuiz(currentUser.id);
+                        } else {
+                            // Mostrar solo el mensaje de "iniciar sesión"
+                            loginToParticipate.style.display = 'block';
+                            quizContent.style.display = 'none';
+                            noQuizMessage.style.display = 'none';
+                        }
+                    }
+                }
+            });
+        });
+        
+        // Función para cargar los posts dinámicamente (Mantenida)
+        async function loadPosts() {
+            const JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
+
+            try {
+                const response = await fetch(JSON_URL);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const posts = await response.json();	
+
+                document.querySelectorAll('.posts-container').forEach(container => {
+                    container.innerHTML = '';
+                });
+
+                posts.forEach(post => {
+                    const category = post.categoria || 'dificultad';	
+                    const container = document.getElementById(`posts-${category}`);
+
+                    if (container) {
+                        const postElement = document.createElement('div');
+                        postElement.className = 'post';
+
+                        let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
+                        
+                        postElement.innerHTML = `
+                            ${badge}
+                            <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
+                            <div class="post-content">
+                                <h3>${post.titulo}</h3>
+                                <span class="date">Fecha: ${post.fecha}</span>
+                                <p>${post.descripcion}</p>
+                            </div>
+                        `;
+                        container.prepend(postElement);	
+                        
+                        const placeholderText = container.parentElement.querySelector('.placeholder-text');
+                        if (placeholderText) {
+                            placeholderText.style.display = 'none';
+                        }
+                    }
+                });
+            } catch (e) {
+                console.error('Error al cargar posts:', e);
+                
+                document.querySelectorAll('section[data-category]').forEach(section => {
+                    const h1 = section.querySelector('h1');
+                    if (h1) {
+                            const container = section.querySelector('.posts-container');
+                            if (container && container.innerHTML === '') {
+                                h1.insertAdjacentHTML('afterend', `
+                                    <p style="color: #F44336; margin-top: 20px; text-align: center;">Error al cargar los datos: ${e.message}.</p>
+                                `);
+                            }
+                    }
+                });
+            }
+        }
+
+        // ---------------------------------------------
+        // LÓGICA DE INICIO GENERAL (DOMContentLoaded)
+        // ---------------------------------------------
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. **VERIFICAR MODO MANTENIMIENTO**
+            const isMaintenance = checkMaintenanceStatus();
+            
+            if (isMaintenance) {
+                // Si está en mantenimiento y no hay bypass, detenemos toda la ejecución del script.
+                return; 
+            }
+            
+            // 2. **INICIAR EL RESTO DE LÓGICA (Si no hay mantenimiento o hay bypass)**
+            
+            // Cargar los posts
+            loadPosts(); 
+
+            // Lógica de inicio del Quiz: comprueba si el usuario ya está logueado
+            checkLocalStorageUser();
+        });
+    </script>
+</body>
+</html>
