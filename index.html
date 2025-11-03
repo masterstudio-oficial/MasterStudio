@@ -85,6 +85,7 @@
             position: relative;
         }
         
+        /* Contenedor del logo, centrado con absolute */
         .header-logo-group {
             position: absolute;
             left: 50%;
@@ -114,7 +115,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            /* Permite que el botón de Google se posicione correctamente */
+            /* Se usa ml-auto si fuera flex-direction: row, pero aquí lo dejamos simple ya que
+               el "spacer" invisible al inicio fuerza el justify-content: space-between a funcionar. */
             min-height: 40px; 
         }
 
@@ -128,7 +130,6 @@
         }
         
         /* GSI button is rendered inside a div. */
-        /* Ensure the GSI elements are hidden when the user is logged in */
         .g_id_signin {
             transition: opacity 0.3s ease;
         }
@@ -488,6 +489,8 @@
         <p>Nuestro sitio web está actualmente fuera de servicio por tareas de mantenimiento y grandes actualizaciones. Estaremos de vuelta muy pronto. ¡Gracias por tu paciencia!</p>
     </div>
     <header>
+        <div style="width: 1px;"></div> 
+        
         <div class="header-logo-group">
             <div class="logo">MasterStudio</div>
             <div class="icon">👑</div>
@@ -695,7 +698,6 @@
     <script>
         // LÓGICA DE INICIO DE SESIÓN Y POSTS (Mantenida y adaptada)
 
-        // const loginButton = document.getElementById('login-button'); // ELIMINADO
         const userDisplay = document.getElementById('user-display');
         const usernameEl = document.getElementById('logged-in-username');
         
@@ -740,10 +742,6 @@
                 // 1. Ocultar el contenido normal y mostrar la pantalla de mantenimiento
                 MAINTENANCE_SCREEN.classList.remove('hidden');
                 
-                // 2. Opcional: Redirigir a la URL sin parámetros (solo la URL base) si no estamos en ella.
-                // Esta parte se deja comentada, ya que la redirección puede ser agresiva, 
-                // pero si el mantenimiento está activo, la pantalla se muestra.
-
                 // Indica que el mantenimiento está activo y la ejecución debe parar.
                 return true; 
             } else {
@@ -757,7 +755,7 @@
         // -------------------------------------
         
         // -------------------------------------
-        // LÓGICA DE GOOGLE SIGN-IN (NUEVA)
+        // LÓGICA DE GOOGLE SIGN-IN (MANTENIDA)
         // -------------------------------------
         /**
          * Función de callback llamada por el SDK de Google después de la autenticación exitosa.
