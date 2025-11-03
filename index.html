@@ -115,23 +115,105 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            /* Se usa ml-auto si fuera flex-direction: row, pero aquí lo dejamos simple ya que
-               el "spacer" invisible al inicio fuerza el justify-content: space-between a funcionar. */
-            min-height: 40px; 
+            min-height: 40px;
+            position: relative;
         }
 
-        /* Estilo para el texto de usuario logueado */
-        .login-button-container span {
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: bold;
-            white-space: nowrap;
-        }
-        
         /* GSI button is rendered inside a div. */
         .g_id_signin {
             transition: opacity 0.3s ease;
+        }
+
+        /* Icono de perfil */
+        .profile-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 188, 212, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .profile-icon:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 188, 212, 0.6);
+            border-color: #00BCD4;
+        }
+
+        /* Menú desplegable de perfil */
+        .profile-dropdown {
+            position: absolute;
+            top: 55px;
+            right: 0;
+            background-color: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 188, 212, 0.3);
+            border-radius: 10px;
+            padding: 15px;
+            min-width: 200px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 1000;
+        }
+
+        .profile-dropdown.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-dropdown-header {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .profile-dropdown-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #00BCD4;
+            margin-bottom: 5px;
+        }
+
+        .profile-dropdown-email {
+            font-size: 0.85rem;
+            color: #cccccc;
+        }
+
+        .logout-button {
+            width: 100%;
+            padding: 10px 15px;
+            background-color: rgba(244, 67, 54, 0.2);
+            border: 1px solid rgba(244, 67, 54, 0.5);
+            border-radius: 8px;
+            color: #F44336;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 5px;
+        }
+
+        .logout-button:hover {
+            background-color: rgba(244, 67, 54, 0.3);
+            border-color: #F44336;
+            transform: translateY(-1px);
         }
         /* FIN: Estilos de la funcionalidad de inicio de sesión */
         
@@ -515,11 +597,21 @@
                  data-logo_alignment="left">
             </div>
             
-            <span id="user-display" style="color: #00BCD4; font-size: 1.2rem; display: none;">
-                ¡Hola, <span id="logged-in-username">Usuario</span>!
-            </span>
+            <!-- Icono de perfil y menú desplegable -->
+            <div id="profile-container" style="display: none;">
+                <div class="profile-icon" id="profile-icon">
+                    👤
+                </div>
+                <div class="profile-dropdown" id="profile-dropdown">
+                    <div class="profile-dropdown-header">
+                        <div class="profile-dropdown-name" id="dropdown-username">Usuario</div>
+                        <div class="profile-dropdown-email" id="dropdown-email">email@example.com</div>
+                    </div>
+                    <button class="logout-button" id="logout-button">Cerrar sesión</button>
+                </div>
+            </div>
         </div>
-        </header>
+    </header>
 
     <div class="main-navigation-container">
         
@@ -698,8 +790,12 @@
     <script>
         // LÓGICA DE INICIO DE SESIÓN Y POSTS (Mantenida y adaptada)
 
-        const userDisplay = document.getElementById('user-display');
-        const usernameEl = document.getElementById('logged-in-username');
+        const profileContainer = document.getElementById('profile-container');
+        const profileIcon = document.getElementById('profile-icon');
+        const profileDropdown = document.getElementById('profile-dropdown');
+        const dropdownUsername = document.getElementById('dropdown-username');
+        const dropdownEmail = document.getElementById('dropdown-email');
+        const logoutButton = document.getElementById('logout-button');
         
         // Elementos del Quiz
         const quizContent = document.getElementById('quiz-content');
@@ -755,7 +851,7 @@
         // -------------------------------------
         
         // -------------------------------------
-        // LÓGICA DE GOOGLE SIGN-IN (MANTENIDA)
+        // LÓGICA DE GOOGLE SIGN-IN (ACTUALIZADA)
         // -------------------------------------
         /**
          * Función de callback llamada por el SDK de Google después de la autenticación exitosa.
@@ -801,8 +897,10 @@
                 if (gIdOnload) gIdOnload.style.display = 'none';
                 if (gIdSignin) gIdSignin.style.display = 'none';
 
-                usernameEl.textContent = currentUser.name;
-                userDisplay.style.display = 'block';
+                // Mostrar icono de perfil
+                profileContainer.style.display = 'block';
+                dropdownUsername.textContent = currentUser.name;
+                dropdownEmail.textContent = currentUser.email;
                 
                 // Ocultar el mensaje "inicia sesión" en la sección de quiz
                 loginToParticipate.style.display = 'none';
@@ -812,9 +910,52 @@
                 if (gIdOnload) gIdOnload.style.display = 'block';
                 if (gIdSignin) gIdSignin.style.display = 'block';
                 
-                userDisplay.style.display = 'none';
+                // Ocultar icono de perfil
+                profileContainer.style.display = 'none';
             }
         }
+
+        /**
+         * Toggle del menú desplegable de perfil
+         */
+        profileIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
+
+        /**
+         * Cerrar el menú si se hace clic fuera de él
+         */
+        document.addEventListener('click', (e) => {
+            if (!profileContainer.contains(e.target)) {
+                profileDropdown.classList.remove('show');
+            }
+        });
+
+        /**
+         * Función para cerrar sesión
+         */
+        logoutButton.addEventListener('click', () => {
+            // Limpiar datos del usuario
+            currentUser = null;
+            localStorage.removeItem(QUIZ_STORAGE_KEY);
+            
+            // Cerrar el menú desplegable
+            profileDropdown.classList.remove('show');
+            
+            // Actualizar la UI
+            updateLoginUI();
+            
+            // Si estamos en la sección de quiz, mostrar mensaje de login
+            if (document.getElementById('daily-quiz').classList.contains('active')) {
+                loginToParticipate.style.display = 'block';
+                quizContent.style.display = 'none';
+                noQuizMessage.style.display = 'none';
+            }
+            
+            // Recargar la página para restablecer el estado de Google Sign-In
+            location.reload();
+        });
         // -------------------------------------
         // FIN: LÓGICA DE GOOGLE SIGN-IN
         // -------------------------------------
