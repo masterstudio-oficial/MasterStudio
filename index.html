@@ -1,103 +1,25 @@
-        .placeholder-text {
-            text-align: center;
-            color: #cccccc;
-            padding: 50px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 1rem;
-        }
-
-        .guide-step {
-            margin-bottom: 50px;
-            padding: 20px;
-            background-color: rgba(26, 26, 26, 0.6);
-            border-radius: 10px;
-            border: 1px solid rgba(0, 188, 212, 0.3);
-        }
-        
-        .guide-step h2 {
-            font-family: 'VT323', monospace;
-            font-size: 2rem;
-            color: #00BCD4;
-            margin-bottom: 15px;
-            text-shadow: none;
-        }
-        
-        .guide-step p {
-            margin-bottom: 20px;
-            color: #cccccc;
-            max-width: none;
-            margin: 15px auto;
-            text-align: left;
-        }
-        
-        .guide-image-container {
-            text-align: center;
-            margin: 20px 0;
-        }
-        
-        .guide-image-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 5px;
-            border: 2px solid #00BCD4;
-        }
-        
-        .download-button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 20px auto;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #000000;
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-            border: 2px solid #FFD700;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-align: center;
-        }
-        
-        .download-button:hover {
-            background: linear-gradient(135deg, #FFC107 0%, #FF8C00 100%);
-            box-shadow: 0 0 30px rgba(255, 215, 0, 1);
-            transform: scale(1.05);
-        }
-        
-        .discord-button {
-            display: inline-block;
-            padding: 15px 30px;
-            margin: 20px auto;
-            background-color: #7289DA;
-            color: #ffffff;
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
-            text-decoration: none;
-            border: 2px solid #99AAB5;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(114, 137, 218, 0.8);
-            transition: all 0.3s ease;
-            cursor: pointer;
-            text-align: center;
-        }
-
-        .discord-button:hover {
-            background-color: #677BC4;
-            box-shadow: 0 0 25px rgba(114, 137, 218, 1);
-            transform: scale(1.05);
-        }
-
-        .button-container {
-            text-align: center;
-            margin-top: 20px;
-        }
-    </style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MasterStudio</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/MasterStudio.png">
+    
+    <!-- Fuentes -->
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    
+    <!-- Google Sign-In -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     
+    <!-- Pantalla de Mantenimiento -->
     <div id="maintenance-screen" class="hidden">
         <h1>🛠️ ¡MANTENIMIENTO! 🛠️</h1>
         <p>Nuestro sitio web está actualmente fuera de servicio por tareas de mantenimiento y grandes actualizaciones. Estaremos de vuelta muy pronto. ¡Gracias por tu paciencia!</p>
@@ -107,17 +29,17 @@
     <div class="modal-overlay" id="notifications-modal">
         <div class="modal-content" style="position: relative;">
             <button class="modal-close" onclick="closeModal('notifications-modal')">✕</button>
-            <h2 class="modal-header">🔔 Notificaciones</h2>
+            <h2 class="modal-header" data-lang="notifications-title">🔔 Notificaciones</h2>
             
             <div class="toggle-container">
-                <span>Activar notificaciones</span>
+                <span data-lang="notifications-enable">Activar notificaciones</span>
                 <div class="toggle-switch" id="notifications-toggle" onclick="toggleNotifications()">
                     <div class="toggle-slider"></div>
                 </div>
             </div>
 
             <div id="notifications-list" style="margin-top: 20px;">
-                <div class="notification-empty">
+                <div class="notification-empty" data-lang="notifications-empty">
                     No tienes notificaciones por el momento.
                 </div>
             </div>
@@ -128,16 +50,16 @@
     <div class="modal-overlay" id="language-modal">
         <div class="modal-content" style="position: relative;">
             <button class="modal-close" onclick="closeModal('language-modal')">✕</button>
-            <h2 class="modal-header">🌍 Seleccionar Idioma</h2>
+            <h2 class="modal-header" data-lang="language-title">🌍 Seleccionar Idioma</h2>
             
             <div class="language-selector">
-                <div class="language-option active" data-lang="es" onclick="selectLanguage('es')">
+                <div class="language-option active" data-lang-code="es" onclick="selectLanguage('es')">
                     🇪🇸<br>Español
                 </div>
-                <div class="language-option" data-lang="en" onclick="selectLanguage('en')">
+                <div class="language-option" data-lang-code="en" onclick="selectLanguage('en')">
                     🇺🇸<br>English
                 </div>
-                <div class="language-option" data-lang="pt" onclick="selectLanguage('pt')">
+                <div class="language-option" data-lang-code="pt" onclick="selectLanguage('pt')">
                     🇧🇷<br>Português
                 </div>
             </div>
@@ -148,19 +70,19 @@
     <div class="modal-overlay" id="theme-modal">
         <div class="modal-content" style="position: relative;">
             <button class="modal-close" onclick="closeModal('theme-modal')">✕</button>
-            <h2 class="modal-header">🎨 Seleccionar Tema</h2>
+            <h2 class="modal-header" data-lang="theme-title">🎨 Seleccionar Tema</h2>
             
             <div class="theme-selector">
                 <div class="theme-option active" data-theme="dark" onclick="selectTheme('dark')">
                     <div class="theme-icon">🌙</div>
-                    <div>Oscuro</div>
+                    <div data-lang="theme-dark">Oscuro</div>
                 </div>
                 <div class="theme-option" data-theme="light" onclick="selectTheme('light')">
                     <div class="theme-icon">☀️</div>
-                    <div>Claro</div>
+                    <div data-lang="theme-light">Claro</div>
                 </div>
             </div>
-            <p style="text-align: center; color: #aaaaaa; margin-top: 15px; font-size: 0.9rem;">
+            <p style="text-align: center; color: #aaaaaa; margin-top: 15px; font-size: 0.9rem;" data-lang="theme-soon">
                 El tema claro estará disponible próximamente
             </p>
         </div>
@@ -170,7 +92,7 @@
     <div class="modal-overlay" id="ranking-modal">
         <div class="modal-content" style="position: relative; max-width: 600px;">
             <button class="modal-close" onclick="closeModal('ranking-modal')">✕</button>
-            <h2 class="modal-header">🏆 Ranking Preguntas Diarias</h2>
+            <h2 class="modal-header" data-lang="ranking-title">🏆 Ranking Preguntas Diarias</h2>
             
             <div class="ranking-container">
                 <!-- Top 3 -->
@@ -193,13 +115,12 @@
                 </div>
 
                 <!-- Resto del ranking -->
-                <div id="ranking-list">
-                    <!-- Se llenará dinámicamente -->
-                </div>
+                <div id="ranking-list"></div>
             </div>
         </div>
     </div>
     
+    <!-- Header -->
     <header>
         <div style="width: 1px;"></div> 
         
@@ -239,124 +160,129 @@
 
                     <!-- Opciones del menú -->
                     <button class="profile-menu-option" onclick="openModal('notifications-modal')">
-                        <span>🔔 Notificaciones</span>
+                        <span data-lang="menu-notifications">🔔 Notificaciones</span>
                         <span class="notification-count" id="notification-count-menu" style="display: none;">0</span>
                     </button>
 
                     <button class="profile-menu-option" onclick="openModal('ranking-modal')">
-                        <span>🏆 Ranking Preguntas Diarias</span>
+                        <span data-lang="menu-ranking">🏆 Ranking Preguntas Diarias</span>
                     </button>
 
                     <button class="profile-menu-option" onclick="openModal('language-modal')">
-                        <span>🌍 Idioma</span>
+                        <span data-lang="menu-language">🌍 Idioma</span>
                     </button>
 
                     <button class="profile-menu-option" onclick="openModal('theme-modal')">
-                        <span>🎨 Tema</span>
+                        <span data-lang="menu-theme">🎨 Tema</span>
                     </button>
 
-                    <button class="logout-button" id="logout-button">Cerrar sesión</button>
+                    <button class="logout-button" id="logout-button" data-lang="logout">Cerrar sesión</button>
                 </div>
             </div>
         </div>
     </header>
 
+    <!-- Navegación -->
     <div class="main-navigation-container">
         
-        <button class="nav-button launcher" data-section="launcher" style="margin: 10px 30px 10px 0;">💻 Launcher</button>
+        <button class="nav-button launcher" data-section="launcher" style="margin: 10px 30px 10px 0;">💻 <span data-lang="nav-launcher">Launcher</span></button>
 
         <nav>
-            <button class="nav-button home active-nav" data-section="home">🏠 Inicio</button>
-            <button class="nav-button mobs" data-section="mobs">Mobs nuevos</button>
-            <button class="nav-button dificultad" data-section="dificultad">Cambio de dificultad</button>
-            <button class="nav-button eventos" data-section="eventos">Eventos</button>
-            <button class="nav-button actualizaciones" data-section="actualizaciones">Actualizaciones</button>
-            <button class="nav-button recompensas" data-section="recompensas">Recompensas</button>
-            <button class="nav-button castigos" data-section="castigos">Castigos</button>
-            <button class="nav-button daily-quiz" data-section="daily-quiz">💡 Pregunta Diaria</button>
+            <button class="nav-button home active-nav" data-section="home">🏠 <span data-lang="nav-home">Inicio</span></button>
+            <button class="nav-button mobs" data-section="mobs"><span data-lang="nav-mobs">Mobs nuevos</span></button>
+            <button class="nav-button dificultad" data-section="dificultad"><span data-lang="nav-difficulty">Cambio de dificultad</span></button>
+            <button class="nav-button eventos" data-section="eventos"><span data-lang="nav-events">Eventos</span></button>
+            <button class="nav-button actualizaciones" data-section="actualizaciones"><span data-lang="nav-updates">Actualizaciones</span></button>
+            <button class="nav-button recompensas" data-section="recompensas"><span data-lang="nav-rewards">Recompensas</span></button>
+            <button class="nav-button castigos" data-section="castigos"><span data-lang="nav-punishments">Castigos</span></button>
+            <button class="nav-button daily-quiz" data-section="daily-quiz">💡 <span data-lang="nav-daily-quiz">Pregunta Diaria</span></button>
         </nav>
     </div>
 
+    <!-- Contenido Principal -->
     <main>
+        <!-- Sección Home -->
         <section id="home" class="active">
-            <h1>Bienvenido a MasterStudio</h1>
-            <p>En MasterStudio, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🌍, fusionando creatividad, dinamismo y diversión para todos los jugadores 🎮.</p>
-            <p><strong>Nuestra Misión:</strong></p>
-            <p>Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🚀. Diseñamos mundos y sistemas que sorprenden, inspiran y mantienen a los jugadores inmersos en cada aventura 🧭.</p>
+            <h1 data-lang="home-welcome">Bienvenido a MasterStudio</h1>
+            <p data-lang="home-intro">En MasterStudio, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🌍, fusionando creatividad, dinamismo y diversión para todos los jugadores 🎮.</p>
+            <p><strong data-lang="home-mission-title">Nuestra Misión:</strong></p>
+            <p data-lang="home-mission-text">Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🚀. Diseñamos mundos y sistemas que sorprenden, inspiran y mantienen a los jugadores inmersos en cada aventura 🧭.</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
+                <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
+                <p><span data-lang="footer-join">Únete a nuestro</span> <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
             </div>
         </section>
 
+        <!-- Sección Launcher -->
         <section id="launcher">
             
             <div class="launcher-title-container">
-                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher Izquierdo">	
-                <h1>Instalación del MasterClient Launcher</h1>
-                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher Derecho">
+                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher">	
+                <h1 data-lang="launcher-title">Instalación del MasterClient Launcher</h1>
+                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher">
             </div>
             
             <div class="guide-step">
-                <h2>PASO 1: Descarga del Instalador</h2>
-                <p>Deberás descargar la última versión publicada aca en nuestra pagina, o en nuestro canal de descargas de discord, haciendo click en el botón de descarga, Si te llega a salir un mensaje de error o de advertencia, no te preocupes, es totalmente seguro, dale al boton de descargar para continuar con tu descarga.</p>
+                <h2 data-lang="launcher-step1-title">PASO 1: Descarga del Instalador</h2>
+                <p data-lang="launcher-step1-text">Deberás descargar la última versión publicada aca en nuestra pagina, o en nuestro canal de descargas de discord, haciendo click en el botón de descarga, Si te llega a salir un mensaje de error o de advertencia, no te preocupes, es totalmente seguro, dale al boton de descargar para continuar con tu descarga.</p>
                 
                 <div class="button-container">
                     <a href="http://us-1.fl.hafu.cfd:41421/updates/MasterClient.exe" class="download-button" download>
-                        DESCARGA AQUÍ
+                        <span data-lang="download-button">DESCARGA AQUÍ</span>
                     </a>
                 </div>
                 
                 <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/qR26GPny/Diseno-sin-titulo-31.png" alt="Imagen del Paso 1" style="max-width: 600px;">
+                    <img src="https://i.postimg.cc/qR26GPny/Diseno-sin-titulo-31.png" alt="Imagen del Paso 1">
                 </div>
             </div>
             
             <div class="guide-step">
-                <h2>PASO 2: Ejecución y Instalación</h2>
-                <p>Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en "Más Información" y una vez desplegado nos habilitara la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.</p>
+                <h2 data-lang="launcher-step2-title">PASO 2: Ejecución y Instalación</h2>
+                <p data-lang="launcher-step2-text">Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en "Más Información" y una vez desplegado nos habilitara la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.</p>
                 <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/SNYR7Fh8/Diseno-sin-titulo-33.png" alt="Imagen del Paso 2" style="max-width: 600px;">
+                    <img src="https://i.postimg.cc/SNYR7Fh8/Diseno-sin-titulo-33.png" alt="Imagen del Paso 2">
                 </div>
             </div>
 
             <div class="guide-step">
-                <h2>Finalización PASO 2: Ejecución y Instalación</h2>
-                <p>Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, en donde nos abrira automaticamente una ventana del instalador del MasterClient - MasterStudio Launcher, la primera ventana nos saldra los Terminos de uso del launcher, los cuales los leeremos para estar de acuerdo, y como siguiente paso le daremos a "Acepto". Luego pasaremos a la segunda ventana donde nos saldra en que usuario de nuestra PC queremos instalar el MasterClient o si lo instalaremos en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos "Instalar".</p>
+                <h2 data-lang="launcher-step2b-title">Finalización PASO 2: Ejecución y Instalación</h2>
+                <p data-lang="launcher-step2b-text">Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, en donde nos abrira automaticamente una ventana del instalador del MasterClient - MasterStudio Launcher, la primera ventana nos saldra los Terminos de uso del launcher, los cuales los leeremos para estar de acuerdo, y como siguiente paso le daremos a "Acepto". Luego pasaremos a la segunda ventana donde nos saldra en que usuario de nuestra PC queremos instalar el MasterClient o si lo instalaremos en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos "Instalar".</p>
                 <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/8CZfXRn4/Diseno-sin-titulo-34.png" alt="Imagen del Paso 2.1" style="max-width: 600px;">	
+                    <img src="https://i.postimg.cc/8CZfXRn4/Diseno-sin-titulo-34.png" alt="Imagen del Paso 2.1">	
                 </div>
             </div>
             
             <div class="guide-step">
-                <h2>PASO 3: Configuración y Instancia</h2>
-                <p>Seguramente cuando se nos habra el Launcher, no nos saldra Jugar directamente, nos saldra sin Instancias o sin nada simplemente, primero que todo nos dirigiremos a la esquina superior derecha, y iniciaremos sesión, sea con cuenta Premiun (Microsoft) o como Invitado (Solo el nombre de Usuario del juego) En caso de haber seleccionado con Microsoft, pues iniciaras sesión como comunmente lo haces como usuario Premiun, pero en caso de seleccionar Invitado se abrira una pestaña donde pondras tu Nick Name que saldra en Minecraft. Luego de iniciar sesión nos dirigiremos a la tuerca de configuración del Launcher, y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods), luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dandole de nuevo a la tuerca.</p>
+                <h2 data-lang="launcher-step3-title">PASO 3: Configuración y Instancia</h2>
+                <p data-lang="launcher-step3-text">Seguramente cuando se nos habra el Launcher, no nos saldra Jugar directamente, nos saldra sin Instancias o sin nada simplemente, primero que todo nos dirigiremos a la esquina superior derecha, y iniciaremos sesión, sea con cuenta Premiun (Microsoft) o como Invitado (Solo el nombre de Usuario del juego) En caso de haber seleccionado con Microsoft, pues iniciaras sesión como comunmente lo haces como usuario Premiun, pero en caso de seleccionar Invitado se abrira una pestaña donde pondras tu Nick Name que saldra en Minecraft. Luego de iniciar sesión nos dirigiremos a la tuerca de configuración del Launcher, y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods), luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dandole de nuevo a la tuerca.</p>
                 <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/Sssdg7kD/Diseno-sin-titulo-36.png" alt="Imagen del Paso 3" style="max-width: 600px;">
+                    <img src="https://i.postimg.cc/Sssdg7kD/Diseno-sin-titulo-36.png" alt="Imagen del Paso 3">
                 </div>
             </div>
 
             <div class="guide-step">
-                <h2>Finalización PASO 3: Instancia</h2>
-                <p>TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERAN INFORMADOS EN EL DISCORD!</p>
+                <h2 data-lang="launcher-step3b-title">Finalización PASO 3: Instancia</h2>
+                <p data-lang="launcher-step3b-text">TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERAN INFORMADOS EN EL DISCORD!</p>
                 
                 <div class="button-container">
                     <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
-                        ÚNETE A NUESTRO DISCORD 💬
+                        <span data-lang="discord-button">ÚNETE A NUESTRO DISCORD 💬</span>
                     </a>
                 </div>
 
                 <div class="footer">
-                    <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                    <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
                 </div>
             </div>
             
         </section>
         
+        <!-- Sección Quiz -->
         <section id="daily-quiz">
-            <h1>Pregunta Diaria</h1>
+            <h1 data-lang="quiz-title">Pregunta Diaria</h1>
             <div class="quiz-container">
-                <p style="text-align: center; color: #cccccc; margin-bottom: 20px;" id="login-to-participate">
+                <p style="text-align: center; color: #cccccc; margin-bottom: 20px;" id="login-to-participate" data-lang="quiz-login">
                     🔒 Por favor, inicia sesión para participar en la pregunta diaria y ganar increíbles premios. 🎁
                 </p>
                 <div id="quiz-content" style="display: none;">
@@ -367,1682 +293,87 @@
                 </div>
                 <div id="winner-section" style="display: none;">
                     <div class="golden-ticket">
-                        <h3>🎉 ¡FELICIDADES! 🎉</h3>
-                        <p>¡Respondiste correctamente y a tiempo!</p>
-                        <p style="font-size: 1.2rem; margin: 15px 0;">Tu código ganador es:</p>
+                        <h3 data-lang="quiz-congrats">🎉 ¡FELICIDADES! 🎉</h3>
+                        <p data-lang="quiz-correct">¡Respondiste correctamente y a tiempo!</p>
+                        <p style="font-size: 1.2rem; margin: 15px 0;" data-lang="quiz-code-label">Tu código ganador es:</p>
                         <div class="code" id="winner-code">CARGANDO...</div>
-                        <p class="warning">⚠️ Este código desaparecerá en 4 horas ⚠️</p>
-                        <p>¡Toma captura de pantalla AHORA!</p>
+                        <p class="warning" data-lang="quiz-expires">⚠️ Este código desaparecerá en 4 horas ⚠️</p>
+                        <p data-lang="quiz-screenshot">¡Toma captura de pantalla AHORA!</p>
                         <div class="button-container">
                             <a href="https://discord.gg/AyAfBn42Nm" class="discord-button" target="_blank" style="margin: 15px auto; font-size: 1.2rem;">
-                                📩 RECLAMAR EN DISCORD
+                                <span data-lang="quiz-claim">📩 RECLAMAR EN DISCORD</span>
                             </a>
                         </div>
-                        <p style="font-size: 0.9rem;">Abre un ticket en Discord por el motivo:<br><strong>"Reclamar Beneficios"</strong></p>
+                        <p style="font-size: 0.9rem;"><span data-lang="quiz-ticket-instructions">Abre un ticket en Discord por el motivo:</span><br><strong>"Reclamar Beneficios"</strong></p>
                     </div>
                 </div>
-                <p id="no-quiz-message">📅 Hoy no tenemos pregunta diaria disponible.<br>¡Vuelve mañana para participar! 😊</p> 
+                <p id="no-quiz-message" data-lang="quiz-no-question">📅 Hoy no tenemos pregunta diaria disponible.<br>¡Vuelve mañana para participar! 😊</p> 
             </div>
             
             <div id="quiz-footer" class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
+                <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
+                <p><span data-lang="footer-join">Únete a nuestro</span> <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
             </div>
         </section>
 
+        <!-- Secciones de Posts -->
         <section id="mobs" data-category="mobs">
-            <h1>Mobs nuevos</h1>
+            <h1 data-lang="mobs-title">Mobs nuevos</h1>
             <div id="posts-mobs" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text" data-lang="coming-soon">Contenido próximamente...</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
             </div>
         </section>
 
         <section id="dificultad" data-category="dificultad">
-            <h1>Cambio de dificultad</h1>
+            <h1 data-lang="difficulty-title">Cambio de dificultad</h1>
             <div id="posts-dificultad" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text" data-lang="coming-soon">Contenido próximamente...</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
             </div>
         </section>
 
         <section id="eventos" data-category="eventos">
-            <h1>Eventos</h1>
+            <h1 data-lang="events-title">Eventos</h1>
             <div id="posts-eventos" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text" data-lang="coming-soon">Contenido próximamente...</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
             </div>
         </section>
 
         <section id="actualizaciones" data-category="actualizaciones">
-            <h1>Actualizaciones</h1>
+            <h1 data-lang="updates-title">Actualizaciones</h1>
             <div id="posts-actualizaciones" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text" data-lang="coming-soon">Contenido próximamente...</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
             </div>
         </section>
 
         <section id="recompensas" data-category="recompensas">
-            <h1>Recompensas</h1>
+            <h1 data-lang="rewards-title">Recompensas</h1>
             <div id="posts-recompensas" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text" data-lang="coming-soon">Contenido próximamente...</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
             </div>
         </section>
 
         <section id="castigos" data-category="castigos">
-            <h1>Castigos</h1>
+            <h1 data-lang="punishments-title">Castigos</h1>
             <div id="posts-castigos" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
+            <p class="placeholder-text" data-lang="coming-soon">Contenido próximamente...</p>
             <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>© 2025 MasterStudio. <span data-lang="footer-rights">Todos los derechos reservados.</span></p>
             </div>
         </section>
         
     </main>
 
-    <script>
-        // CONSTANTES Y VARIABLES GLOBALES
-        const profileContainer = document.getElementById('profile-container');
-        const profileIcon = document.getElementById('profile-icon');
-        const profileDropdown = document.getElementById('profile-dropdown');
-        const dropdownUsername = document.getElementById('dropdown-username');
-        const dropdownEmail = document.getElementById('dropdown-email');
-        const logoutButton = document.getElementById('logout-button');
-        const notificationBadge = document.getElementById('notification-badge');
-        const notificationCountMenu = document.getElementById('notification-count-menu');
-        
-        // Elementos del Quiz
-        const quizContent = document.getElementById('quiz-content');
-        const loginToParticipate = document.getElementById('login-to-participate');
-        const quizTimerEl = document.getElementById('quiz-timer');
-        const quizQuestionEl = document.getElementById('quiz-question');
-        const quizOptionsContainer = document.getElementById('quiz-options-container');
-        const quizMessage = document.getElementById('quiz-message');
-        const noQuizMessage = document.getElementById('no-quiz-message');
-        const winnerSection = document.getElementById('winner-section');
-        const winnerCodeEl = document.getElementById('winner-code');
-
-        const QUIZ_STORAGE_KEY = 'masterstudio_quiz_user';
-        const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer';
-        const QUIZ_WINNER_CODE_KEY = 'masterstudio_winner_code';
-        const QUIZ_TICKETS_KEY = 'masterstudio_user_tickets';
-        const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json';
-        const NOTIFICATIONS_KEY = 'masterstudio_notifications_enabled';
-        const LANGUAGE_KEY = 'masterstudio_language';
-        const THEME_KEY = 'masterstudio_theme';
-        
-        // URL para guardar códigos ganadores
-        const SAVE_WINNER_CODE_URL = 'https://script.google.com/macros/s/AKfycbxK4kyZ_e18qBt4NGY_MqFzCMhreJuLVNJApXP3GCrqdU5jEW6vOFQoziPMhEyNK6k6jg/exec';
-        
-        let currentUser = null;
-        let selectedOption = null;
-        let dailyQuizData = null;
-        let quizTimer = null;
-        let timeRemaining = 15;
-        let notificationsEnabled = false;
-        let currentLanguage = 'es';
-        let currentTheme = 'dark';
-
-        // -------------------------------------
-        // LÓGICA DE MANTENIMIENTO
-        // -------------------------------------
-        const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
-        const IS_MAINTENANCE_ACTIVE = true;
-        const BYPASS_PARAM = 'dev';
-        const BYPASS_VALUE = 'master';
-
-        function checkMaintenanceStatus() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const bypassActive = urlParams.get(BYPASS_PARAM) === BYPASS_VALUE;
-
-            if (IS_MAINTENANCE_ACTIVE && !bypassActive) {
-                MAINTENANCE_SCREEN.classList.remove('hidden');
-                return true; 
-            } else {
-                MAINTENANCE_SCREEN.classList.add('hidden');
-                return false;
-            }
-        }
-
-        // -------------------------------------
-        // FUNCIONES DE MODAL
-        // -------------------------------------
-        function openModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.add('show');
-                profileDropdown.classList.remove('show');
-                
-                // Cargar datos según el modal
-                if (modalId === 'ranking-modal') {
-                    loadRanking();
-                }
-            }
-        }
-
-        function closeModal(modalId) {
-            const modal = document.getElementById(modalId);
-            if (modal) {
-                modal.classList.remove('show');
-            }
-        }
-
-        // Cerrar modales al hacer clic fuera
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', (e) => {
-                if (e.target === modal) {
-                    modal.classList.remove('show');
-                }
-            });
-        });
-
-        // -------------------------------------
-        // FUNCIONES DE NOTIFICACIONES
-        // -------------------------------------
-        function toggleNotifications() {
-            notificationsEnabled = !notificationsEnabled;
-            localStorage.setItem(NOTIFICATIONS_KEY, notificationsEnabled);
-            
-            const toggle = document.getElementById('notifications-toggle');
-            if (notificationsEnabled) {
-                toggle.classList.add('active');
-            } else {
-                toggle.classList.remove('active');
-            }
-            
-            updateNotificationBadge();
-        }
-
-        function updateNotificationBadge() {
-            if (notificationsEnabled) {
-                const count = 0; // Aquí irá la lógica para contar notificaciones reales
-                if (count > 0) {
-                    notificationBadge.textContent = count;
-                    notificationBadge.style.display = 'flex';
-                    notificationCountMenu.textContent = count;
-                    notificationCountMenu.style.display = 'inline';
-                } else {
-                    notificationBadge.style.display = 'none';
-                    notificationCountMenu.style.display = 'none';
-                }
-            } else {
-                notificationBadge.style.display = 'none';
-                notificationCountMenu.style.display = 'none';
-            }
-        }
-
-        function loadNotificationsSettings() {
-            notificationsEnabled = localStorage.getItem(NOTIFICATIONS_KEY) === 'true';
-            const toggle = document.getElementById('notifications-toggle');
-            if (notificationsEnabled) {
-                toggle.classList.add('active');
-            }
-            updateNotificationBadge();
-        }
-
-        // -------------------------------------
-        // FUNCIONES DE IDIOMA
-        // -------------------------------------
-        function selectLanguage(lang) {
-            currentLanguage = lang;
-            localStorage.setItem(LANGUAGE_KEY, lang);
-            
-            document.querySelectorAll('.language-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            document.querySelector(`[data-lang="${lang}"]`).classList.add('active');
-            
-            // Aquí iría la lógica para cambiar el idioma de la interfaz
-            console.log(`Idioma cambiado a: ${lang}`);
-        }
-
-        function loadLanguageSettings() {
-            currentLanguage = localStorage.getItem(LANGUAGE_KEY) || 'es';
-            document.querySelectorAll('.language-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            const activeOpt = document.querySelector(`[data-lang="${currentLanguage}"]`);
-            if (activeOpt) activeOpt.classList.add('active');
-        }
-
-        // -------------------------------------
-        // FUNCIONES DE TEMA
-        // -------------------------------------
-        function selectTheme(theme) {
-            if (theme === 'light') {
-                alert('El tema claro estará disponible próximamente. Por ahora solo está disponible el tema oscuro.');
-                return;
-            }
-            
-            currentTheme = theme;
-            localStorage.setItem(THEME_KEY, theme);
-            
-            document.querySelectorAll('.theme-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
-        }
-
-        function loadThemeSettings() {
-            currentTheme = localStorage.getItem(THEME_KEY) || 'dark';
-            document.querySelectorAll('.theme-option').forEach(opt => {
-                opt.classList.remove('active');
-            });
-            const activeOpt = document.querySelector(`[data-theme="${currentTheme}"]`);
-            if (activeOpt) activeOpt.classList.add('active');
-        }
-
-        // -------------------------------------
-        // FUNCIONES DE RANKING
-        // -------------------------------------
-        function getUserTickets(userId) {
-            const tickets = localStorage.getItem(`${QUIZ_TICKETS_KEY}_${userId}`);
-            return tickets ? parseInt(tickets) : 0;
-        }
-
-        function incrementUserTickets(userId) {
-            const currentTickets = getUserTickets(userId);
-            localStorage.setItem(`${QUIZ_TICKETS_KEY}_${userId}`, currentTickets + 1);
-        }
-
-        function loadRanking() {
-            // Obtener todos los usuarios con tickets
-            const users = [];
-            
-            // Recorrer localStorage para encontrar todos los usuarios
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith(QUIZ_TICKETS_KEY)) {
-                    const userId = key.replace(`${QUIZ_TICKETS_KEY}_`, '');
-                    const tickets = parseInt(localStorage.getItem(key));
-                    
-                    // Buscar el nombre del usuario
-                    let username = 'Usuario Desconocido';
-                    const userKey = localStorage.getItem(QUIZ_STORAGE_KEY);
-                    if (userKey) {
-                        try {
-                            const userData = JSON.parse(userKey);
-                            if (userData.id === userId) {
-                                username = userData.name;
-                            }
-                        } catch (e) {}
-                    }
-                    
-                    users.push({ userId, username, tickets });
-                }
-            }
-
-            // Añadir usuario actual si no está en la lista
-            if (currentUser) {
-                const userExists = users.find(u => u.userId === currentUser.id);
-                if (!userExists) {
-                    users.push({
-                        userId: currentUser.id,
-                        username: currentUser.name,
-                        tickets: getUserTickets(currentUser.id)
-                    });
-                }
-            }
-
-            // Ordenar por tickets (descendente)
-            users.sort((a, b) => b.tickets - a.tickets);
-
-            // Actualizar Top 3
-            document.getElementById('rank-1-name').textContent = users[0]?.username || '---';
-            document.getElementById('rank-1-tickets').textContent = users[0] ? `${users[0].tickets} TICKETS` : '0 TICKETS';
-            
-            document.getElementById('rank-2-name').textContent = users[1]?.username || '---';
-            document.getElementById('rank-2-tickets').textContent = users[1] ? `${users[1].tickets} TICKETS` : '0 TICKETS';
-            
-            document.getElementById('rank-3-name').textContent = users[2]?.username || '---';
-            document.getElementById('rank-3-tickets').textContent = users[2] ? `${users[2].tickets} TICKETS` : '0 TICKETS';
-
-            // Resto del ranking (desde el 4to lugar)
-            const rankingList = document.getElementById('ranking-list');
-            rankingList.innerHTML = '';
-
-            for (let i = 3; i < users.length; i++) {
-                const user = users[i];
-                const rankingUser = document.createElement('div');
-                rankingUser.className = 'ranking-user';
-                
-                rankingUser.innerHTML = `
-                    <span class="ranking-position">#${i + 1}</span>
-                    <span class="ranking-name">${user.username}</span>
-                    <span class="ranking-tickets">${user.tickets} TICKETS</span>
-                `;
-                
-                rankingList.appendChild(rankingUser);
-            }
-
-            // Si no hay más usuarios después del top 3
-            if (users.length <= 3) {
-                rankingList.innerHTML = '<div style="text-align: center; color: #aaaaaa; padding: 20px;">No hay más participantes en el ranking</div>';
-            }
-        }
-
-        // -------------------------------------
-        // FUNCIONES DE AUTENTICACIÓN
-        // -------------------------------------
-        function handleCredentialResponse(response) {
-            if (response.credential) {
-                const idToken = response.credential;
-                const base64Url = idToken.split('.')[1];
-                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-                const payload = JSON.parse(atob(base64));
-
-                currentUser = { 
-                    id: payload.sub,
-                    name: payload.given_name || payload.name || payload.email,
-                    email: payload.email 
-                };
-                
-                localStorage.setItem(QUIZ_STORAGE_KEY, JSON.stringify(currentUser));
-                updateLoginUI();
-                
-                if (document.getElementById('daily-quiz').classList.contains('active')) {
-                    loadDailyQuiz(currentUser.id);
-                }
-            }
-        }
-
-        function updateLoginUI() {
-            const gIdOnload = document.getElementById('g_id_onload');
-            const gIdSignin = document.querySelector('.g_id_signin');
-
-            if (currentUser) {
-                if (gIdOnload) gIdOnload.style.display = 'none';
-                if (gIdSignin) gIdSignin.style.display = 'none';
-
-                profileContainer.style.display = 'block';
-                dropdownUsername.textContent = currentUser.name;
-                dropdownEmail.textContent = currentUser.email;
-                
-                loginToParticipate.style.display = 'none';
-                
-                // Cargar configuraciones
-                loadNotificationsSettings();
-                loadLanguageSettings();
-                loadThemeSettings();
-            } else {
-                if (gIdOnload) gIdOnload.style.display = 'block';
-                if (gIdSignin) gIdSignin.style.display = 'block';
-                
-                profileContainer.style.display = 'none';
-            }
-        }
-
-        profileIcon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('show');
-        });
-
-        document.addEventListener('click', (e) => {
-            if (!profileContainer.contains(e.target)) {
-                profileDropdown.classList.remove('show');
-            }
-        });
-
-        logoutButton.addEventListener('click', () => {
-            currentUser = null;
-            localStorage.removeItem(QUIZ_STORAGE_KEY);
-            profileDropdown.classList.remove('show');
-            updateLoginUI();
-            
-            if (document.getElementById('daily-quiz').classList.contains('active')) {
-                loginToParticipate.style.display = 'block';
-                quizContent.style.display = 'none';
-                noQuizMessage.style.display = 'none';
-                winnerSection.style.display = 'none';
-            }
-            
-            location.reload();
-        });
-
-        // -------------------------------------
-        // FUNCIONES DEL QUIZ
-        // -------------------------------------
-        function getTodayDate() {
-            const now = new Date();
-            const year = now.getFullYear();
-            const month = String(now.getMonth() + 1).padStart(2, '0'); 
-            const day = String(now.getDate()).padStart(2, '0');
-            return `${year}-${month}-${day}`;
-        }
-
-        async function getDailyQuizData() {
-            try {
-                const response = await fetch(QUIZ_JSON_URL);
-                if (!response.ok) {
-                    console.error('Error al cargar preguntas.json:', response.statusText);
-                    return null;
-                }
-                const quizData = await response.json();
-                const todayDate = getTodayDate(); 
-                
-                return quizData[todayDate] || null;
-            } catch (e) {
-                console.error('Fallo en la petición de preguntas.json:', e);
-                return null;
-            }
-        }
-
-        function generateWinnerCode() {
-            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-            let code = 'MS-';
-            for (let i = 0; i < 12; i++) {
-                code += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return code;
-        }
-
-        async function saveWinnerCode(userId, username, code, question) {
-            const winnerData = {
-                code: code,
-                userId: userId,
-                username: username,
-                question: question,
-                date: getTodayDate(),
-                timestamp: Date.now(),
-                expiresAt: Date.now() + (4 * 60 * 60 * 1000)
-            };
-            
-            localStorage.setItem(`${QUIZ_WINNER_CODE_KEY}_${userId}_${getTodayDate()}`, JSON.stringify(winnerData));
-
-            if (SAVE_WINNER_CODE_URL && SAVE_WINNER_CODE_URL !== 'TU_URL_DE_GOOGLE_APPS_SCRIPT_AQUI') {
-                try {
-                    await fetch(SAVE_WINNER_CODE_URL, {
-                        method: 'POST',
-                        mode: 'no-cors',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify(winnerData)
-                    });
-                    console.log('Código guardado en el servidor correctamente');
-                } catch (error) {
-                    console.log('No se pudo guardar en servidor, código guardado localmente');
-                }
-            }
-        }
-
-        function startQuizTimer() {
-            timeRemaining = 15;
-            updateTimerDisplay();
-            
-            quizTimer = setInterval(() => {
-                timeRemaining--;
-                updateTimerDisplay();
-                
-                if (timeRemaining <= 5) {
-                    quizTimerEl.classList.add('warning');
-                }
-                
-                if (timeRemaining <= 0) {
-                    clearInterval(quizTimer);
-                    handleTimeUp();
-                }
-            }, 1000);
-        }
-
-        function updateTimerDisplay() {
-            quizTimerEl.textContent = `⏱️ ${timeRemaining}`;
-        }
-
-        function handleTimeUp() {
-            localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'TIMEOUT');
-            
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.classList.add('disabled');
-            });
-            
-            quizMessage.textContent = '⏰ ¡Se acabó el tiempo! No respondiste a tiempo. Vuelve mañana para una nueva oportunidad.';
-            quizMessage.style.color = '#F44336';
-        }
-
-        function handleOptionClick(event) {
-            if (timeRemaining <= 0) return;
-            
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.classList.remove('selected');
-            });
-            event.target.classList.add('selected');
-            selectedOption = event.target.textContent;
-            
-            setTimeout(() => handleQuizSubmit(), 300);
-        }
-
-        async function handleQuizSubmit() {
-            if (!selectedOption || timeRemaining <= 0) return;
-            
-            const selectedElement = document.querySelector('.quiz-option.selected');
-            const selectedKey = selectedElement ? selectedElement.getAttribute('data-key') : null;
-
-            if (!dailyQuizData) return;
-
-            clearInterval(quizTimer);
-
-            document.querySelectorAll('.quiz-option').forEach(opt => {
-                opt.classList.add('disabled');
-            });
-
-            if (selectedKey === dailyQuizData.respuesta_correcta) {
-                // ¡RESPUESTA CORRECTA!
-                const winnerCode = generateWinnerCode();
-                
-                // Incrementar tickets del usuario
-                incrementUserTickets(currentUser.id);
-                
-                await saveWinnerCode(currentUser.id, currentUser.name, winnerCode, dailyQuizData.pregunta);
-                
-                localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, selectedOption);
-                
-                quizContent.style.display = 'none';
-                winnerSection.style.display = 'block';
-                winnerCodeEl.textContent = winnerCode;
-                
-                setTimeout(() => {
-                    winnerCodeEl.textContent = 'CÓDIGO EXPIRADO';
-                    winnerCodeEl.style.color = '#F44336';
-                }, 4 * 60 * 60 * 1000);
-                
-            } else {
-                // Respuesta incorrecta
-                localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, selectedOption);
-                
-                quizQuestionEl.textContent = '❌ Respuesta Incorrecta';
-                quizOptionsContainer.innerHTML = '';
-                quizMessage.textContent = '¡Oh no! Tu respuesta fue incorrecta. Vuelve mañana para intentarlo de nuevo con la pregunta diaria del siguiente día. ¡No te rindas! 💪';
-                quizMessage.style.color = '#F44336';
-            }
-        }
-
-        async function loadDailyQuiz(userId) {
-            loginToParticipate.style.display = 'none';
-            quizContent.style.display = 'none';
-            noQuizMessage.style.display = 'none';
-            winnerSection.style.display = 'none';
-            quizTimerEl.classList.remove('warning');
-            
-            dailyQuizData = await getDailyQuizData();
-            
-            if (!dailyQuizData) {
-                noQuizMessage.style.display = 'block';
-                return;
-            }
-
-            const storedAnswer = localStorage.getItem(`${QUIZ_ANSWER_KEY}_${userId}_${getTodayDate()}`);
-            const storedWinner = localStorage.getItem(`${QUIZ_WINNER_CODE_KEY}_${userId}_${getTodayDate()}`);
-
-            if (storedWinner) {
-                const winnerData = JSON.parse(storedWinner);
-                winnerSection.style.display = 'block';
-                
-                if (Date.now() > winnerData.expiresAt) {
-                    winnerCodeEl.textContent = 'CÓDIGO EXPIRADO';
-                    winnerCodeEl.style.color = '#F44336';
-                } else {
-                    winnerCodeEl.textContent = winnerData.code;
-                }
-                return;
-            }
-
-            if (storedAnswer) {
-                quizContent.style.display = 'block';
-                quizTimerEl.style.display = 'none';
-                quizQuestionEl.textContent = '✅ Ya participaste hoy';
-                quizOptionsContainer.innerHTML = '';
-                
-                if (storedAnswer === 'TIMEOUT') {
-                    quizMessage.textContent = '⏰ No respondiste a tiempo. ¡Vuelve mañana por otra oportunidad!';
-                } else {
-                    quizMessage.textContent = `Tu respuesta fue: "${storedAnswer}". Vuelve mañana para la nueva pregunta diaria. 😊`;
-                }
-                quizMessage.style.color = '#4CAF50';
-                return;
-            }
-
-            quizContent.style.display = 'block';
-            quizTimerEl.style.display = 'block';
-            quizQuestionEl.textContent = dailyQuizData.pregunta;
-            quizOptionsContainer.innerHTML = '';
-            quizMessage.textContent = '';
-            selectedOption = null;
-
-            const optionsArray = Object.values(dailyQuizData.opciones);
-            optionsArray.forEach(option => {
-                const optionEl = document.createElement('div');
-                const optionKey = Object.keys(dailyQuizData.opciones).find(key => dailyQuizData.opciones[key] === option);
-                optionEl.className = 'quiz-option';
-                optionEl.setAttribute('data-key', optionKey);
-                optionEl.textContent = option;
-                optionEl.addEventListener('click', handleOptionClick);
-                quizOptionsContainer.appendChild(optionEl);
-            });
-
-            startQuizTimer();
-        }
-
-        function checkLocalStorageUser() {
-            const storedUser = localStorage.getItem(QUIZ_STORAGE_KEY);
-            if (storedUser) {
-                try {
-                    currentUser = JSON.parse(storedUser);
-                    updateLoginUI();
-                    return true;
-                } catch (e) {
-                    localStorage.removeItem(QUIZ_STORAGE_KEY);
-                }
-            }
-            
-            if (document.getElementById('daily-quiz').classList.contains('active')) {
-                loginToParticipate.style.display = 'block';
-                quizContent.style.display = 'none';
-                noQuizMessage.style.display = 'none';
-                winnerSection.style.display = 'none';
-            }
-            return false;
-        }
-
-        // -------------------------------------
-        // NAVEGACIÓN
-        // -------------------------------------
-        document.querySelectorAll('.nav-button').forEach(button => {
-            button.addEventListener('click', function() {
-                const targetId = this.getAttribute('data-section');
-                
-                document.querySelectorAll('.nav-button').forEach(btn => {
-                    btn.classList.remove('active-nav');
-                });
-                
-                this.classList.add('active-nav');
-
-                document.querySelectorAll('section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.classList.add('active');
-                    
-                    if (targetId === 'daily-quiz') {
-                         if (currentUser) {
-                            loadDailyQuiz(currentUser.id);
-                        } else {
-                            loginToParticipate.style.display = 'block';
-                            quizContent.style.display = 'none';
-                            noQuizMessage.style.display = 'none';
-                            winnerSection.style.display = 'none';
-                        }
-                    }
-                }
-            });
-        });
-
-        // -------------------------------------
-        // CARGAR POSTS
-        // -------------------------------------
-        async function loadPosts() {
-            const POSTS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
-
-            try {
-                const response = await fetch(POSTS_JSON_URL);
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                const posts = await response.json();	
-
-                document.querySelectorAll('.posts-container').forEach(container => {
-                    container.innerHTML = '';
-                });
-
-                posts.forEach(post => {
-                    const category = post.categoria || 'dificultad';	
-                    const container = document.getElementById(`posts-${category}`);
-
-                    if (container) {
-                        const postElement = document.createElement('div');
-                        postElement.className = 'post';
-
-                        let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
-                        
-                        postElement.innerHTML = `
-                            ${badge}
-                            <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
-                            <div class="post-content">
-                                <h3>${post.titulo}</h3>
-                                <span class="date">Fecha: ${post.fecha}</span>
-                                <p>${post.descripcion}</p>
-                            </div>
-                        `;
-                        container.prepend(postElement);	
-                        
-                        const placeholderText = container.parentElement.querySelector('.placeholder-text');
-                        if (placeholderText) {
-                            placeholderText.style.display = 'none';
-                        }
-                    }
-                });
-            } catch (e) {
-                console.error('Error al cargar posts:', e);
-            }
-        }
-
-        // -------------------------------------
-        // INICIALIZACIÓN
-        // -------------------------------------
-        document.addEventListener('DOMContentLoaded', () => {
-            const isMaintenance = checkMaintenanceStatus();
-            
-            if (isMaintenance) {
-                return; 
-            }
-            
-            loadPosts(); 
-            checkLocalStorageUser();
-        });
-    </script>
+    <!-- JavaScript -->
+    <script src="script.js"></script>
 </body>
-</html><!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterStudio</title>
-    
-    <!-- Favicon - Logo en la pestaña del navegador -->
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/MasterStudio.png">
-    
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
-    <style>
-        /* INICIO: Estilos base */
-
-        /* Reset básico */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #000000;
-            color: #ffffff;
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-
-        /* ------------------------------------- */
-        /* INICIO: Estilos de Mantenimiento */
-        /* ------------------------------------- */
-        #maintenance-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding: 20px;
-        }
-
-        #maintenance-screen h1 {
-            font-family: 'VT323', monospace;
-            font-size: 5rem;
-            color: #F44336;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(244, 67, 54, 0.7);
-        }
-
-        #maintenance-screen p {
-            font-size: 1.2rem;
-            color: #FFCDD2;
-            margin-bottom: 30px;
-        }
-        
-        #maintenance-screen a {
-            font-family: 'VT323', monospace;
-        }
-
-        #maintenance-screen.hidden {
-            display: none;
-        }
-
-        /* Header */
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 30px 50px;
-            background-color: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            position: relative;
-            z-index: 100;
-        }
-        
-        .header-logo-group {
-            position: absolute;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 2;
-        }
-
-        .logo {
-            font-family: 'VT323', monospace;
-            font-size: 3.5rem;
-            font-weight: bold;
-            margin-right: 15px;
-            color: #ffffff;
-            text-shadow: none;
-        }
-        
-        .icon {
-            font-size: 2.5rem;
-        }
-        
-        /* INICIO: Estilos de la funcionalidad de inicio de sesión */
-        .login-button-container {
-            z-index: 10000;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            min-height: 40px;
-            position: relative;
-        }
-
-        .g_id_signin {
-            transition: opacity 0.3s ease;
-        }
-
-        /* Icono de perfil */
-        .profile-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            font-size: 2.2rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.4);
-            border: 3px solid #1a1a1a;
-            position: relative;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
-            clip-path: polygon(
-                0 4px, 4px 4px, 4px 0,
-                calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
-                100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
-                4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
-            );
-        }
-        
-        .profile-icon::before {
-            content: '👤';
-            font-size: 1.8rem;
-            position: absolute;
-            bottom: 2px;
-        }
-        
-        .profile-icon::after {
-            content: '👑';
-            font-size: 1.4rem;
-            position: absolute;
-            top: -15px;
-            right: -2px;
-            transform: rotate(25deg);
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
-        }
-
-        .profile-icon:hover {
-            transform: scale(1.1) rotate(-3deg);
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.6);
-        }
-        
-        .profile-icon:hover::after {
-            animation: crownBounce 0.6s ease infinite;
-        }
-        
-        @keyframes crownBounce {
-            0%, 100% { transform: rotate(25deg) translateY(0); }
-            50% { transform: rotate(25deg) translateY(-3px); }
-        }
-
-        /* Badge de notificaciones */
-        .notification-badge {
-            position: absolute;
-            top: -5px;
-            right: -8px;
-            background-color: #F44336;
-            color: #ffffff;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.7rem;
-            font-weight: bold;
-            border: 2px solid #000000;
-            z-index: 10;
-            animation: notificationPulse 2s infinite;
-        }
-        
-        @keyframes notificationPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        /* Menú desplegable de perfil */
-        .profile-dropdown {
-            position: fixed;
-            top: 80px;
-            right: 50px;
-            background-color: rgba(26, 26, 26, 0.98);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            border-radius: 8px;
-            padding: 15px;
-            min-width: 250px;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.7), 0 0 15px rgba(255, 215, 0, 0.3);
-            display: none;
-            z-index: 99999;
-        }
-
-        .profile-dropdown.show {
-            display: block;
-            animation: slideDown 0.3s ease;
-        }
-
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .profile-dropdown-header {
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            margin-bottom: 10px;
-        }
-
-        .profile-dropdown-name {
-            font-size: 1.1rem;
-            font-weight: bold;
-            color: #FFD700;
-            margin-bottom: 5px;
-        }
-
-        .profile-dropdown-email {
-            font-size: 0.85rem;
-            color: #cccccc;
-        }
-
-        /* Opciones del menú */
-        .profile-menu-option {
-            width: 100%;
-            padding: 10px 15px;
-            background-color: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 6px;
-            color: #ffffff;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin: 5px 0;
-            text-align: left;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .profile-menu-option:hover {
-            background-color: rgba(255, 215, 0, 0.1);
-            border-color: #FFD700;
-        }
-
-        .profile-menu-option .notification-count {
-            background-color: #F44336;
-            color: #ffffff;
-            padding: 2px 8px;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            font-weight: bold;
-        }
-
-        .logout-button {
-            width: 100%;
-            padding: 10px 15px;
-            background-color: rgba(244, 67, 54, 0.2);
-            border: 1px solid rgba(244, 67, 54, 0.5);
-            border-radius: 8px;
-            color: #F44336;
-            font-weight: bold;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 10px;
-        }
-
-        .logout-button:hover {
-            background-color: rgba(244, 67, 54, 0.3);
-            border-color: #F44336;
-            transform: translateY(-1px);
-        }
-
-        /* Modal general */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(5px);
-            z-index: 100000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-            animation: fadeIn 0.3s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .modal-content {
-            background-color: rgba(26, 26, 26, 0.98);
-            border: 2px solid rgba(255, 215, 0, 0.5);
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.9);
-        }
-
-        .modal-header {
-            font-family: 'VT323', monospace;
-            font-size: 2rem;
-            color: #FFD700;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #ffffff;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: color 0.3s ease;
-        }
-
-        .modal-close:hover {
-            color: #F44336;
-        }
-
-        /* Notificaciones */
-        .notification-item {
-            background-color: rgba(40, 40, 40, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-        }
-
-        .notification-item.unread {
-            border-color: #FFD700;
-            background-color: rgba(255, 215, 0, 0.1);
-        }
-
-        .notification-empty {
-            text-align: center;
-            color: #aaaaaa;
-            padding: 30px;
-        }
-
-        /* Toggle switch */
-        .toggle-container {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .toggle-switch {
-            position: relative;
-            width: 50px;
-            height: 26px;
-            background-color: #555;
-            border-radius: 13px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .toggle-switch.active {
-            background-color: #FFD700;
-        }
-
-        .toggle-slider {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
-            background-color: #ffffff;
-            border-radius: 50%;
-            transition: transform 0.3s ease;
-        }
-
-        .toggle-switch.active .toggle-slider {
-            transform: translateX(24px);
-        }
-
-        /* Selector de idioma */
-        .language-selector {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .language-option {
-            flex: 1;
-            padding: 10px;
-            background-color: rgba(40, 40, 40, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            font-weight: bold;
-        }
-
-        .language-option:hover {
-            border-color: #FFD700;
-        }
-
-        .language-option.active {
-            background-color: rgba(255, 215, 0, 0.2);
-            border-color: #FFD700;
-            color: #FFD700;
-        }
-
-        /* Selector de tema */
-        .theme-selector {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .theme-option {
-            flex: 1;
-            padding: 15px;
-            background-color: rgba(40, 40, 40, 0.8);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-        }
-
-        .theme-option:hover {
-            border-color: #FFD700;
-        }
-
-        .theme-option.active {
-            background-color: rgba(255, 215, 0, 0.2);
-            border-color: #FFD700;
-        }
-
-        .theme-option .theme-icon {
-            font-size: 2rem;
-            margin-bottom: 5px;
-        }
-
-        /* Ranking */
-        .ranking-container {
-            margin-top: 20px;
-        }
-
-        .ranking-top3 {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(255, 215, 0, 0.5);
-        }
-
-        .ranking-podium {
-            text-align: center;
-            flex: 1;
-        }
-
-        .ranking-podium.first {
-            order: 2;
-        }
-
-        .ranking-podium.second {
-            order: 1;
-        }
-
-        .ranking-podium.third {
-            order: 3;
-        }
-
-        .podium-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-
-        .ranking-user {
-            background-color: rgba(40, 40, 40, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .ranking-user.top1 {
-            border: 2px solid #FFD700;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 165, 0, 0.1) 100%);
-        }
-
-        .ranking-user.top2 {
-            border: 2px solid #C0C0C0;
-            background: linear-gradient(135deg, rgba(192, 192, 192, 0.2) 0%, rgba(169, 169, 169, 0.1) 100%);
-        }
-
-        .ranking-user.top3 {
-            border: 2px solid #CD7F32;
-            background: linear-gradient(135deg, rgba(205, 127, 50, 0.2) 0%, rgba(184, 115, 51, 0.1) 100%);
-        }
-
-        .ranking-position {
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-right: 15px;
-            min-width: 30px;
-        }
-
-        .ranking-name {
-            flex: 1;
-            font-weight: bold;
-        }
-
-        .ranking-tickets {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            color: #000000;
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-family: 'VT323', monospace;
-            font-size: 1.2rem;
-            font-weight: bold;
-            border: 2px solid #FF8C00;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        
-        /* INICIO: CONTENEDOR DE NAVEGACIÓN PRINCIPAL Y BOTÓN LAUNCHER */
-        .main-navigation-container {
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
-            padding: 30px 50px;
-            background-color: rgba(26, 26, 26, 0.6);
-            backdrop-filter: blur(10px);
-            gap: 20px;
-            position: relative;
-            z-index: 1;
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            padding: 0;
-            flex-grow: 1;
-        }
-
-        .nav-button {
-            margin: 10px;
-            padding: 15px 30px;
-            background-color: rgba(26, 26, 26, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 10px;
-            text-decoration: none;
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-            position: relative;
-        }
-        
-        .nav-button.active-nav {
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.5);
-            background-color: rgba(40, 40, 40, 0.9);
-            border: 1px solid #ffffff;
-            transform: translateY(-2px);
-        }
-
-        .home.active-nav { border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.8); }
-        .mobs.active-nav { border-color: #FFD700; box-shadow: 0 0 15px rgba(255, 215, 0, 0.8); }
-        .dificultad.active-nav { border-color: #FFA500; box-shadow: 0 0 15px rgba(255, 165, 0, 0.8); }
-        .eventos.active-nav { border-color: #FF69B4; box-shadow: 0 0 15px rgba(255, 105, 180, 0.8); }
-        .actualizaciones.active-nav { border-color: #2196F3; box-shadow: 0 0 15px rgba(33, 150, 243, 0.8); }
-        .recompensas.active-nav { border-color: #4CAF50; box-shadow: 0 0 15px rgba(76, 175, 80, 0.8); }
-        .castigos.active-nav { border-color: #F44336; box-shadow: 0 0 15px rgba(244, 67, 54, 0.8); }
-        .launcher.active-nav { border-color: #00BCD4; box-shadow: 0 0 15px rgba(0, 188, 212, 0.8); }
-        .daily-quiz.active-nav { border-color: #9C27B0; box-shadow: 0 0 15px rgba(156, 39, 176, 0.8); }
-
-        .nav-button:hover {
-            transform: translateY(-2px);
-        }
-        
-        .nav-button:not(.active-nav):hover { box-shadow: 0 0 20px rgba(255, 255, 255, 0.3); }
-
-        /* Main content */
-        main {
-            padding: 50px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        section {
-            display: none;
-            margin-bottom: 40px;
-        }
-
-        section.active {
-            display: block;
-        }
-
-        section h1 {
-            font-family: 'VT323', monospace;
-            font-size: 3rem;
-            color: #ffffff;
-            text-align: center;
-            text-shadow: none;
-        }
-        
-        /* INICIO: Estilos para la sección de Quiz */
-        .quiz-container h2 {
-            font-family: 'VT323', monospace;
-            color: #9C27B0;
-            font-size: 2rem;
-            margin-bottom: 20px;
-            text-shadow: none;
-            text-align: center;
-        }
-        
-        .quiz-container {
-            background-color: rgba(26, 26, 26, 0.8);
-            padding: 30px;
-            border-radius: 15px;
-            border: 1px solid rgba(156, 39, 176, 0.3);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            max-width: 700px;
-            margin: 30px auto;
-        }
-        
-        .quiz-timer {
-            font-family: 'VT323', monospace;
-            font-size: 3rem;
-            color: #FFD700;
-            text-align: center;
-            margin-bottom: 20px;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-        }
-        
-        .quiz-timer.warning {
-            color: #F44336;
-            animation: pulse 0.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-        
-        .quiz-option {
-            background-color: rgba(40, 40, 40, 0.9);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-align: left;
-        }
-        
-        .quiz-option:hover {
-            background-color: rgba(50, 50, 50, 0.9);
-            border-color: #9C27B0;
-        }
-        
-        .quiz-option.selected {
-            background-color: #9C27B0;
-            border-color: #FFFFFF;
-            box-shadow: 0 0 8px rgba(156, 39, 176, 0.8);
-        }
-        
-        .quiz-option.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            pointer-events: none;
-        }
-        
-        #quiz-message {
-            font-weight: bold;
-            margin-top: 20px;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-        
-        #no-quiz-message {
-            color: #aaaaaa;
-            font-size: 1.1rem;
-            text-align: center;
-            padding: 30px 0;
-            display: none;
-        }
-        
-        /* Ticket Dorado */
-        .golden-ticket {
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            border: 3px solid #FF8C00;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 20px auto;
-            max-width: 500px;
-            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
-            text-align: center;
-            animation: ticketGlow 2s infinite;
-        }
-        
-        @keyframes ticketGlow {
-            0%, 100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.6); }
-            50% { box-shadow: 0 0 50px rgba(255, 215, 0, 1); }
-        }
-        
-        .golden-ticket h3 {
-            font-family: 'VT323', monospace;
-            font-size: 2.5rem;
-            color: #000000;
-            margin-bottom: 15px;
-        }
-        
-        .golden-ticket .code {
-            font-family: 'VT323', monospace;
-            font-size: 2rem;
-            background-color: #000000;
-            color: #FFD700;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            letter-spacing: 3px;
-            word-break: break-all;
-        }
-        
-        .golden-ticket p {
-            color: #000000;
-            font-weight: bold;
-            margin: 10px 0;
-            font-size: 0.95rem;
-        }
-        
-        .golden-ticket .warning {
-            color: #D32F2F;
-            font-size: 1.1rem;
-            margin-top: 15px;
-        }
-
-        .launcher-title-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-
-        .launcher-title-container img {
-            height: 50px;
-            vertical-align: middle;
-        }
-
-        .launcher-title-container img:first-of-type {
-            margin-right: 15px;
-        }
-
-        .launcher-title-container img:last-of-type {
-            margin-left: 15px;
-        }
-
-        #home p {
-            margin-bottom: 20px;
-            color: #cccccc;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            text-align: center;
-        }
-
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            color: #cccccc;
-            font-size: 0.9rem;
-        }
-
-        .footer a {
-            color: #2196F3;
-            text-decoration: none;
-        }
-        
-        .footer a:hover {
-            text-decoration: underline;
-        }
-
-        .post {
-            display: flex;
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: rgba(26, 26, 26, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-            position: relative;
-            overflow: hidden;
-            align-items: flex-start;
-        }
-
-        .post img {
-            width: 150px;
-            height: 150px;
-            object-fit: cover;
-            margin-right: 20px;
-            border-radius: 10px;
-            margin-bottom: 10px;
-        }
-
-        .post-content {
-            flex: 1;
-        }
-
-        .post-content h3 {
-            font-family: 'VT323', monospace;
-            margin-bottom: 5px;
-            font-size: 1.6rem;
-            color: #ffffff;
-            display: block;
-        }
-
-        .post-content .date {
-            font-size: 0.9rem;
-            color: #cccccc;
-            margin-bottom: 15px;
-            display: block;
-        }
-        
-        .post-content p {
-            color: #cccccc;
-            display: block;
-        }
-
-        .new-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #FFC107;
-            color: #000000;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .placeholder-
+</html>
