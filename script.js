@@ -733,3 +733,4 @@ document.addEventListener('DOMContentLoaded', () => {
     checkLocalStorageUser();
 });
 ```
+}
