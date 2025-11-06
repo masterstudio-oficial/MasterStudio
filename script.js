@@ -90,7 +90,12 @@ function applyTranslations() {
     document.querySelectorAll('[data-lang]').forEach(element => {
         const key = element.getAttribute('data-lang');
         if (translations[key]) {
-            element.textContent = translations[key];
+            // Para elementos con innerHTML (como los que tienen <br>)
+            if (key.includes('quiz-no-question')) {
+                element.innerHTML = translations[key].replace('\\n', '<br>');
+            } else {
+                element.textContent = translations[key];
+            }
         }
     });
 }
@@ -142,11 +147,13 @@ function closeModal(modalId) {
 }
 
 // Cerrar modales al hacer clic fuera
-document.querySelectorAll('.modal-overlay').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.classList.remove('show');
-        }
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.modal-overlay').forEach(modal => {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.classList.remove('show');
+            }
+        });
     });
 });
 
@@ -362,31 +369,38 @@ function updateLoginUI() {
     }
 }
 
-profileIcon.addEventListener('click', (e) => {
-    e.stopPropagation();
-    profileDropdown.classList.toggle('show');
-});
-
-document.addEventListener('click', (e) => {
-    if (!profileContainer.contains(e.target)) {
-        profileDropdown.classList.remove('show');
+// Event listeners para el perfil
+document.addEventListener('DOMContentLoaded', () => {
+    if (profileIcon) {
+        profileIcon.addEventListener('click', (e) => {
+            e.stopPropagation();
+            profileDropdown.classList.toggle('show');
+        });
     }
-});
 
-logoutButton.addEventListener('click', () => {
-    currentUser = null;
-    localStorage.removeItem(QUIZ_STORAGE_KEY);
-    profileDropdown.classList.remove('show');
-    updateLoginUI();
-    
-    if (document.getElementById('daily-quiz').classList.contains('active')) {
-        loginToParticipate.style.display = 'block';
-        quizContent.style.display = 'none';
-        noQuizMessage.style.display = 'none';
-        winnerSection.style.display = 'none';
+    document.addEventListener('click', (e) => {
+        if (profileContainer && !profileContainer.contains(e.target)) {
+            profileDropdown.classList.remove('show');
+        }
+    });
+
+    if (logoutButton) {
+        logoutButton.addEventListener('click', () => {
+            currentUser = null;
+            localStorage.removeItem(QUIZ_STORAGE_KEY);
+            profileDropdown.classList.remove('show');
+            updateLoginUI();
+            
+            if (document.getElementById('daily-quiz').classList.contains('active')) {
+                loginToParticipate.style.display = 'block';
+                quizContent.style.display = 'none';
+                noQuizMessage.style.display = 'none';
+                winnerSection.style.display = 'none';
+            }
+            
+            location.reload();
+        });
     }
-    
-    location.reload();
 });
 
 // =============================================
@@ -623,7 +637,7 @@ function checkLocalStorageUser() {
         }
     }
     
-    if (document.getElementById('daily-quiz').classList.contains('active')) {
+    if (document.getElementById('daily-quiz') && document.getElementById('daily-quiz').classList.contains('active')) {
         loginToParticipate.style.display = 'block';
         quizContent.style.display = 'none';
         noQuizMessage.style.display = 'none';
@@ -636,35 +650,37 @@ function checkLocalStorageUser() {
 // NAVEGACIÓN
 // =============================================
 
-document.querySelectorAll('.nav-button').forEach(button => {
-    button.addEventListener('click', function() {
-        const targetId = this.getAttribute('data-section');
-        
-        document.querySelectorAll('.nav-button').forEach(btn => {
-            btn.classList.remove('active-nav');
-        });
-        
-        this.classList.add('active-nav');
-
-        document.querySelectorAll('section').forEach(section => {
-            section.classList.remove('active');
-        });
-        
-        const targetSection = document.getElementById(targetId);
-        if (targetSection) {
-            targetSection.classList.add('active');
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.nav-button').forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-section');
             
-            if (targetId === 'daily-quiz') {
-                 if (currentUser) {
-                    loadDailyQuiz(currentUser.id);
-                } else {
-                    loginToParticipate.style.display = 'block';
-                    quizContent.style.display = 'none';
-                    noQuizMessage.style.display = 'none';
-                    winnerSection.style.display = 'none';
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active-nav');
+            });
+            
+            this.classList.add('active-nav');
+
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            const targetSection = document.getElementById(targetId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                
+                if (targetId === 'daily-quiz') {
+                     if (currentUser) {
+                        loadDailyQuiz(currentUser.id);
+                    } else {
+                        loginToParticipate.style.display = 'block';
+                        quizContent.style.display = 'none';
+                        noQuizMessage.style.display = 'none';
+                        winnerSection.style.display = 'none';
+                    }
                 }
             }
-        }
+        });
     });
 });
 
@@ -732,5 +748,3 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPosts();
     checkLocalStorageUser();
 });
-```
-}
