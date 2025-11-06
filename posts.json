@@ -6,7 +6,7 @@
         "descripcion": "Como agradecimiento por permanecer en nuestro servidor de MasterStudio, realizamos el 1/11/2025 un sorteo totalmente gratuito, que no requiere requisitos especificos, más que simplemente tener rango PARTICIPANTE en el discord de MasterStudio, este sorteo contara con solo 1 ganador que se revelara el 1/11/2025 a las 3:00PM hora MX",
         "fecha": "2025-11-01",
         "imagenUrl": "https://i.postimg.cc/LXzjdGSp/halloween.webp",
-        "esNuevo": true
+        "esNuevo": false
     },
     {
         "id": 3,
@@ -15,7 +15,7 @@
         "descripcion": "Dragon muy poderoso y sorprendente, los dragon pueden aparecer en nidos de dragones o en una madriguera pequeña, par incubar un huevo de dragon de fuego los pasos son:\nPrimero: poner un bloque de netherrack por abajo\n\nSegundo: poner fuego arriba del bloque\n\nTercero: poner el huevo encima\n\nDetalle: Los huevos solo se consiguen en los nidos de dragon y se consiguen de las dragones mamás ellas se les puede identificar porque tienen unas manchas",
         "fecha": "2025-10-26",
         "imagenUrl": "https://i.postimg.cc/L5fTMgjW/IMG-20251026-135804.jpg",
-        "esNuevo": true
+        "esNuevo": false
     },
     {
         "id": 2,
@@ -24,7 +24,7 @@
         "descripcion": "Los vampiros son seres nocturnos que obtienen fuerza, velocidad y sentidos mejorados al costo de depender de la sangre para sobrevivir, sus debilidades son el agua, fuego, luz solar y el ajo",
         "fecha": "2025-10-26",
         "imagenUrl": "https://i.postimg.cc/43qd7sLc/vampiro.webp",
-        "esNuevo": true
+        "esNuevo": false
     },
     {
         "id": 1,
@@ -33,6 +33,6 @@
         "descripcion": "Hemos lanzado nueva instancia del Launcher, que esta dirigida para ser usada en el server MasterMythron",
         "fecha": "2025-10-26",
         "imagenUrl": "https://i.postimg.cc/mDxYfjgF/prueba.png",
-        "esNuevo": true
+        "esNuevo": false
     }
 ]
