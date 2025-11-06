@@ -1,0 +1,72 @@
+{
+  "nav-launcher": "Launcher",
+  "nav-home": "Home",
+  "nav-mobs": "New Mobs",
+  "nav-difficulty": "Difficulty Change",
+  "nav-events": "Events",
+  "nav-updates": "Updates",
+  "nav-rewards": "Rewards",
+  "nav-punishments": "Punishments",
+  "nav-daily-quiz": "Daily Question",
+  
+  "menu-notifications": "🔔 Notifications",
+  "menu-ranking": "🏆 Daily Quiz Ranking",
+  "menu-language": "🌍 Language",
+  "menu-theme": "🎨 Theme",
+  "logout": "Log out",
+  
+  "notifications-title": "🔔 Notifications",
+  "notifications-enable": "Enable notifications",
+  "notifications-empty": "You have no notifications at the moment.",
+  
+  "language-title": "🌍 Select Language",
+  
+  "theme-title": "🎨 Select Theme",
+  "theme-dark": "Dark",
+  "theme-light": "Light",
+  "theme-soon": "Light theme will be available soon",
+  
+  "ranking-title": "🏆 Daily Quiz Ranking",
+  
+  "home-welcome": "Welcome to MasterStudio",
+  "home-intro": "At MasterStudio, we are passionate about creating and recreating unforgettable experiences in Minecraft 🌍, merging creativity, dynamism and fun for all players 🎮.",
+  "home-mission-title": "Our Mission:",
+  "home-mission-text": "Elevate entertainment to the maximum, recreating iconic maps like Dedsafio3, Dedsafio2 and Squid Craft in Minecraft at a higher level 🚀. We design worlds and systems that surprise, inspire and keep players immersed in every adventure 🧭.",
+  
+  "launcher-title": "MasterClient Launcher Installation",
+  "launcher-step1-title": "STEP 1: Installer Download",
+  "launcher-step1-text": "You must download the latest version published here on our page, or on our discord download channel, by clicking the download button. If you get an error or warning message, don't worry, it's completely safe, click the download button to continue with your download.",
+  "launcher-step2-title": "STEP 2: Execution and Installation",
+  "launcher-step2-text": "You will most likely get a Windows Protect warning, commonly always appears when you try to install any program from the internet, simply click on 'More Information' and once deployed it will enable the option to 'Run anyway', we will click on this option and we can continue with the installation of MasterClient.",
+  "launcher-step2b-title": "STEP 2 Completion: Execution and Installation",
+  "launcher-step2b-text": "Once we pass the Windows Protect filter, we can continue with the installation, where it will automatically open a window of the MasterClient installer - MasterStudio Launcher, the first window will show us the Terms of use of the launcher, which we will read to agree, and as next step we will click 'I Accept'. Then we will move to the second window where we will see which user of our PC we want to install the MasterClient or if we will install it on all users of our PC, after choosing, we will select 'Install'.",
+  "launcher-step3-title": "STEP 3: Configuration and Instance",
+  "launcher-step3-text": "Surely when the Launcher opens, it will not directly show Play, it will appear without Instances or nothing simply, first of all we will go to the upper right corner, and we will log in, either with a Premium account (Microsoft) or as a Guest (Only the Username of the game). In case you have selected Microsoft, then you will log in as you commonly do as a Premium user, but in case you select Guest, a tab will open where you will put your Nick Name that will appear in Minecraft.",
+  "launcher-step3b-title": "STEP 3 Completion: Instance",
+  "launcher-step3b-text": "ALL STEPS TO BE ABLE TO PLAY (DOWNLOAD INSTANCES/MINECRAFT VERSIONS) WILL BE INFORMED IN DISCORD!",
+  
+  "download-button": "DOWNLOAD HERE",
+  "discord-button": "JOIN OUR DISCORD 💬",
+  
+  "quiz-title": "Daily Question",
+  "quiz-login": "🔒 Please log in to participate in the daily question and win incredible prizes. 🎁",
+  "quiz-congrats": "🎉 CONGRATULATIONS! 🎉",
+  "quiz-correct": "You answered correctly and on time!",
+  "quiz-code-label": "Your winner code is:",
+  "quiz-expires": "⚠️ This code will disappear in 4 hours ⚠️",
+  "quiz-screenshot": "Take a screenshot NOW!",
+  "quiz-claim": "📩 CLAIM ON DISCORD",
+  "quiz-ticket-instructions": "Open a ticket on Discord for the reason:",
+  "quiz-no-question": "📅 We don't have a daily question available today.\nCome back tomorrow to participate! 😊",
+  
+  "mobs-title": "New Mobs",
+  "difficulty-title": "Difficulty Change",
+  "events-title": "Events",
+  "updates-title": "Updates",
+  "rewards-title": "Rewards",
+  "punishments-title": "Punishments",
+  
+  "coming-soon": "Content coming soon...",
+  "footer-rights": "All rights reserved.",
+  "footer-join": "Join our"
+}
