@@ -1,0 +1,72 @@
+{
+  "nav-launcher": "Launcher",
+  "nav-home": "Inicio",
+  "nav-mobs": "Mobs nuevos",
+  "nav-difficulty": "Cambio de dificultad",
+  "nav-events": "Eventos",
+  "nav-updates": "Actualizaciones",
+  "nav-rewards": "Recompensas",
+  "nav-punishments": "Castigos",
+  "nav-daily-quiz": "Pregunta Diaria",
+  
+  "menu-notifications": "🔔 Notificaciones",
+  "menu-ranking": "🏆 Ranking Preguntas Diarias",
+  "menu-language": "🌍 Idioma",
+  "menu-theme": "🎨 Tema",
+  "logout": "Cerrar sesión",
+  
+  "notifications-title": "🔔 Notificaciones",
+  "notifications-enable": "Activar notificaciones",
+  "notifications-empty": "No tienes notificaciones por el momento.",
+  
+  "language-title": "🌍 Seleccionar Idioma",
+  
+  "theme-title": "🎨 Seleccionar Tema",
+  "theme-dark": "Oscuro",
+  "theme-light": "Claro",
+  "theme-soon": "El tema claro estará disponible próximamente",
+  
+  "ranking-title": "🏆 Ranking Preguntas Diarias",
+  
+  "home-welcome": "Bienvenido a MasterStudio",
+  "home-intro": "En MasterStudio, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🌍, fusionando creatividad, dinamismo y diversión para todos los jugadores 🎮.",
+  "home-mission-title": "Nuestra Misión:",
+  "home-mission-text": "Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🚀. Diseñamos mundos y sistemas que sorprenden, inspiran y mantienen a los jugadores inmersos en cada aventura 🧭.",
+  
+  "launcher-title": "Instalación del MasterClient Launcher",
+  "launcher-step1-title": "PASO 1: Descarga del Instalador",
+  "launcher-step1-text": "Deberás descargar la última versión publicada aca en nuestra pagina, o en nuestro canal de descargas de discord, haciendo click en el botón de descarga, Si te llega a salir un mensaje de error o de advertencia, no te preocupes, es totalmente seguro, dale al boton de descargar para continuar con tu descarga.",
+  "launcher-step2-title": "PASO 2: Ejecución y Instalación",
+  "launcher-step2-text": "Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en 'Más Información' y una vez desplegado nos habilitara la opción de 'Ejecutar de todas formas', haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.",
+  "launcher-step2b-title": "Finalización PASO 2: Ejecución y Instalación",
+  "launcher-step2b-text": "Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, en donde nos abrira automaticamente una ventana del instalador del MasterClient - MasterStudio Launcher, la primera ventana nos saldra los Terminos de uso del launcher, los cuales los leeremos para estar de acuerdo, y como siguiente paso le daremos a 'Acepto'. Luego pasaremos a la segunda ventana donde nos saldra en que usuario de nuestra PC queremos instalar el MasterClient o si lo instalaremos en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos 'Instalar'.",
+  "launcher-step3-title": "PASO 3: Configuración y Instancia",
+  "launcher-step3-text": "Seguramente cuando se nos habra el Launcher, no nos saldra Jugar directamente, nos saldra sin Instancias o sin nada simplemente, primero que todo nos dirigiremos a la esquina superior derecha, y iniciaremos sesión, sea con cuenta Premiun (Microsoft) o como Invitado (Solo el nombre de Usuario del juego) En caso de haber seleccionado con Microsoft, pues iniciaras sesión como comunmente lo haces como usuario Premiun, pero en caso de seleccionar Invitado se abrira una pestaña donde pondras tu Nick Name que saldra en Minecraft.",
+  "launcher-step3b-title": "Finalización PASO 3: Instancia",
+  "launcher-step3b-text": "TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERAN INFORMADOS EN EL DISCORD!",
+  
+  "download-button": "DESCARGA AQUÍ",
+  "discord-button": "ÚNETE A NUESTRO DISCORD 💬",
+  
+  "quiz-title": "Pregunta Diaria",
+  "quiz-login": "🔒 Por favor, inicia sesión para participar en la pregunta diaria y ganar increíbles premios. 🎁",
+  "quiz-congrats": "🎉 ¡FELICIDADES! 🎉",
+  "quiz-correct": "¡Respondiste correctamente y a tiempo!",
+  "quiz-code-label": "Tu código ganador es:",
+  "quiz-expires": "⚠️ Este código desaparecerá en 4 horas ⚠️",
+  "quiz-screenshot": "¡Toma captura de pantalla AHORA!",
+  "quiz-claim": "📩 RECLAMAR EN DISCORD",
+  "quiz-ticket-instructions": "Abre un ticket en Discord por el motivo:",
+  "quiz-no-question": "📅 Hoy no tenemos pregunta diaria disponible.\n¡Vuelve mañana para participar! 😊",
+  
+  "mobs-title": "Mobs nuevos",
+  "difficulty-title": "Cambio de dificultad",
+  "events-title": "Eventos",
+  "updates-title": "Actualizaciones",
+  "rewards-title": "Recompensas",
+  "punishments-title": "Castigos",
+  
+  "coming-soon": "Contenido próximamente...",
+  "footer-rights": "Todos los derechos reservados.",
+  "footer-join": "Únete a nuestro"
+}
