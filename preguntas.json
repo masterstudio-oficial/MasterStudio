@@ -9,7 +9,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-05": {
+  "2025-11-06": {
     "pregunta": "¿Qué país tiene la mayor superficie territorial del mundo (km²)?",
     "opciones": {
       "a": "Brasil",
@@ -19,7 +19,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-06": {
+  "2025-11-07": {
     "pregunta": "¿Cuál es el propósito del encantamiento 'Toque de Seda' (Silk Touch)?",
     "opciones": {
       "a": "Hacer que tus herramientas brillen",
@@ -29,7 +29,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-07": {
+  "2025-11-08": {
     "pregunta": "¿Cuál es el elemento químico más abundante en el universo?",
     "opciones": {
       "a": "Oxígeno",
@@ -39,7 +39,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-08": {
+  "2025-11-09": {
     "pregunta": "¿Cuántos Corazones de daño causa una flecha disparada por un Esqueleto en dificultad Normal?",
     "opciones": {
       "a": "1 Corazón",
@@ -49,7 +49,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-09": {
+  "2025-11-10": {
     "pregunta": "¿Qué animal terrestre es el más rápido del mundo?",
     "opciones": {
       "a": "El león",
@@ -59,7 +59,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-10": {
+  "2025-11-11": {
     "pregunta": "¿Qué se obtiene al minar Arena de Almas (Soul Sand) con una pala con 'Fortuna III'?",
     "opciones": {
       "a": "Más Arena de Almas",
@@ -69,7 +69,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-11": {
+  "2025-11-12": {
     "pregunta": "¿Qué famoso científico formuló la Teoría de la Relatividad?",
     "opciones": {
       "a": "Isaac Newton",
@@ -79,7 +79,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-12": {
+  "2025-11-13": {
     "pregunta": "¿Cuál es el propósito principal del encantamiento 'Afinidad Acuática' (Aqua Affinity)?",
     "opciones": {
       "a": "Permitirte respirar bajo el agua",
@@ -89,7 +89,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-13": {
+  "2025-11-14": {
     "pregunta": "¿Cuál es el río más largo del mundo?",
     "opciones": {
       "a": "El Misisipi",
@@ -99,7 +99,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-14": {
+  "2025-11-15": {
     "pregunta": "¿Qué material NO es necesario para CRAFTEAR un Beacon?",
     "opciones": {
       "a": "Vidrio",
@@ -109,7 +109,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-15": {
+  "2025-11-16": {
     "pregunta": "¿Cuántos días tarda la Tierra en dar una vuelta completa alrededor del Sol?",
     "opciones": {
       "a": "360 días",
@@ -119,7 +119,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-16": {
+  "2025-11-17": {
     "pregunta": "¿Qué mob del Nether tiene la capacidad de disparar bolas de fuego y volar?",
     "opciones": {
       "a": "El Wither",
@@ -129,7 +129,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-17": {
+  "2025-11-18": {
     "pregunta": "¿Quién es el autor de la obra 'Don Quijote de la Mancha'?",
     "opciones": {
       "a": "Leonardo da Vinci",
@@ -139,7 +139,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-18": {
+  "2025-11-19": {
     "pregunta": "¿Cuál es el único bioma del Overworld donde se genera el mob Slime con mayor frecuencia?",
     "opciones": {
       "a": "Las llanuras",
@@ -149,7 +149,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-19": {
+  "2025-11-20": {
     "pregunta": "¿En qué año se disolvió la Unión Soviética (URSS)?",
     "opciones": {
       "a": "1945",
@@ -159,7 +159,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-20": {
+  "2025-11-21": {
     "pregunta": "¿Qué se utiliza para hacer una 'Mesa de Herrería' (Smithing Table)?",
     "opciones": {
       "a": "Madera y Hierro",
@@ -169,7 +169,7 @@
     },
     "respuesta_correcta": "a"
   },
-  "2025-11-21": {
+  "2025-11-22": {
     "pregunta": "¿Qué país está formado por más de 17.000 islas?",
     "opciones": {
       "a": "Filipinas",
@@ -179,7 +179,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-22": {
+  "2025-11-23": {
     "pregunta": "¿Cuál es el único mob pasivo que se puede domesticar y que te puede ayudar a cazar?",
     "opciones": {
       "a": "El creeper",
@@ -189,7 +189,7 @@
     },
     "respuesta_correcta": "d"
   },
-  "2025-11-23": {
+  "2025-11-24": {
     "pregunta": "¿Qué famoso músico se hacía llamar 'El Rey del Pop'?",
     "opciones": {
       "a": "Elvis Presley",
@@ -199,7 +199,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-24": {
+  "2025-11-25": {
     "pregunta": "¿Cuál es el material más resistente para fabricar armadura y herramientas en Minecraft?",
     "opciones": {
       "a": "Netherita",
@@ -209,7 +209,7 @@
     },
     "respuesta_correcta": "a"
   },
-  "2025-11-25": {
+  "2025-11-26": {
     "pregunta": "¿Qué instrumento se utiliza para medir la temperatura?",
     "opciones": {
       "a": "EL tacto",
@@ -219,7 +219,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-26": {
+  "2025-11-27": {
     "pregunta": "¿Qué mobs arrojan pociones cuando se les ataca o están cerca de un jugador?",
     "opciones": {
       "a": "Las Brujas",
@@ -229,7 +229,7 @@
     },
     "respuesta_correcta": "a"
   },
-  "2025-11-27": {
+  "2025-11-28": {
     "pregunta": "¿Quién fue la primera mujer en ganar un Premio Nobel?",
     "opciones": {
       "a": "Malala Yousafzai",
@@ -239,7 +239,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-28": {
+  "2025-11-29": {
     "pregunta": "¿Cuántos corazones de vida tiene el Ender Dragon (el jefe final del End)?",
     "opciones": {
       "a": "50",
@@ -249,7 +249,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-29": {
+  "2025-11-30": {
     "pregunta": "¿Cuál es la capital de Italia?",
     "opciones": {
       "a": "Milán",
@@ -259,7 +259,7 @@
     },
     "respuesta_correcta": "c"
   },
-  "2025-11-30": {
+  "2025-12-01": {
     "pregunta": "¿Cuál es el principal uso del Bloque de Slime (Slime Block)?",
     "opciones": {
       "a": "Hacer que tus construcciones brillen",
@@ -269,7 +269,7 @@
     },
     "respuesta_correcta": "b"
   },
-  "2025-11-31": {
+  "2025-12-02": {
     "pregunta": "¿Cuál es la lengua más hablada del mundo por número de hablantes nativos?",
     "opciones": {
       "a": "Inglés",
