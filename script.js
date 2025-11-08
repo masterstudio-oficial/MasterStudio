@@ -51,7 +51,7 @@ let translations = {};
 // =============================================
 
 const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
-const IS_MAINTENANCE_ACTIVE = false;
+const IS_MAINTENANCE_ACTIVE = true;
 const BYPASS_PARAM = 'dev';
 const BYPASS_VALUE = 'master';
 
@@ -90,7 +90,6 @@ function applyTranslations() {
     document.querySelectorAll('[data-lang]').forEach(element => {
         const key = element.getAttribute('data-lang');
         if (translations[key]) {
-            // Para elementos con innerHTML (como los que tienen <br>)
             if (key.includes('quiz-no-question')) {
                 element.innerHTML = translations[key].replace('\\n', '<br>');
             } else {
@@ -146,7 +145,6 @@ function closeModal(modalId) {
     }
 }
 
-// Cerrar modales al hacer clic fuera
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.modal-overlay').forEach(modal => {
         modal.addEventListener('click', (e) => {
@@ -177,7 +175,7 @@ function toggleNotifications() {
 
 function updateNotificationBadge() {
     if (notificationsEnabled) {
-        const count = 0; // Aquí irá la lógica para contar notificaciones reales
+        const count = 0;
         if (count > 0) {
             notificationBadge.textContent = count;
             notificationBadge.style.display = 'flex';
@@ -231,7 +229,7 @@ function loadThemeSettings() {
 }
 
 // =============================================
-// SISTEMA DE RANKING
+// SISTEMA DE RANKING (ACTUALIZADO CON GOOGLE SHEETS)
 // =============================================
 
 function getUserTickets(userId) {
@@ -244,46 +242,27 @@ function incrementUserTickets(userId) {
     localStorage.setItem(`${QUIZ_TICKETS_KEY}_${userId}`, currentTickets + 1);
 }
 
-function loadRanking() {
-    const users = [];
-    
-    // Recorrer localStorage para encontrar todos los usuarios con tickets
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key.startsWith(QUIZ_TICKETS_KEY)) {
-            const userId = key.replace(`${QUIZ_TICKETS_KEY}_`, '');
-            const tickets = parseInt(localStorage.getItem(key));
-            
-            let username = 'Usuario Desconocido';
-            const userKey = localStorage.getItem(QUIZ_STORAGE_KEY);
-            if (userKey) {
-                try {
-                    const userData = JSON.parse(userKey);
-                    if (userData.id === userId) {
-                        username = userData.name;
-                    }
-                } catch (e) {}
-            }
-            
-            users.push({ userId, username, tickets });
+async function loadRanking() {
+    try {
+        // Cargar ranking desde Google Sheets
+        const response = await fetch(SAVE_WINNER_CODE_URL);
+        const data = await response.json();
+        
+        if (data.success && data.users && data.users.length > 0) {
+            // Usar datos del servidor
+            displayRanking(data.users);
+        } else {
+            // Si no hay datos en el servidor, mostrar ranking vacío
+            displayRanking([]);
         }
+    } catch (error) {
+        console.error('Error al cargar ranking desde servidor:', error);
+        // En caso de error, mostrar ranking vacío
+        displayRanking([]);
     }
+}
 
-    // Añadir usuario actual si no está en la lista
-    if (currentUser) {
-        const userExists = users.find(u => u.userId === currentUser.id);
-        if (!userExists) {
-            users.push({
-                userId: currentUser.id,
-                username: currentUser.name,
-                tickets: getUserTickets(currentUser.id)
-            });
-        }
-    }
-
-    // Ordenar por tickets (descendente)
-    users.sort((a, b) => b.tickets - a.tickets);
-
+function displayRanking(users) {
     // Actualizar Top 3
     document.getElementById('rank-1-name').textContent = users[0]?.username || '---';
     document.getElementById('rank-1-tickets').textContent = users[0] ? `${users[0].tickets} TICKETS` : '0 TICKETS';
@@ -312,8 +291,10 @@ function loadRanking() {
         rankingList.appendChild(rankingUser);
     }
 
-    // Si no hay más usuarios después del top 3
-    if (users.length <= 3) {
+    // Mensajes cuando no hay suficientes usuarios
+    if (users.length === 0) {
+        rankingList.innerHTML = '<div style="text-align: center; color: #aaaaaa; padding: 20px;">Aún no hay participantes en el ranking. ¡Sé el primero! 🎮</div>';
+    } else if (users.length <= 3) {
         rankingList.innerHTML = '<div style="text-align: center; color: #aaaaaa; padding: 20px;">No hay más participantes en el ranking</div>';
     }
 }
@@ -369,7 +350,6 @@ function updateLoginUI() {
     }
 }
 
-// Event listeners para el perfil
 document.addEventListener('DOMContentLoaded', () => {
     if (profileIcon) {
         profileIcon.addEventListener('click', (e) => {
@@ -464,7 +444,7 @@ async function saveWinnerCode(userId, username, code, question) {
                 },
                 body: JSON.stringify(winnerData)
             });
-            console.log('Código guardado en el servidor correctamente');
+            console.log('Código y ticket guardados en el servidor correctamente');
         } catch (error) {
             console.log('No se pudo guardar en servidor, código guardado localmente');
         }
@@ -748,3 +728,16 @@ document.addEventListener('DOMContentLoaded', () => {
     loadPosts();
     checkLocalStorageUser();
 });
+
+// =============================================
+// 🎁 BONUS: AUTO-ACTUALIZACIÓN DEL RANKING
+// =============================================
+
+// Auto-actualizar ranking cada 30 segundos si el modal está abierto
+setInterval(() => {
+    const rankingModal = document.getElementById('ranking-modal');
+    if (rankingModal && rankingModal.classList.contains('show')) {
+        loadRanking();
+        console.log('🔄 Ranking actualizado automáticamente');
+    }
+}, 30000); // 30 segundos
