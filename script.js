@@ -51,7 +51,7 @@ let translations = {};
 // =============================================
 
 const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
-const IS_MAINTENANCE_ACTIVE = true;
+const IS_MAINTENANCE_ACTIVE = false;
 const BYPASS_PARAM = 'dev';
 const BYPASS_VALUE = 'master';
 
