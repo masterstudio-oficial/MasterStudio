@@ -8,6 +8,8 @@ const profileDropdown = document.getElementById('profile-dropdown');
 const dropdownUsername = document.getElementById('dropdown-username');
 const dropdownEmail = document.getElementById('dropdown-email');
 const logoutButton = document.getElementById('logout-button');
+const notificationBadge = document.getElementById('notification-badge');
+const notificationCountMenu = document.getElementById('notification-count-menu');
 
 // Elementos del Quiz
 const quizContent = document.getElementById('quiz-content');
@@ -22,6 +24,9 @@ const winnerSection = document.getElementById('winner-section');
 // Claves de almacenamiento
 const USER_STORAGE_KEY = 'masterstudio_user';
 const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer';
+const NOTIFICATIONS_KEY = 'masterstudio_notifications_enabled';
+const LANGUAGE_KEY = 'masterstudio_language';
+const THEME_KEY = 'masterstudio_theme';
 
 // URLs
 const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json';
@@ -33,6 +38,10 @@ let selectedOption = null;
 let dailyQuizData = null;
 let quizTimer = null;
 let timeRemaining = 15;
+let notificationsEnabled = false;
+let currentLanguage = 'es';
+let currentTheme = 'dark';
+let translations = {};
 
 // =============================================
 // CONFIGURACIÓN DE MANTENIMIENTO
