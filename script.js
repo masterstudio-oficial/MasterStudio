@@ -33,7 +33,7 @@ const THEME_KEY = 'masterstudio_theme';
 
 // URLs
 const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json';
-const RANKING_API_URL = 'https://script.google.com/macros/s/AKfycbxK4kyZ_e18qBt4NGY_MqFzCMhreJuLVNJApXP3GCrqdU5jEW6vOFQoziPMhEyNK6k6jg/exec';
+const RANKING_API_URL = 'https://script.google.com/macros/s/AKfycbwm4xK38yErPBv_m2zFCYF0EMxxBh2D-hEbSni4I8u8q92xpKp3UmZ3JwSkqWDf3qLnQw/exec';
 
 // Variables de estado
 let currentUser = null;
@@ -532,11 +532,10 @@ async function getDailyQuizData() {
     }
 }
 
-async function saveTicketToServer(userId, username) {
+async function saveTicketToServer(userId, username, email) {
     try {
         const response = await fetch(RANKING_API_URL, {
             method: 'POST',
-            mode: 'no-cors',
             headers: {
                 'Content-Type': 'application/json',
             },
@@ -544,13 +543,22 @@ async function saveTicketToServer(userId, username) {
                 action: 'addTicket',
                 userId: userId,
                 username: username,
+                email: email,
                 date: getTodayDate(),
                 timestamp: Date.now()
             })
         });
-        console.log('✅ Intento de guardar ticket en servidor para:', username);
+        
+        const data = await response.json();
+        console.log('✅ Respuesta del servidor:', data);
+        
+        if (data.success) {
+            console.log('✅ Ticket guardado en servidor:', username);
+        } else {
+            console.log('⚠️ Error del servidor:', data.message);
+        }
     } catch (error) {
-        console.log('⚠️ No se pudo guardar en servidor, usando almacenamiento local');
+        console.log('⚠️ No se pudo conectar con el servidor:', error);
     }
 }
 
