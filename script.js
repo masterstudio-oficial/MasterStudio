@@ -39,7 +39,7 @@ let timeRemaining = 15;
 // =============================================
 
 const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
-const IS_MAINTENANCE_ACTIVE = false;
+const IS_MAINTENANCE_ACTIVE = true;
 const BYPASS_PARAM = 'dev';
 const BYPASS_VALUE = 'master';
 
@@ -239,17 +239,22 @@ function getTodayDate() {
 
 async function getDailyQuizData() {
     try {
+        console.log('🔍 Cargando quiz del día:', getTodayDate());
         const response = await fetch(QUIZ_JSON_URL);
         if (!response.ok) {
-            console.error('Error al cargar preguntas.json:', response.statusText);
+            console.error('❌ Error al cargar preguntas.json:', response.statusText);
             return null;
         }
         const quizData = await response.json();
+        console.log('📦 Datos del quiz cargados:', quizData);
+        
         const todayDate = getTodayDate();
+        console.log('📅 Fecha de hoy:', todayDate);
+        console.log('📋 Pregunta de hoy:', quizData[todayDate]);
         
         return quizData[todayDate] || null;
     } catch (e) {
-        console.error('Fallo en la petición de preguntas.json:', e);
+        console.error('❌ Fallo en la petición de preguntas.json:', e);
         return null;
     }
 }
@@ -507,6 +512,56 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // =============================================
+// CARGAR POSTS
+// =============================================
+
+async function loadPosts() {
+    const POSTS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
+
+    try {
+        const response = await fetch(POSTS_JSON_URL);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const posts = await response.json();
+
+        document.querySelectorAll('.posts-container').forEach(container => {
+            container.innerHTML = '';
+        });
+
+        posts.forEach(post => {
+            const category = post.categoria || 'dificultad';
+            const container = document.getElementById(`posts-${category}`);
+
+            if (container) {
+                const postElement = document.createElement('div');
+                postElement.className = 'post';
+
+                let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
+                
+                postElement.innerHTML = `
+                    ${badge}
+                    <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
+                    <div class="post-content">
+                        <h3>${post.titulo}</h3>
+                        <span class="date">Fecha: ${post.fecha}</span>
+                        <p>${post.descripcion}</p>
+                    </div>
+                `;
+                container.prepend(postElement);
+                
+                const placeholderText = container.parentElement.querySelector('.placeholder-text');
+                if (placeholderText) {
+                    placeholderText.style.display = 'none';
+                }
+            }
+        });
+    } catch (e) {
+        console.error('Error al cargar posts:', e);
+    }
+}
+
+// =============================================
 // INICIALIZACIÓN
 // =============================================
 
@@ -517,6 +572,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     
+    loadPosts();
     checkLocalStorageUser();
 });
 
