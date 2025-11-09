@@ -158,11 +158,25 @@
                         <div class="profile-dropdown-email" id="dropdown-email">email@example.com</div>
                     </div>
 
-                    <button class="profile-menu-option" onclick="openModal('ranking-modal')">
-                        <span>🏆 Ranking Quiz</span>
+                    <!-- Opciones del menú -->
+                    <button class="profile-menu-option" onclick="openModal('notifications-modal')">
+                        <span data-lang="menu-notifications">🔔 Notificaciones</span>
+                        <span class="notification-count" id="notification-count-menu" style="display: none;">0</span>
                     </button>
 
-                    <button class="logout-button" id="logout-button">Cerrar sesión</button>
+                    <button class="profile-menu-option" onclick="openModal('ranking-modal')">
+                        <span data-lang="menu-ranking">🏆 Ranking Quiz</span>
+                    </button>
+
+                    <button class="profile-menu-option" onclick="openModal('language-modal')">
+                        <span data-lang="menu-language">🌍 Idioma</span>
+                    </button>
+
+                    <button class="profile-menu-option" onclick="openModal('theme-modal')">
+                        <span data-lang="menu-theme">🎨 Tema</span>
+                    </button>
+
+                    <button class="logout-button" id="logout-button" data-lang="logout">Cerrar sesión</button>
                 </div>
             </div>
         </div>
@@ -174,14 +188,14 @@
         <button class="nav-button launcher" data-section="launcher" style="margin: 10px 30px 10px 0;">💻 <span>Launcher</span></button>
 
         <nav>
-            <button class="nav-button home active-nav" data-section="home">🏠 <span>Inicio</span></button>
-            <button class="nav-button mobs" data-section="mobs"><span>Mobs nuevos</span></button>
-            <button class="nav-button dificultad" data-section="dificultad"><span>Cambio de dificultad</span></button>
-            <button class="nav-button eventos" data-section="eventos"><span>Eventos</span></button>
-            <button class="nav-button actualizaciones" data-section="actualizaciones"><span>Actualizaciones</span></button>
-            <button class="nav-button recompensas" data-section="recompensas"><span>Recompensas</span></button>
-            <button class="nav-button castigos" data-section="castigos"><span>Castigos</span></button>
-            <button class="nav-button quiz" data-section="quiz">💡 <span>Quiz</span></button>
+            <button class="nav-button home active-nav" data-section="home">🏠 <span data-lang="nav-home">Inicio</span></button>
+            <button class="nav-button mobs" data-section="mobs"><span data-lang="nav-mobs">Mobs nuevos</span></button>
+            <button class="nav-button dificultad" data-section="dificultad"><span data-lang="nav-difficulty">Cambio de dificultad</span></button>
+            <button class="nav-button eventos" data-section="eventos"><span data-lang="nav-events">Eventos</span></button>
+            <button class="nav-button actualizaciones" data-section="actualizaciones"><span data-lang="nav-updates">Actualizaciones</span></button>
+            <button class="nav-button recompensas" data-section="recompensas"><span data-lang="nav-rewards">Recompensas</span></button>
+            <button class="nav-button castigos" data-section="castigos"><span data-lang="nav-punishments">Castigos</span></button>
+            <button class="nav-button quiz" data-section="quiz">💡 <span data-lang="nav-quiz">Quiz</span></button>
         </nav>
     </div>
 
