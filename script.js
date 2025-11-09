@@ -26,6 +26,7 @@ const winnerSection = document.getElementById('winner-section');
 const USER_STORAGE_KEY = 'masterstudio_user';
 const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer';
 const QUIZ_TICKETS_KEY = 'masterstudio_user_tickets';
+const USER_DATA_KEY = 'masterstudio_users_data'; // Nueva key para guardar datos de usuarios
 const NOTIFICATIONS_KEY = 'masterstudio_notifications_enabled';
 const LANGUAGE_KEY = 'masterstudio_language';
 const THEME_KEY = 'masterstudio_theme';
@@ -50,7 +51,7 @@ let translations = {};
 // =============================================
 
 const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
-const IS_MAINTENANCE_ACTIVE = false;
+const IS_MAINTENANCE_ACTIVE = true;
 const BYPASS_PARAM = 'dev';
 const BYPASS_VALUE = 'master';
 
@@ -231,6 +232,31 @@ function loadThemeSettings() {
 // SISTEMA DE RANKING
 // =============================================
 
+function saveUserData(userId, username, email) {
+    try {
+        let usersData = JSON.parse(localStorage.getItem(USER_DATA_KEY)) || {};
+        usersData[userId] = {
+            username: username,
+            email: email,
+            lastUpdate: Date.now()
+        };
+        localStorage.setItem(USER_DATA_KEY, JSON.stringify(usersData));
+        console.log('💾 Datos de usuario guardados:', username);
+    } catch (e) {
+        console.error('Error guardando datos de usuario:', e);
+    }
+}
+
+function getUserData(userId) {
+    try {
+        const usersData = JSON.parse(localStorage.getItem(USER_DATA_KEY)) || {};
+        return usersData[userId] || null;
+    } catch (e) {
+        console.error('Error leyendo datos de usuario:', e);
+        return null;
+    }
+}
+
 function getUserTickets(userId) {
     const key = `${QUIZ_TICKETS_KEY}_${userId}`;
     const tickets = localStorage.getItem(key);
@@ -291,24 +317,25 @@ function createLocalRanking() {
             
             const tickets = parseInt(localStorage.getItem(key)) || 0;
             
-            // Obtener nombre de usuario desde el almacenamiento
-            let username = 'Usuario';
-            
-            // Si es el usuario actual
-            if (currentUser && currentUser.id === userId) {
-                username = currentUser.name;
-            } else {
-                // Intentar recuperar de localStorage
-                username = `Usuario ${userId.substring(0, 8)}`;
-            }
-            
             if (tickets > 0) {
+                // Obtener nombre de usuario desde los datos guardados
+                const userData = getUserData(userId);
+                let username = 'Usuario';
+                
+                if (userData && userData.username) {
+                    username = userData.username;
+                } else if (currentUser && currentUser.id === userId) {
+                    username = currentUser.name;
+                } else {
+                    username = `Usuario ${userId.substring(0, 8)}`;
+                }
+                
                 users.push({ userId, username, tickets });
             }
         }
     }
     
-    // Si el usuario actual tiene tickets pero no está en la lista
+    // Asegurar que el usuario actual esté en la lista
     if (currentUser) {
         const userInList = users.find(u => u.userId === currentUser.id);
         if (!userInList) {
@@ -386,7 +413,12 @@ function handleCredentialResponse(response) {
             email: payload.email 
         };
         
+        // Guardar usuario en localStorage
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(currentUser));
+        
+        // Guardar datos del usuario para el ranking
+        saveUserData(currentUser.id, currentUser.name, currentUser.email);
+        
         updateLoginUI();
         
         if (document.getElementById('quiz').classList.contains('active')) {
@@ -711,6 +743,10 @@ function checkLocalStorageUser() {
     if (storedUser) {
         try {
             currentUser = JSON.parse(storedUser);
+            
+            // Guardar datos del usuario para el ranking
+            saveUserData(currentUser.id, currentUser.name, currentUser.email);
+            
             updateLoginUI();
             return true;
         } catch (e) {
