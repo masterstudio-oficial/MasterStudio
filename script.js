@@ -7,6 +7,7 @@ const profileIcon = document.getElementById('profile-icon');
 const profileDropdown = document.getElementById('profile-dropdown');
 const dropdownUsername = document.getElementById('dropdown-username');
 const dropdownEmail = document.getElementById('dropdown-email');
+const dropdownTickets = document.getElementById('dropdown-tickets');
 const logoutButton = document.getElementById('logout-button');
 const notificationBadge = document.getElementById('notification-badge');
 const notificationCountMenu = document.getElementById('notification-count-menu');
@@ -230,20 +231,106 @@ function loadThemeSettings() {
 // SISTEMA DE RANKING
 // =============================================
 
+function getUserTickets(userId) {
+    const key = `${QUIZ_TICKETS_KEY}_${userId}`;
+    const tickets = localStorage.getItem(key);
+    const ticketCount = tickets ? parseInt(tickets) : 0;
+    console.log(`🎟️ getUserTickets("${userId}"): ${ticketCount} (key: ${key})`);
+    return ticketCount;
+}
+
+function incrementUserTickets(userId) {
+    const currentTickets = getUserTickets(userId);
+    const newTickets = currentTickets + 1;
+    localStorage.setItem(`${QUIZ_TICKETS_KEY}_${userId}`, newTickets);
+    console.log(`✅ Tickets actualizados: ${newTickets} para usuario ${userId}`);
+    
+    // Actualizar UI del perfil inmediatamente
+    if (dropdownTickets && currentUser && currentUser.id === userId) {
+        dropdownTickets.textContent = `🎫 ${newTickets} Tickets`;
+    }
+    
+    return newTickets;
+}
+
 async function loadRanking() {
     try {
         const response = await fetch(RANKING_API_URL + '?action=getRanking');
         const data = await response.json();
         
+        console.log('📊 Datos del ranking recibidos:', data);
+        
         if (data.success && data.users && data.users.length > 0) {
             displayRanking(data.users);
         } else {
-            displayRanking([]);
+            // Si no hay datos del servidor, crear ranking local
+            const localRanking = createLocalRanking();
+            displayRanking(localRanking);
         }
     } catch (error) {
-        console.error('Error al cargar ranking:', error);
-        displayRanking([]);
+        console.error('❌ Error al cargar ranking:', error);
+        // En caso de error, mostrar ranking local
+        const localRanking = createLocalRanking();
+        displayRanking(localRanking);
     }
+}
+
+function createLocalRanking() {
+    // Crear ranking basado en localStorage
+    const users = [];
+    const processedUsers = new Set();
+    
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith(QUIZ_TICKETS_KEY)) {
+            const userId = key.replace(`${QUIZ_TICKETS_KEY}_`, '');
+            
+            // Evitar duplicados
+            if (processedUsers.has(userId)) continue;
+            processedUsers.add(userId);
+            
+            const tickets = parseInt(localStorage.getItem(key)) || 0;
+            
+            // Obtener nombre de usuario desde el almacenamiento
+            let username = 'Usuario';
+            
+            // Si es el usuario actual
+            if (currentUser && currentUser.id === userId) {
+                username = currentUser.name;
+            } else {
+                // Intentar recuperar de localStorage
+                username = `Usuario ${userId.substring(0, 8)}`;
+            }
+            
+            if (tickets > 0) {
+                users.push({ userId, username, tickets });
+            }
+        }
+    }
+    
+    // Si el usuario actual tiene tickets pero no está en la lista
+    if (currentUser) {
+        const userInList = users.find(u => u.userId === currentUser.id);
+        if (!userInList) {
+            const userTickets = getUserTickets(currentUser.id);
+            if (userTickets > 0) {
+                users.push({
+                    userId: currentUser.id,
+                    username: currentUser.name,
+                    tickets: userTickets
+                });
+            }
+        }
+    }
+    
+    // Ordenar por tickets descendente
+    users.sort((a, b) => b.tickets - a.tickets);
+    
+    console.log('📊 Ranking local creado:', users);
+    console.log('👤 Usuario actual:', currentUser);
+    console.log('🎫 Tickets del usuario actual:', currentUser ? getUserTickets(currentUser.id) : 0);
+    
+    return users;
 }
 
 function displayRanking(users) {
@@ -320,6 +407,12 @@ function updateLoginUI() {
         dropdownUsername.textContent = currentUser.name;
         dropdownEmail.textContent = currentUser.email;
         
+        // Mostrar tickets del usuario
+        const userTickets = getUserTickets(currentUser.id);
+        if (dropdownTickets) {
+            dropdownTickets.textContent = `🎫 ${userTickets} Tickets`;
+        }
+        
         loginToParticipate.style.display = 'none';
         
         loadNotificationsSettings();
@@ -338,6 +431,13 @@ document.addEventListener('DOMContentLoaded', () => {
         profileIcon.addEventListener('click', (e) => {
             e.stopPropagation();
             profileDropdown.classList.toggle('show');
+            
+            // Actualizar tickets al abrir el menú
+            if (currentUser && dropdownTickets) {
+                const userTickets = getUserTickets(currentUser.id);
+                dropdownTickets.textContent = `🎫 ${userTickets} Tickets`;
+                console.log('🔄 Menú abierto - Tickets actualizados:', userTickets);
+            }
         });
     }
 
@@ -402,7 +502,7 @@ async function getDailyQuizData() {
 
 async function saveTicketToServer(userId, username) {
     try {
-        await fetch(RANKING_API_URL, {
+        const response = await fetch(RANKING_API_URL, {
             method: 'POST',
             mode: 'no-cors',
             headers: {
@@ -416,9 +516,9 @@ async function saveTicketToServer(userId, username) {
                 timestamp: Date.now()
             })
         });
-        console.log('Ticket guardado en el servidor');
+        console.log('✅ Intento de guardar ticket en servidor para:', username);
     } catch (error) {
-        console.log('Error al guardar ticket en servidor:', error);
+        console.log('⚠️ No se pudo guardar en servidor, usando almacenamiento local');
     }
 }
 
@@ -483,8 +583,18 @@ async function handleQuizSubmit() {
     });
 
     if (selectedKey === dailyQuizData.respuesta_correcta) {
+        console.log('✅ Respuesta CORRECTA!');
+        console.log('👤 Usuario actual:', currentUser);
+        console.log('🆔 User ID:', currentUser.id);
+        console.log('📝 Nombre:', currentUser.name);
+        
         // Respuesta correcta - Guardar ticket
+        const newTicketCount = incrementUserTickets(currentUser.id);
         await saveTicketToServer(currentUser.id, currentUser.name);
+        
+        console.log('💾 Ticket guardado. Nuevo total:', newTicketCount);
+        console.log('🔑 localStorage key:', `${QUIZ_TICKETS_KEY}_${currentUser.id}`);
+        console.log('📦 Valor guardado:', localStorage.getItem(`${QUIZ_TICKETS_KEY}_${currentUser.id}`));
         
         localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'CORRECT');
         
@@ -498,7 +608,8 @@ async function handleQuizSubmit() {
                 <div class="ticket-earned">+1 TICKET</div>
                 <p style="font-size: 1rem; margin-top: 10px;">¡Has ganado 1 ticket! 🎫</p>
                 <div class="user-stats">
-                    <p>Vuelve mañana para ganar más tickets 😊</p>
+                    <p>Total de tickets: ${newTicketCount} 🎟️</p>
+                    <p style="margin-top: 10px;">Vuelve mañana para ganar más tickets 😊</p>
                 </div>
             </div>
         `;
@@ -539,12 +650,14 @@ async function loadDailyQuiz(userId) {
         winnerSection.style.display = 'block';
         
         if (storedAnswer === 'CORRECT') {
+            const currentTickets = getUserTickets(userId);
             winnerSection.innerHTML = `
                 <div class="quiz-result">
                     <h3>✅ Ya participaste hoy</h3>
                     <p>Ganaste 1 ticket 🎫</p>
                     <div class="user-stats">
-                        <p>Vuelve mañana para la nueva pregunta diaria 😊</p>
+                        <p>Total de tickets: ${currentTickets} 🎟️</p>
+                        <p style="margin-top: 10px;">Vuelve mañana para la nueva pregunta diaria 😊</p>
                     </div>
                 </div>
             `;
