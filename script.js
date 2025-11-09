@@ -24,6 +24,7 @@ const winnerSection = document.getElementById('winner-section');
 // Claves de almacenamiento
 const USER_STORAGE_KEY = 'masterstudio_user';
 const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer';
+const QUIZ_TICKETS_KEY = 'masterstudio_user_tickets';
 const NOTIFICATIONS_KEY = 'masterstudio_notifications_enabled';
 const LANGUAGE_KEY = 'masterstudio_language';
 const THEME_KEY = 'masterstudio_theme';
@@ -97,6 +98,133 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 });
+
+// =============================================
+// SISTEMA DE IDIOMAS
+// =============================================
+
+async function loadLanguage(lang) {
+    try {
+        const response = await fetch(`https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/lang/${lang}.json`);
+        if (!response.ok) {
+            console.error('Error al cargar idioma:', lang);
+            return;
+        }
+        translations = await response.json();
+        applyTranslations();
+    } catch (e) {
+        console.error('Error cargando traducciones:', e);
+    }
+}
+
+function applyTranslations() {
+    document.querySelectorAll('[data-lang]').forEach(element => {
+        const key = element.getAttribute('data-lang');
+        if (translations[key]) {
+            if (key.includes('quiz-no-question')) {
+                element.innerHTML = translations[key].replace('\\n', '<br>');
+            } else {
+                element.textContent = translations[key];
+            }
+        }
+    });
+}
+
+function selectLanguage(lang) {
+    currentLanguage = lang;
+    localStorage.setItem(LANGUAGE_KEY, lang);
+    
+    document.querySelectorAll('.language-option').forEach(opt => {
+        opt.classList.remove('active');
+    });
+    document.querySelector(`[data-lang-code="${lang}"]`).classList.add('active');
+    
+    loadLanguage(lang);
+}
+
+function loadLanguageSettings() {
+    currentLanguage = localStorage.getItem(LANGUAGE_KEY) || 'es';
+    document.querySelectorAll('.language-option').forEach(opt => {
+        opt.classList.remove('active');
+    });
+    const activeOpt = document.querySelector(`[data-lang-code="${currentLanguage}"]`);
+    if (activeOpt) activeOpt.classList.add('active');
+    
+    loadLanguage(currentLanguage);
+}
+
+// =============================================
+// SISTEMA DE NOTIFICACIONES
+// =============================================
+
+function toggleNotifications() {
+    notificationsEnabled = !notificationsEnabled;
+    localStorage.setItem(NOTIFICATIONS_KEY, notificationsEnabled);
+    
+    const toggle = document.getElementById('notifications-toggle');
+    if (notificationsEnabled) {
+        toggle.classList.add('active');
+    } else {
+        toggle.classList.remove('active');
+    }
+    
+    updateNotificationBadge();
+}
+
+function updateNotificationBadge() {
+    if (notificationsEnabled) {
+        const count = 0;
+        if (count > 0) {
+            notificationBadge.textContent = count;
+            notificationBadge.style.display = 'flex';
+            notificationCountMenu.textContent = count;
+            notificationCountMenu.style.display = 'inline';
+        } else {
+            notificationBadge.style.display = 'none';
+            notificationCountMenu.style.display = 'none';
+        }
+    } else {
+        notificationBadge.style.display = 'none';
+        notificationCountMenu.style.display = 'none';
+    }
+}
+
+function loadNotificationsSettings() {
+    notificationsEnabled = localStorage.getItem(NOTIFICATIONS_KEY) === 'true';
+    const toggle = document.getElementById('notifications-toggle');
+    if (notificationsEnabled) {
+        toggle.classList.add('active');
+    }
+    updateNotificationBadge();
+}
+
+// =============================================
+// SISTEMA DE TEMAS
+// =============================================
+
+function selectTheme(theme) {
+    if (theme === 'light') {
+        alert('El tema claro estará disponible próximamente. Por ahora solo está disponible el tema oscuro.');
+        return;
+    }
+    
+    currentTheme = theme;
+    localStorage.setItem(THEME_KEY, theme);
+    
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.classList.remove('active');
+    });
+    document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+}
+
+function loadThemeSettings() {
+    currentTheme = localStorage.getItem(THEME_KEY) || 'dark';
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.classList.remove('active');
+    });
+    const activeOpt = document.querySelector(`[data-theme="${currentTheme}"]`);
+    if (activeOpt) activeOpt.classList.add('active');
+}
 
 // =============================================
 // SISTEMA DE RANKING
@@ -193,6 +321,10 @@ function updateLoginUI() {
         dropdownEmail.textContent = currentUser.email;
         
         loginToParticipate.style.display = 'none';
+        
+        loadNotificationsSettings();
+        loadLanguageSettings();
+        loadThemeSettings();
     } else {
         if (gIdOnload) gIdOnload.style.display = 'block';
         if (gIdSignin) gIdSignin.style.display = 'block';
