@@ -25,11 +25,74 @@
         <p>Nuestro sitio web está actualmente fuera de servicio por tareas de mantenimiento y grandes actualizaciones. Estaremos de vuelta muy pronto. ¡Gracias por tu paciencia!</p>
     </div>
 
+    <!-- Modal de Notificaciones -->
+    <div class="modal-overlay" id="notifications-modal">
+        <div class="modal-content" style="position: relative;">
+            <button class="modal-close" onclick="closeModal('notifications-modal')">✕</button>
+            <h2 class="modal-header" data-lang="notifications-title">🔔 Notificaciones</h2>
+            
+            <div class="toggle-container">
+                <span data-lang="notifications-enable">Activar notificaciones</span>
+                <div class="toggle-switch" id="notifications-toggle" onclick="toggleNotifications()">
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+
+            <div id="notifications-list" style="margin-top: 20px;">
+                <div class="notification-empty" data-lang="notifications-empty">
+                    No tienes notificaciones por el momento.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Idioma -->
+    <div class="modal-overlay" id="language-modal">
+        <div class="modal-content" style="position: relative;">
+            <button class="modal-close" onclick="closeModal('language-modal')">✕</button>
+            <h2 class="modal-header" data-lang="language-title">🌍 Seleccionar Idioma</h2>
+            
+            <div class="language-selector">
+                <div class="language-option active" data-lang-code="es" onclick="selectLanguage('es')">
+                    🇪🇸<br>Español
+                </div>
+                <div class="language-option" data-lang-code="en" onclick="selectLanguage('en')">
+                    🇺🇸<br>English
+                </div>
+                <div class="language-option" data-lang-code="pt" onclick="selectLanguage('pt')">
+                    🇧🇷<br>Português
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Tema -->
+    <div class="modal-overlay" id="theme-modal">
+        <div class="modal-content" style="position: relative;">
+            <button class="modal-close" onclick="closeModal('theme-modal')">✕</button>
+            <h2 class="modal-header" data-lang="theme-title">🎨 Seleccionar Tema</h2>
+            
+            <div class="theme-selector">
+                <div class="theme-option active" data-theme="dark" onclick="selectTheme('dark')">
+                    <div class="theme-icon">🌙</div>
+                    <div data-lang="theme-dark">Oscuro</div>
+                </div>
+                <div class="theme-option" data-theme="light" onclick="selectTheme('light')">
+                    <div class="theme-icon">☀️</div>
+                    <div data-lang="theme-light">Claro</div>
+                </div>
+            </div>
+            <p style="text-align: center; color: #aaaaaa; margin-top: 15px; font-size: 0.9rem;" data-lang="theme-soon">
+                El tema claro estará disponible próximamente
+            </p>
+        </div>
+    </div>
+
     <!-- Modal de Ranking -->
     <div class="modal-overlay" id="ranking-modal">
         <div class="modal-content" style="position: relative; max-width: 600px;">
             <button class="modal-close" onclick="closeModal('ranking-modal')">✕</button>
-            <h2 class="modal-header">🏆 Ranking Quiz</h2>
+            <h2 class="modal-header" data-lang="ranking-title">🏆 Ranking Quiz</h2>
             
             <div class="ranking-container">
                 <!-- Top 3 -->
