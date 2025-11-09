@@ -694,6 +694,67 @@ section h1 {
     font-size: 1rem;
 }
 
+/* Posts */
+.post {
+    display: flex;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: rgba(26, 26, 26, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    align-items: flex-start;
+}
+
+.post img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    margin-right: 20px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.post-content {
+    flex: 1;
+}
+
+.post-content h3 {
+    font-family: 'VT323', monospace;
+    margin-bottom: 5px;
+    font-size: 1.6rem;
+    color: #ffffff;
+    display: block;
+}
+
+.post-content .date {
+    font-size: 0.9rem;
+    color: #cccccc;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.post-content p {
+    color: #cccccc;
+    display: block;
+}
+
+.new-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #FFC107;
+    color: #000000;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.8rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
 /* Launcher */
 .launcher-title-container {
     display: flex;
