@@ -33,7 +33,7 @@ const THEME_KEY = 'masterstudio_theme';
 
 // URLs
 const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json';
-const RANKING_API_URL = 'https://script.google.com/macros/s/AKfycbwm4xK38yErPBv_m2zFCYF0EMxxBh2D-hEbSni4I8u8q92xpKp3UmZ3JwSkqWDf3qLnQw/exec';
+const RANKING_API_URL = 'https://script.google.com/macros/s/AKfycbx-Oay0uBNGDJborb0kKQIkymVFxmO-NB4EUBZHNogOxP-FLPItFrnmYxYqzmuwx2vVBw/exec';
 
 // Variables de estado
 let currentUser = null;
@@ -806,8 +806,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // CARGAR POSTS
 // =============================================
 
+const LIKES_STORAGE_KEY = 'masterstudio_post_likes';
+
 function generatePostId(post) {
-    // Generar ID único basado en título y fecha
     const cleanTitle = post.titulo.toLowerCase().replace(/[^a-z0-9]/g, '-');
     const cleanDate = post.fecha.replace(/[^0-9]/g, '');
     return `post-${cleanTitle}-${cleanDate}`;
@@ -817,13 +818,11 @@ function sharePost(postId, category) {
     const baseUrl = window.location.origin + window.location.pathname;
     const shareUrl = `${baseUrl}?post=${postId}&category=${category}`;
     
-    // Copiar al portapapeles
     navigator.clipboard.writeText(shareUrl).then(() => {
         showCopyNotification();
         console.log('🔗 Link copiado:', shareUrl);
     }).catch(err => {
         console.error('Error al copiar:', err);
-        // Fallback para navegadores antiguos
         const textArea = document.createElement('textarea');
         textArea.value = shareUrl;
         document.body.appendChild(textArea);
@@ -845,6 +844,129 @@ function showCopyNotification() {
     }, 3000);
 }
 
+async function toggleLike(postId) {
+    if (!currentUser) {
+        alert('Por favor, inicia sesión para dar like a los posts 💙');
+        return;
+    }
+    
+    const likeButton = document.querySelector(`#${postId} .like-button`);
+    const likeCountSpan = document.querySelector(`#${postId} .like-count`);
+    
+    if (!likeButton) return;
+    
+    // Deshabilitar botón temporalmente
+    likeButton.disabled = true;
+    
+    try {
+        // Guardar en servidor
+        const response = await fetch(RANKING_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'toggleLike',
+                postId: postId,
+                userId: currentUser.id,
+                username: currentUser.name
+            })
+        });
+        
+        const data = await response.json();
+        console.log('❤️ Respuesta del servidor:', data);
+        
+        if (data.success) {
+            // Actualizar UI según la acción
+            if (data.action === 'liked') {
+                likeButton.classList.add('liked');
+                saveLocalLike(postId, true);
+                console.log('💖 Like agregado a:', postId);
+            } else {
+                likeButton.classList.remove('liked');
+                saveLocalLike(postId, false);
+                console.log('💔 Like removido de:', postId);
+            }
+            
+            // Actualizar contador
+            await updateLikeCount(postId);
+        }
+        
+    } catch (error) {
+        console.error('❌ Error al dar like:', error);
+        // Fallback a localStorage
+        const isLiked = likeButton.classList.contains('liked');
+        if (isLiked) {
+            likeButton.classList.remove('liked');
+            saveLocalLike(postId, false);
+        } else {
+            likeButton.classList.add('liked');
+            saveLocalLike(postId, true);
+        }
+    } finally {
+        likeButton.disabled = false;
+    }
+}
+
+function saveLocalLike(postId, liked) {
+    if (!currentUser) return;
+    
+    let likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
+    
+    if (liked) {
+        if (!likes[postId]) likes[postId] = [];
+        if (!likes[postId].includes(currentUser.id)) {
+            likes[postId].push(currentUser.id);
+        }
+    } else {
+        if (likes[postId]) {
+            likes[postId] = likes[postId].filter(id => id !== currentUser.id);
+            if (likes[postId].length === 0) {
+                delete likes[postId];
+            }
+        }
+    }
+    
+    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likes));
+}
+
+function checkIfUserLiked(postId) {
+    if (!currentUser) return false;
+    
+    const likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
+    return likes[postId] && likes[postId].includes(currentUser.id);
+}
+
+async function updateLikeCount(postId) {
+    try {
+        const response = await fetch(RANKING_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                action: 'getLikes',
+                postId: postId
+            })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const likeCountSpan = document.querySelector(`#${postId} .like-count`);
+            if (likeCountSpan && data.count > 0) {
+                likeCountSpan.textContent = data.count;
+                likeCountSpan.style.display = 'inline';
+            } else if (likeCountSpan) {
+                likeCountSpan.style.display = 'none';
+            }
+        }
+        
+    } catch (error) {
+        console.error('Error al obtener likes:', error);
+    }
+}
+
 function checkSharedPost() {
     const urlParams = new URLSearchParams(window.location.search);
     const postId = urlParams.get('post');
@@ -853,10 +975,8 @@ function checkSharedPost() {
     if (postId && category) {
         console.log('📌 Post compartido detectado:', postId, 'en categoría:', category);
         
-        // Cambiar a la sección correcta
         const targetSection = document.getElementById(category);
         if (targetSection) {
-            // Activar navegación
             document.querySelectorAll('.nav-button').forEach(btn => {
                 btn.classList.remove('active-nav');
             });
@@ -867,21 +987,14 @@ function checkSharedPost() {
             });
             targetSection.classList.add('active');
             
-            // Esperar a que los posts se carguen
             setTimeout(() => {
                 const postElement = document.getElementById(postId);
                 if (postElement) {
-                    // Scroll suave al post
                     postElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
-                    // Agregar clase de highlight
                     postElement.classList.add('highlighted');
                     
-                    // Remover highlight después de 5 segundos
                     setTimeout(() => {
                         postElement.classList.remove('highlighted');
-                        
-                        // Limpiar URL sin recargar
                         const cleanUrl = window.location.origin + window.location.pathname;
                         window.history.replaceState({}, document.title, cleanUrl);
                     }, 5000);
@@ -917,6 +1030,10 @@ async function loadPosts() {
                 postElement.className = 'post';
                 postElement.id = postId;
 
+                const isLiked = checkIfUserLiked(postId);
+                const likedClass = isLiked ? 'liked' : '';
+                const heartFill = isLiked ? 'fill="currentColor"' : 'fill="none"';
+
                 let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
                 
                 postElement.innerHTML = `
@@ -926,16 +1043,25 @@ async function loadPosts() {
                         <h3>${post.titulo}</h3>
                         <span class="date">Fecha: ${post.fecha}</span>
                         <p>${post.descripcion}</p>
-                        <button class="share-button" onclick="sharePost('${postId}', '${category}')">
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <circle cx="18" cy="5" r="3"></circle>
-                                <circle cx="6" cy="12" r="3"></circle>
-                                <circle cx="18" cy="19" r="3"></circle>
-                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                            </svg>
-                            Compartir
-                        </button>
+                        <div class="post-actions">
+                            <button class="like-button ${likedClass}" onclick="toggleLike('${postId}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${heartFill} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                                </svg>
+                                Like
+                                <span class="like-count" style="display: none;">0</span>
+                            </button>
+                            <button class="share-button" onclick="sharePost('${postId}', '${category}')">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="18" cy="5" r="3"></circle>
+                                    <circle cx="6" cy="12" r="3"></circle>
+                                    <circle cx="18" cy="19" r="3"></circle>
+                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                                </svg>
+                                Compartir
+                            </button>
+                        </div>
                     </div>
                 `;
                 container.prepend(postElement);
@@ -944,10 +1070,12 @@ async function loadPosts() {
                 if (placeholderText) {
                     placeholderText.style.display = 'none';
                 }
+                
+                // Cargar contador de likes del servidor
+                updateLikeCount(postId);
             }
         });
         
-        // Verificar si hay un post compartido en la URL
         checkSharedPost();
         
     } catch (e) {
