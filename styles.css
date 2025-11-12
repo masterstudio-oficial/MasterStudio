@@ -1154,6 +1154,7 @@ body.light-mode .post-content p {
     background-color: rgba(244, 67, 54, 0.1);
     border-color: rgba(244, 67, 54, 0.3);
     color: #F44336;
+    position: relative;
 }
 
 .like-button:hover {
@@ -1191,9 +1192,24 @@ body.light-mode .post-content p {
 }
 
 .like-count {
-    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 6px;
+    background-color: rgba(244, 67, 54, 0.2);
     color: #F44336;
+    font-size: 0.85rem;
     font-weight: bold;
+    border-radius: 12px;
+    margin-left: 3px;
+    border: 1px solid rgba(244, 67, 54, 0.3);
+}
+
+.like-button.liked .like-count {
+    background-color: rgba(244, 67, 54, 0.4);
+    border-color: #F44336;
 }
 
 body.light-mode .share-button {
@@ -1210,6 +1226,10 @@ body.light-mode .like-button {
 
 body.light-mode .like-button:hover {
     background-color: rgba(244, 67, 54, 0.2);
+}
+
+body.light-mode .like-count {
+    background-color: rgba(244, 67, 54, 0.15);
 }
 
 /* Notificación de copiado */
