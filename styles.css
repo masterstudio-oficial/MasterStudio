@@ -1037,12 +1037,37 @@ body.light-mode .placeholder-text {
     position: relative;
     overflow: hidden;
     align-items: flex-start;
+    transition: all 0.3s ease;
 }
 
 body.light-mode .post {
     background-color: rgba(255, 255, 255, 0.95);
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Post destacado (cuando es compartido) */
+.post.highlighted {
+    border: 3px solid #FFD700;
+    background-color: rgba(255, 215, 0, 0.15);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.6), 0 4px 12px rgba(0, 0, 0, 0.5);
+    animation: highlightPulse 1.5s ease-in-out 3;
+}
+
+body.light-mode .post.highlighted {
+    background-color: rgba(255, 215, 0, 0.2);
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+@keyframes highlightPulse {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    }
+    50% {
+        transform: scale(1.02);
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+    }
 }
 
 .post img {
@@ -1084,10 +1109,85 @@ body.light-mode .post-content .date {
 .post-content p {
     color: #cccccc;
     display: block;
+    margin-bottom: 15px;
 }
 
 body.light-mode .post-content p {
     color: #444444;
+}
+
+/* Botón de compartir */
+.share-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 15px;
+    background-color: rgba(33, 150, 243, 0.2);
+    border: 1px solid rgba(33, 150, 243, 0.5);
+    border-radius: 20px;
+    color: #2196F3;
+    font-size: 0.9rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.share-button:hover {
+    background-color: rgba(33, 150, 243, 0.3);
+    border-color: #2196F3;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(33, 150, 243, 0.3);
+}
+
+.share-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+body.light-mode .share-button {
+    background-color: rgba(33, 150, 243, 0.15);
+}
+
+body.light-mode .share-button:hover {
+    background-color: rgba(33, 150, 243, 0.25);
+}
+
+/* Notificación de copiado */
+.copy-notification {
+    position: fixed;
+    top: 100px;
+    right: 50px;
+    background-color: rgba(76, 175, 80, 0.95);
+    color: #ffffff;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    z-index: 100000;
+    animation: slideInRight 0.3s ease, slideOutRight 0.3s ease 2.7s;
+    pointer-events: none;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
 }
 
 .new-badge {
