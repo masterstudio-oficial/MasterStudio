@@ -903,6 +903,8 @@ async function toggleLike(postId) {
             likeButton.classList.add('liked');
             saveLocalLike(postId, true);
         }
+        // Actualizar contador con datos locales
+        await updateLikeCount(postId);
     } finally {
         likeButton.disabled = false;
     }
@@ -938,6 +940,9 @@ function checkIfUserLiked(postId) {
 }
 
 async function updateLikeCount(postId) {
+    const likeCountSpan = document.querySelector(`#${postId} .like-count`);
+    if (!likeCountSpan) return;
+    
     try {
         const response = await fetch(RANKING_API_URL, {
             method: 'POST',
@@ -953,17 +958,26 @@ async function updateLikeCount(postId) {
         const data = await response.json();
         
         if (data.success) {
-            const likeCountSpan = document.querySelector(`#${postId} .like-count`);
-            if (likeCountSpan && data.count > 0) {
-                likeCountSpan.textContent = data.count;
-                likeCountSpan.style.display = 'inline';
-            } else if (likeCountSpan) {
+            const count = data.count || 0;
+            if (count > 0) {
+                likeCountSpan.textContent = count;
+                likeCountSpan.style.display = 'inline-flex';
+            } else {
                 likeCountSpan.style.display = 'none';
             }
         }
         
     } catch (error) {
         console.error('Error al obtener likes:', error);
+        // Fallback a localStorage
+        const likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
+        const count = likes[postId] ? likes[postId].length : 0;
+        if (count > 0) {
+            likeCountSpan.textContent = count;
+            likeCountSpan.style.display = 'inline-flex';
+        } else {
+            likeCountSpan.style.display = 'none';
+        }
     }
 }
 
