@@ -26,7 +26,7 @@ const winnerSection = document.getElementById('winner-section');
 const USER_STORAGE_KEY = 'masterstudio_user';
 const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer';
 const QUIZ_TICKETS_KEY = 'masterstudio_user_tickets';
-const USER_DATA_KEY = 'masterstudio_users_data'; // Nueva key para guardar datos de usuarios
+const USER_DATA_KEY = 'masterstudio_users_data';
 const NOTIFICATIONS_KEY = 'masterstudio_notifications_enabled';
 const LANGUAGE_KEY = 'masterstudio_language';
 const THEME_KEY = 'masterstudio_theme';
@@ -51,7 +51,7 @@ let translations = {};
 // =============================================
 
 const MAINTENANCE_SCREEN = document.getElementById('maintenance-screen');
-const IS_MAINTENANCE_ACTIVE = false;
+const IS_MAINTENANCE_ACTIVE = true;
 const BYPASS_PARAM = 'dev';
 const BYPASS_VALUE = 'master';
 
@@ -205,22 +205,36 @@ function loadNotificationsSettings() {
 // =============================================
 
 function selectTheme(theme) {
-    if (theme === 'light') {
-        alert('El tema claro estará disponible próximamente. Por ahora solo está disponible el tema oscuro.');
-        return;
-    }
-    
     currentTheme = theme;
     localStorage.setItem(THEME_KEY, theme);
     
+    // Aplicar tema al body
+    if (theme === 'light') {
+        document.body.classList.add('light-mode');
+    } else {
+        document.body.classList.remove('light-mode');
+    }
+    
+    // Actualizar selector visual
     document.querySelectorAll('.theme-option').forEach(opt => {
         opt.classList.remove('active');
     });
     document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
+    
+    console.log(`🎨 Tema cambiado a: ${theme}`);
 }
 
 function loadThemeSettings() {
     currentTheme = localStorage.getItem(THEME_KEY) || 'dark';
+    
+    // Aplicar tema guardado
+    if (currentTheme === 'light') {
+        document.body.classList.add('light-mode');
+    } else {
+        document.body.classList.remove('light-mode');
+    }
+    
+    // Actualizar selector visual
     document.querySelectorAll('.theme-option').forEach(opt => {
         opt.classList.remove('active');
     });
@@ -271,7 +285,6 @@ function incrementUserTickets(userId) {
     localStorage.setItem(`${QUIZ_TICKETS_KEY}_${userId}`, newTickets);
     console.log(`✅ Tickets actualizados: ${newTickets} para usuario ${userId}`);
     
-    // Actualizar UI del perfil inmediatamente
     if (dropdownTickets && currentUser && currentUser.id === userId) {
         dropdownTickets.textContent = `🎫 ${newTickets} Tickets`;
     }
@@ -289,20 +302,17 @@ async function loadRanking() {
         if (data.success && data.users && data.users.length > 0) {
             displayRanking(data.users);
         } else {
-            // Si no hay datos del servidor, crear ranking local
             const localRanking = createLocalRanking();
             displayRanking(localRanking);
         }
     } catch (error) {
         console.error('❌ Error al cargar ranking:', error);
-        // En caso de error, mostrar ranking local
         const localRanking = createLocalRanking();
         displayRanking(localRanking);
     }
 }
 
 function createLocalRanking() {
-    // Crear ranking basado en localStorage
     const users = [];
     const processedUsers = new Set();
     
@@ -311,14 +321,12 @@ function createLocalRanking() {
         if (key && key.startsWith(QUIZ_TICKETS_KEY)) {
             const userId = key.replace(`${QUIZ_TICKETS_KEY}_`, '');
             
-            // Evitar duplicados
             if (processedUsers.has(userId)) continue;
             processedUsers.add(userId);
             
             const tickets = parseInt(localStorage.getItem(key)) || 0;
             
             if (tickets > 0) {
-                // Obtener nombre de usuario desde los datos guardados
                 const userData = getUserData(userId);
                 let username = 'Usuario';
                 
@@ -335,7 +343,6 @@ function createLocalRanking() {
         }
     }
     
-    // Asegurar que el usuario actual esté en la lista
     if (currentUser) {
         const userInList = users.find(u => u.userId === currentUser.id);
         if (!userInList) {
@@ -350,7 +357,6 @@ function createLocalRanking() {
         }
     }
     
-    // Ordenar por tickets descendente
     users.sort((a, b) => b.tickets - a.tickets);
     
     console.log('📊 Ranking local creado:', users);
@@ -361,7 +367,6 @@ function createLocalRanking() {
 }
 
 function displayRanking(users) {
-    // Actualizar Top 3
     document.getElementById('rank-1-name').textContent = users[0]?.username || '---';
     document.getElementById('rank-1-tickets').textContent = users[0] ? `${users[0].tickets} TICKETS` : '0 TICKETS';
     
@@ -371,7 +376,6 @@ function displayRanking(users) {
     document.getElementById('rank-3-name').textContent = users[2]?.username || '---';
     document.getElementById('rank-3-tickets').textContent = users[2] ? `${users[2].tickets} TICKETS` : '0 TICKETS';
 
-    // Resto del ranking
     const rankingList = document.getElementById('ranking-list');
     rankingList.innerHTML = '';
 
@@ -413,10 +417,7 @@ function handleCredentialResponse(response) {
             email: payload.email 
         };
         
-        // Guardar usuario en localStorage
         localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(currentUser));
-        
-        // Guardar datos del usuario para el ranking
         saveUserData(currentUser.id, currentUser.name, currentUser.email);
         
         updateLoginUI();
@@ -439,7 +440,6 @@ function updateLoginUI() {
         dropdownUsername.textContent = currentUser.name;
         dropdownEmail.textContent = currentUser.email;
         
-        // Mostrar tickets del usuario
         const userTickets = getUserTickets(currentUser.id);
         if (dropdownTickets) {
             dropdownTickets.textContent = `🎫 ${userTickets} Tickets`;
@@ -464,7 +464,6 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             profileDropdown.classList.toggle('show');
             
-            // Actualizar tickets al abrir el menú
             if (currentUser && dropdownTickets) {
                 const userTickets = getUserTickets(currentUser.id);
                 dropdownTickets.textContent = `🎫 ${userTickets} Tickets`;
@@ -628,9 +627,8 @@ async function handleQuizSubmit() {
         console.log('🆔 User ID:', currentUser.id);
         console.log('📝 Nombre:', currentUser.name);
         
-        // Respuesta correcta - Guardar ticket
         const newTicketCount = incrementUserTickets(currentUser.id);
-        await saveTicketToServer(currentUser.id, currentUser.name);
+        await saveTicketToServer(currentUser.id, currentUser.name, currentUser.email);
         
         console.log('💾 Ticket guardado. Nuevo total:', newTicketCount);
         console.log('🔑 localStorage key:', `${QUIZ_TICKETS_KEY}_${currentUser.id}`);
@@ -638,7 +636,6 @@ async function handleQuizSubmit() {
         
         localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'CORRECT');
         
-        // Mostrar mensaje de victoria
         quizContent.style.display = 'none';
         winnerSection.style.display = 'block';
         winnerSection.innerHTML = `
@@ -655,7 +652,6 @@ async function handleQuizSubmit() {
         `;
         
     } else {
-        // Respuesta incorrecta
         localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'INCORRECT');
         
         quizContent.style.display = 'none';
@@ -751,10 +747,7 @@ function checkLocalStorageUser() {
     if (storedUser) {
         try {
             currentUser = JSON.parse(storedUser);
-            
-            // Guardar datos del usuario para el ranking
             saveUserData(currentUser.id, currentUser.name, currentUser.email);
-            
             updateLoginUI();
             return true;
         } catch (e) {
