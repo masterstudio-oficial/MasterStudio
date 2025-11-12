@@ -806,6 +806,93 @@ document.addEventListener('DOMContentLoaded', () => {
 // CARGAR POSTS
 // =============================================
 
+function generatePostId(post) {
+    // Generar ID único basado en título y fecha
+    const cleanTitle = post.titulo.toLowerCase().replace(/[^a-z0-9]/g, '-');
+    const cleanDate = post.fecha.replace(/[^0-9]/g, '');
+    return `post-${cleanTitle}-${cleanDate}`;
+}
+
+function sharePost(postId, category) {
+    const baseUrl = window.location.origin + window.location.pathname;
+    const shareUrl = `${baseUrl}?post=${postId}&category=${category}`;
+    
+    // Copiar al portapapeles
+    navigator.clipboard.writeText(shareUrl).then(() => {
+        showCopyNotification();
+        console.log('🔗 Link copiado:', shareUrl);
+    }).catch(err => {
+        console.error('Error al copiar:', err);
+        // Fallback para navegadores antiguos
+        const textArea = document.createElement('textarea');
+        textArea.value = shareUrl;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+        showCopyNotification();
+    });
+}
+
+function showCopyNotification() {
+    const notification = document.createElement('div');
+    notification.className = 'copy-notification';
+    notification.innerHTML = '✅ ¡Link copiado al portapapeles!';
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+function checkSharedPost() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('post');
+    const category = urlParams.get('category');
+    
+    if (postId && category) {
+        console.log('📌 Post compartido detectado:', postId, 'en categoría:', category);
+        
+        // Cambiar a la sección correcta
+        const targetSection = document.getElementById(category);
+        if (targetSection) {
+            // Activar navegación
+            document.querySelectorAll('.nav-button').forEach(btn => {
+                btn.classList.remove('active-nav');
+            });
+            document.querySelector(`[data-section="${category}"]`)?.classList.add('active-nav');
+            
+            document.querySelectorAll('section').forEach(section => {
+                section.classList.remove('active');
+            });
+            targetSection.classList.add('active');
+            
+            // Esperar a que los posts se carguen
+            setTimeout(() => {
+                const postElement = document.getElementById(postId);
+                if (postElement) {
+                    // Scroll suave al post
+                    postElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    // Agregar clase de highlight
+                    postElement.classList.add('highlighted');
+                    
+                    // Remover highlight después de 5 segundos
+                    setTimeout(() => {
+                        postElement.classList.remove('highlighted');
+                        
+                        // Limpiar URL sin recargar
+                        const cleanUrl = window.location.origin + window.location.pathname;
+                        window.history.replaceState({}, document.title, cleanUrl);
+                    }, 5000);
+                } else {
+                    console.warn('⚠️ Post no encontrado:', postId);
+                }
+            }, 500);
+        }
+    }
+}
+
 async function loadPosts() {
     const POSTS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
 
@@ -825,8 +912,10 @@ async function loadPosts() {
             const container = document.getElementById(`posts-${category}`);
 
             if (container) {
+                const postId = generatePostId(post);
                 const postElement = document.createElement('div');
                 postElement.className = 'post';
+                postElement.id = postId;
 
                 let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
                 
@@ -837,6 +926,16 @@ async function loadPosts() {
                         <h3>${post.titulo}</h3>
                         <span class="date">Fecha: ${post.fecha}</span>
                         <p>${post.descripcion}</p>
+                        <button class="share-button" onclick="sharePost('${postId}', '${category}')">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="18" cy="5" r="3"></circle>
+                                <circle cx="6" cy="12" r="3"></circle>
+                                <circle cx="18" cy="19" r="3"></circle>
+                                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                            </svg>
+                            Compartir
+                        </button>
                     </div>
                 `;
                 container.prepend(postElement);
@@ -847,6 +946,10 @@ async function loadPosts() {
                 }
             }
         });
+        
+        // Verificar si hay un post compartido en la URL
+        checkSharedPost();
+        
     } catch (e) {
         console.error('Error al cargar posts:', e);
     }
