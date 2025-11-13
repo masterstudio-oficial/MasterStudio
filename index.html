@@ -116,6 +116,86 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal de Desafíos -->
+    <div class="modal-overlay" id="challenges-modal">
+        <div class="modal-content" style="position: relative; max-width: 700px;">
+            <button class="modal-close" onclick="closeModal('challenges-modal')">✕</button>
+            <h2 class="modal-header">🎯 Desafíos Diarios</h2>
+            
+            <div class="challenges-notice">
+                <div class="notice-icon">🚧</div>
+                <h3>Próximamente Disponible</h3>
+                <p>Los desafíos están en desarrollo y estarán disponibles muy pronto.</p>
+                <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                    Podrás completar misiones como dar likes, compartir posts y más para ganar recompensas exclusivas. ¡Estate atento! 🎁
+                </p>
+            </div>
+            
+            <!-- Contenedor de desafíos (actualmente oculto) -->
+            <div id="challenges-container" style="display: none;">
+                <div class="challenge-item locked">
+                    <div class="challenge-icon">❤️</div>
+                    <div class="challenge-info">
+                        <div class="challenge-title">Primer Like</div>
+                        <div class="challenge-description">Da like a 1 post</div>
+                        <div class="challenge-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0/1</span>
+                        </div>
+                    </div>
+                    <div class="challenge-reward">+2 🎫</div>
+                </div>
+
+                <div class="challenge-item locked">
+                    <div class="challenge-icon">💖</div>
+                    <div class="challenge-info">
+                        <div class="challenge-title">Amor Triple</div>
+                        <div class="challenge-description">Da like a 3 posts</div>
+                        <div class="challenge-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0/3</span>
+                        </div>
+                    </div>
+                    <div class="challenge-reward">+5 🎫</div>
+                </div>
+
+                <div class="challenge-item locked">
+                    <div class="challenge-icon">🔗</div>
+                    <div class="challenge-info">
+                        <div class="challenge-title">Compartir es Cuidar</div>
+                        <div class="challenge-description">Comparte 1 post en Discord</div>
+                        <div class="challenge-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0/1</span>
+                        </div>
+                    </div>
+                    <div class="challenge-reward">+3 🎫</div>
+                </div>
+
+                <div class="challenge-item locked">
+                    <div class="challenge-icon">📢</div>
+                    <div class="challenge-info">
+                        <div class="challenge-title">Súper Difusor</div>
+                        <div class="challenge-description">Comparte 3 posts en Discord</div>
+                        <div class="challenge-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 0%"></div>
+                            </div>
+                            <span class="progress-text">0/3</span>
+                        </div>
+                    </div>
+                    <div class="challenge-reward">+10 🎫</div>
+                </div>
+            </div>
+        </div>
+    </div>
     
     <!-- Header -->
     <header>
@@ -177,7 +257,11 @@
                         </div>
                     </div>
 
-                    <!-- Opciones del menú -->
+                    <!-- Sección: Comunidad -->
+                    <div class="menu-section-divider">
+                        <span>COMUNIDAD</span>
+                    </div>
+
                     <button class="profile-menu-option" onclick="openModal('notifications-modal')">
                         <span data-lang="menu-notifications">🔔 Notificaciones</span>
                         <span class="notification-count" id="notification-count-menu" style="display: none;">0</span>
@@ -186,6 +270,15 @@
                     <button class="profile-menu-option" onclick="openModal('ranking-modal')">
                         <span data-lang="menu-ranking">🏆 Ranking Quiz</span>
                     </button>
+
+                    <button class="profile-menu-option" onclick="openModal('challenges-modal')">
+                        <span>🎯 Desafíos</span>
+                    </button>
+
+                    <!-- Sección: Personalización -->
+                    <div class="menu-section-divider">
+                        <span>PERSONALIZACIÓN</span>
+                    </div>
 
                     <button class="profile-menu-option" onclick="openModal('language-modal')">
                         <span data-lang="menu-language">🌍 Idioma</span>
