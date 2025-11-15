@@ -7,7 +7,8 @@ const profileIcon = document.getElementById('profile-icon');
 const profileDropdown = document.getElementById('profile-dropdown');
 const dropdownUsername = document.getElementById('dropdown-username');
 const dropdownEmail = document.getElementById('dropdown-email');
-const dropdownTickets = document.getElementById('dropdown-tickets');
+const dropdownTicketsGold = document.getElementById('dropdown-tickets-gold');
+const dropdownTicketsSilver = document.getElementById('dropdown-tickets-silver');
 const logoutButton = document.getElementById('logout-button');
 const notificationBadge = document.getElementById('notification-badge');
 const notificationCountMenu = document.getElementById('notification-count-menu');
@@ -25,11 +26,14 @@ const winnerSection = document.getElementById('winner-section');
 // Claves de almacenamiento
 const USER_STORAGE_KEY = 'masterstudio_user';
 const QUIZ_ANSWER_KEY = 'masterstudio_quiz_answer';
-const QUIZ_TICKETS_KEY = 'masterstudio_user_tickets';
+const GOLD_TICKETS_KEY = 'masterstudio_gold_tickets';
+const SILVER_TICKETS_KEY = 'masterstudio_silver_tickets';
 const USER_DATA_KEY = 'masterstudio_users_data';
 const NOTIFICATIONS_KEY = 'masterstudio_notifications_enabled';
+const NOTIFICATIONS_LIST_KEY = 'masterstudio_notifications_list';
 const LANGUAGE_KEY = 'masterstudio_language';
 const THEME_KEY = 'masterstudio_theme';
+const CHALLENGES_KEY = 'masterstudio_challenges';
 
 // URLs
 const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json';
@@ -69,6 +73,335 @@ function checkMaintenanceStatus() {
 }
 
 // =============================================
+// SISTEMA DE TICKETS (PLATA Y ORO)
+// =============================================
+
+function getGoldTickets(userId) {
+    const key = `${GOLD_TICKETS_KEY}_${userId}`;
+    const tickets = localStorage.getItem(key);
+    return tickets ? parseInt(tickets) : 0;
+}
+
+function getSilverTickets(userId) {
+    const key = `${SILVER_TICKETS_KEY}_${userId}`;
+    const tickets = localStorage.getItem(key);
+    return tickets ? parseInt(tickets) : 0;
+}
+
+function setGoldTickets(userId, amount) {
+    localStorage.setItem(`${GOLD_TICKETS_KEY}_${userId}`, amount);
+    console.log(`🎫 Gold tickets actualizados: ${amount} para ${userId}`);
+}
+
+function setSilverTickets(userId, amount) {
+    localStorage.setItem(`${SILVER_TICKETS_KEY}_${userId}`, amount);
+    console.log(`🥈 Silver tickets actualizados: ${amount} para ${userId}`);
+}
+
+function addSilverTickets(userId, amount) {
+    const current = getSilverTickets(userId);
+    const newAmount = current + amount;
+    setSilverTickets(userId, newAmount);
+    
+    console.log(`✅ +${amount} tickets de plata. Total: ${newAmount}`);
+    
+    // Verificar si se puede convertir
+    checkAndConvertTickets(userId);
+    
+    updateTicketsDisplay(userId);
+    return newAmount;
+}
+
+function addGoldTickets(userId, amount) {
+    const current = getGoldTickets(userId);
+    const newAmount = current + amount;
+    setGoldTickets(userId, newAmount);
+    
+    console.log(`✅ +${amount} tickets de oro. Total: ${newAmount}`);
+    
+    updateTicketsDisplay(userId);
+    return newAmount;
+}
+
+function checkAndConvertTickets(userId) {
+    const silverTickets = getSilverTickets(userId);
+    
+    if (silverTickets >= 10) {
+        const conversions = Math.floor(silverTickets / 10);
+        const remaining = silverTickets % 10;
+        
+        // Actualizar tickets
+        addGoldTickets(userId, conversions);
+        setSilverTickets(userId, remaining);
+        
+        console.log(`🎉 ¡CONVERSIÓN! ${conversions} ticket(s) de oro obtenidos. Sobrante: ${remaining} plata`);
+        
+        // Mostrar notificación de conversión
+        showConversionNotification(conversions, remaining);
+        
+        // Agregar a las notificaciones
+        addNotification({
+            type: 'conversion',
+            title: '🎉 ¡Conversión Exitosa!',
+            message: `${conversions} Ticket(s) de Plata se han convertido en ${conversions} Ticket(s) de Oro. Tickets de Plata restantes: ${remaining}`,
+            timestamp: Date.now(),
+            read: false
+        });
+        
+        updateTicketsDisplay(userId);
+    }
+}
+
+function updateTicketsDisplay(userId) {
+    if (currentUser && currentUser.id === userId) {
+        const gold = getGoldTickets(userId);
+        const silver = getSilverTickets(userId);
+        
+        if (dropdownTicketsGold) {
+            dropdownTicketsGold.textContent = `🎫 ${gold}`;
+        }
+        
+        if (dropdownTicketsSilver) {
+            dropdownTicketsSilver.textContent = `🥈 ${silver}`;
+        }
+    }
+}
+
+function showConversionNotification(conversions, remaining) {
+    const notification = document.createElement('div');
+    notification.className = 'conversion-notification';
+    notification.innerHTML = `
+        <h3>🎉 ¡CONVERSIÓN EXITOSA! 🎉</h3>
+        <p>${conversions} Ticket(s) de Oro obtenidos</p>
+        <p style="font-size: 0.9rem; margin-top: 10px;">Tickets de Plata restantes: ${remaining}</p>
+    `;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 5000);
+}
+
+// =============================================
+// SISTEMA DE NOTIFICACIONES
+// =============================================
+
+function addNotification(notification) {
+    if (!currentUser) return;
+    
+    let notifications = JSON.parse(localStorage.getItem(`${NOTIFICATIONS_LIST_KEY}_${currentUser.id}`)) || [];
+    
+    notification.id = Date.now() + Math.random();
+    notifications.unshift(notification);
+    
+    // Limitar a 50 notificaciones
+    if (notifications.length > 50) {
+        notifications = notifications.slice(0, 50);
+    }
+    
+    localStorage.setItem(`${NOTIFICATIONS_LIST_KEY}_${currentUser.id}`, JSON.stringify(notifications));
+    
+    updateNotificationBadge();
+}
+
+function getNotifications() {
+    if (!currentUser) return [];
+    
+    const notifications = localStorage.getItem(`${NOTIFICATIONS_LIST_KEY}_${currentUser.id}`);
+    return notifications ? JSON.parse(notifications) : [];
+}
+
+function markNotificationAsRead(notificationId) {
+    if (!currentUser) return;
+    
+    let notifications = getNotifications();
+    const notification = notifications.find(n => n.id === notificationId);
+    
+    if (notification) {
+        notification.read = true;
+        localStorage.setItem(`${NOTIFICATIONS_LIST_KEY}_${currentUser.id}`, JSON.stringify(notifications));
+        updateNotificationBadge();
+    }
+}
+
+function markAllNotificationsAsRead() {
+    if (!currentUser) return;
+    
+    let notifications = getNotifications();
+    notifications.forEach(n => n.read = true);
+    localStorage.setItem(`${NOTIFICATIONS_LIST_KEY}_${currentUser.id}`, JSON.stringify(notifications));
+    updateNotificationBadge();
+}
+
+function loadNotificationsList() {
+    const notificationsList = document.getElementById('notifications-list');
+    if (!notificationsList) return;
+    
+    const notifications = getNotifications();
+    
+    if (notifications.length === 0) {
+        notificationsList.innerHTML = '<div class="notification-empty">No tienes notificaciones por el momento.</div>';
+        return;
+    }
+    
+    notificationsList.innerHTML = '';
+    
+    notifications.forEach(notification => {
+        const notifElement = document.createElement('div');
+        notifElement.className = `notification-item ${notification.read ? '' : 'unread'} ${notification.type || ''}`;
+        
+        const date = new Date(notification.timestamp);
+        const timeStr = date.toLocaleString('es-ES', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+        
+        notifElement.innerHTML = `
+            <div style="font-weight: bold; margin-bottom: 5px;">${notification.title}</div>
+            <div style="color: #aaa; font-size: 0.9rem; margin-bottom: 8px;">${notification.message}</div>
+            <div style="color: #888; font-size: 0.8rem;">${timeStr}</div>
+        `;
+        
+        notifElement.addEventListener('click', () => {
+            markNotificationAsRead(notification.id);
+            loadNotificationsList();
+        });
+        
+        notificationsList.appendChild(notifElement);
+    });
+}
+
+function toggleNotifications() {
+    notificationsEnabled = !notificationsEnabled;
+    localStorage.setItem(NOTIFICATIONS_KEY, notificationsEnabled);
+    
+    const toggle = document.getElementById('notifications-toggle');
+    if (notificationsEnabled) {
+        toggle.classList.add('active');
+    } else {
+        toggle.classList.remove('active');
+    }
+    
+    updateNotificationBadge();
+}
+
+function updateNotificationBadge() {
+    if (!currentUser) return;
+    
+    const notifications = getNotifications();
+    const unreadCount = notifications.filter(n => !n.read).length;
+    
+    if (notificationsEnabled && unreadCount > 0) {
+        notificationBadge.textContent = unreadCount;
+        notificationBadge.style.display = 'flex';
+        notificationCountMenu.textContent = unreadCount;
+        notificationCountMenu.style.display = 'inline';
+    } else {
+        notificationBadge.style.display = 'none';
+        notificationCountMenu.style.display = 'none';
+    }
+}
+
+function loadNotificationsSettings() {
+    notificationsEnabled = localStorage.getItem(NOTIFICATIONS_KEY) === 'true';
+    const toggle = document.getElementById('notifications-toggle');
+    if (notificationsEnabled) {
+        toggle.classList.add('active');
+    }
+    updateNotificationBadge();
+}
+
+// =============================================
+// SISTEMA DE DESAFÍOS
+// =============================================
+
+function getChallenges(userId) {
+    const key = `${CHALLENGES_KEY}_${userId}`;
+    const challenges = localStorage.getItem(key);
+    
+    if (challenges) {
+        return JSON.parse(challenges);
+    }
+    
+    // Inicializar desafíos
+    return {
+        'like-1': { completed: false, progress: 0, total: 1, reward: 2 },
+        'like-3': { completed: false, progress: 0, total: 3, reward: 5 },
+        'share-1': { completed: false, progress: 0, total: 1, reward: 3 },
+        'share-3': { completed: false, progress: 0, total: 3, reward: 10 }
+    };
+}
+
+function saveChallenges(userId, challenges) {
+    const key = `${CHALLENGES_KEY}_${userId}`;
+    localStorage.setItem(key, JSON.stringify(challenges));
+}
+
+function updateChallengeProgress(userId, challengeType) {
+    const challenges = getChallenges(userId);
+    
+    Object.keys(challenges).forEach(key => {
+        if (key.startsWith(challengeType) && !challenges[key].completed) {
+            challenges[key].progress++;
+            
+            // Verificar si se completó
+            if (challenges[key].progress >= challenges[key].total) {
+                challenges[key].completed = true;
+                challenges[key].progress = challenges[key].total;
+                
+                // Otorgar recompensa
+                const reward = challenges[key].reward;
+                addSilverTickets(userId, reward);
+                
+                console.log(`🎉 ¡Desafío completado! +${reward} tickets de plata`);
+                
+                // Notificación
+                addNotification({
+                    type: 'challenge',
+                    title: '🎯 ¡Desafío Completado!',
+                    message: `Has completado un desafío y ganado ${reward} Tickets de Plata 🥈`,
+                    timestamp: Date.now(),
+                    read: false
+                });
+            }
+        }
+    });
+    
+    saveChallenges(userId, challenges);
+    updateChallengesDisplay(userId);
+}
+
+function updateChallengesDisplay(userId) {
+    if (!currentUser || currentUser.id !== userId) return;
+    
+    const challenges = getChallenges(userId);
+    
+    // Actualizar cada desafío en la UI
+    Object.keys(challenges).forEach(key => {
+        const challenge = challenges[key];
+        const progressBar = document.getElementById(`progress-${key}`);
+        const progressText = document.getElementById(`progress-text-${key}`);
+        const challengeItem = document.getElementById(`challenge-${key}`);
+        
+        if (progressBar && progressText && challengeItem) {
+            const percentage = (challenge.progress / challenge.total) * 100;
+            progressBar.style.width = `${percentage}%`;
+            progressText.textContent = `${challenge.progress}/${challenge.total}`;
+            
+            if (challenge.completed) {
+                challengeItem.classList.add('completed');
+                challengeItem.classList.remove('locked');
+            } else {
+                challengeItem.classList.remove('locked');
+            }
+        }
+    });
+}
+
+// =============================================
 // FUNCIONES DE MODAL
 // =============================================
 
@@ -80,6 +413,10 @@ function openModal(modalId) {
         
         if (modalId === 'ranking-modal') {
             loadRanking();
+        } else if (modalId === 'notifications-modal') {
+            loadNotificationsList();
+        } else if (modalId === 'challenges-modal' && currentUser) {
+            updateChallengesDisplay(currentUser.id);
         }
     }
 }
@@ -156,51 +493,6 @@ function loadLanguageSettings() {
 }
 
 // =============================================
-// SISTEMA DE NOTIFICACIONES
-// =============================================
-
-function toggleNotifications() {
-    notificationsEnabled = !notificationsEnabled;
-    localStorage.setItem(NOTIFICATIONS_KEY, notificationsEnabled);
-    
-    const toggle = document.getElementById('notifications-toggle');
-    if (notificationsEnabled) {
-        toggle.classList.add('active');
-    } else {
-        toggle.classList.remove('active');
-    }
-    
-    updateNotificationBadge();
-}
-
-function updateNotificationBadge() {
-    if (notificationsEnabled) {
-        const count = 0;
-        if (count > 0) {
-            notificationBadge.textContent = count;
-            notificationBadge.style.display = 'flex';
-            notificationCountMenu.textContent = count;
-            notificationCountMenu.style.display = 'inline';
-        } else {
-            notificationBadge.style.display = 'none';
-            notificationCountMenu.style.display = 'none';
-        }
-    } else {
-        notificationBadge.style.display = 'none';
-        notificationCountMenu.style.display = 'none';
-    }
-}
-
-function loadNotificationsSettings() {
-    notificationsEnabled = localStorage.getItem(NOTIFICATIONS_KEY) === 'true';
-    const toggle = document.getElementById('notifications-toggle');
-    if (notificationsEnabled) {
-        toggle.classList.add('active');
-    }
-    updateNotificationBadge();
-}
-
-// =============================================
 // SISTEMA DE TEMAS
 // =============================================
 
@@ -208,14 +500,12 @@ function selectTheme(theme) {
     currentTheme = theme;
     localStorage.setItem(THEME_KEY, theme);
     
-    // Aplicar tema al body
     if (theme === 'light') {
         document.body.classList.add('light-mode');
     } else {
         document.body.classList.remove('light-mode');
     }
     
-    // Actualizar selector visual
     document.querySelectorAll('.theme-option').forEach(opt => {
         opt.classList.remove('active');
     });
@@ -227,14 +517,12 @@ function selectTheme(theme) {
 function loadThemeSettings() {
     currentTheme = localStorage.getItem(THEME_KEY) || 'dark';
     
-    // Aplicar tema guardado
     if (currentTheme === 'light') {
         document.body.classList.add('light-mode');
     } else {
         document.body.classList.remove('light-mode');
     }
     
-    // Actualizar selector visual
     document.querySelectorAll('.theme-option').forEach(opt => {
         opt.classList.remove('active');
     });
@@ -271,27 +559,6 @@ function getUserData(userId) {
     }
 }
 
-function getUserTickets(userId) {
-    const key = `${QUIZ_TICKETS_KEY}_${userId}`;
-    const tickets = localStorage.getItem(key);
-    const ticketCount = tickets ? parseInt(tickets) : 0;
-    console.log(`🎟️ getUserTickets("${userId}"): ${ticketCount} (key: ${key})`);
-    return ticketCount;
-}
-
-function incrementUserTickets(userId) {
-    const currentTickets = getUserTickets(userId);
-    const newTickets = currentTickets + 1;
-    localStorage.setItem(`${QUIZ_TICKETS_KEY}_${userId}`, newTickets);
-    console.log(`✅ Tickets actualizados: ${newTickets} para usuario ${userId}`);
-    
-    if (dropdownTickets && currentUser && currentUser.id === userId) {
-        dropdownTickets.textContent = `🎫 ${newTickets} Tickets`;
-    }
-    
-    return newTickets;
-}
-
 async function loadRanking() {
     try {
         const response = await fetch(RANKING_API_URL + '?action=getRanking');
@@ -318,15 +585,15 @@ function createLocalRanking() {
     
     for (let i = 0; i < localStorage.length; i++) {
         const key = localStorage.key(i);
-        if (key && key.startsWith(QUIZ_TICKETS_KEY)) {
-            const userId = key.replace(`${QUIZ_TICKETS_KEY}_`, '');
+        if (key && key.startsWith(GOLD_TICKETS_KEY)) {
+            const userId = key.replace(`${GOLD_TICKETS_KEY}_`, '');
             
             if (processedUsers.has(userId)) continue;
             processedUsers.add(userId);
             
-            const tickets = parseInt(localStorage.getItem(key)) || 0;
+            const goldTickets = getGoldTickets(userId);
             
-            if (tickets > 0) {
+            if (goldTickets > 0) {
                 const userData = getUserData(userId);
                 let username = 'Usuario';
                 
@@ -338,7 +605,7 @@ function createLocalRanking() {
                     username = `Usuario ${userId.substring(0, 8)}`;
                 }
                 
-                users.push({ userId, username, tickets });
+                users.push({ userId, username, tickets: goldTickets });
             }
         }
     }
@@ -346,12 +613,12 @@ function createLocalRanking() {
     if (currentUser) {
         const userInList = users.find(u => u.userId === currentUser.id);
         if (!userInList) {
-            const userTickets = getUserTickets(currentUser.id);
-            if (userTickets > 0) {
+            const userGoldTickets = getGoldTickets(currentUser.id);
+            if (userGoldTickets > 0) {
                 users.push({
                     userId: currentUser.id,
                     username: currentUser.name,
-                    tickets: userTickets
+                    tickets: userGoldTickets
                 });
             }
         }
@@ -360,21 +627,19 @@ function createLocalRanking() {
     users.sort((a, b) => b.tickets - a.tickets);
     
     console.log('📊 Ranking local creado:', users);
-    console.log('👤 Usuario actual:', currentUser);
-    console.log('🎫 Tickets del usuario actual:', currentUser ? getUserTickets(currentUser.id) : 0);
     
     return users;
 }
 
 function displayRanking(users) {
     document.getElementById('rank-1-name').textContent = users[0]?.username || '---';
-    document.getElementById('rank-1-tickets').textContent = users[0] ? `${users[0].tickets} TICKETS` : '0 TICKETS';
+    document.getElementById('rank-1-tickets').textContent = users[0] ? `${users[0].tickets} 🎫` : '0 🎫';
     
     document.getElementById('rank-2-name').textContent = users[1]?.username || '---';
-    document.getElementById('rank-2-tickets').textContent = users[1] ? `${users[1].tickets} TICKETS` : '0 TICKETS';
+    document.getElementById('rank-2-tickets').textContent = users[1] ? `${users[1].tickets} 🎫` : '0 🎫';
     
     document.getElementById('rank-3-name').textContent = users[2]?.username || '---';
-    document.getElementById('rank-3-tickets').textContent = users[2] ? `${users[2].tickets} TICKETS` : '0 TICKETS';
+    document.getElementById('rank-3-tickets').textContent = users[2] ? `${users[2].tickets} 🎫` : '0 🎫';
 
     const rankingList = document.getElementById('ranking-list');
     rankingList.innerHTML = '';
@@ -387,7 +652,7 @@ function displayRanking(users) {
         rankingUser.innerHTML = `
             <span class="ranking-position">#${i + 1}</span>
             <span class="ranking-name">${user.username}</span>
-            <span class="ranking-tickets">${user.tickets} TICKETS</span>
+            <span class="ranking-tickets gold">${user.tickets} 🎫</span>
         `;
         
         rankingList.appendChild(rankingUser);
@@ -440,10 +705,7 @@ function updateLoginUI() {
         dropdownUsername.textContent = currentUser.name;
         dropdownEmail.textContent = currentUser.email;
         
-        const userTickets = getUserTickets(currentUser.id);
-        if (dropdownTickets) {
-            dropdownTickets.textContent = `🎫 ${userTickets} Tickets`;
-        }
+        updateTicketsDisplay(currentUser.id);
         
         loginToParticipate.style.display = 'none';
         
@@ -464,10 +726,9 @@ document.addEventListener('DOMContentLoaded', () => {
             e.stopPropagation();
             profileDropdown.classList.toggle('show');
             
-            if (currentUser && dropdownTickets) {
-                const userTickets = getUserTickets(currentUser.id);
-                dropdownTickets.textContent = `🎫 ${userTickets} Tickets`;
-                console.log('🔄 Menú abierto - Tickets actualizados:', userTickets);
+            if (currentUser) {
+                updateTicketsDisplay(currentUser.id);
+                console.log('🔄 Menú abierto - Tickets actualizados');
             }
         });
     }
@@ -623,16 +884,9 @@ async function handleQuizSubmit() {
 
     if (selectedKey === dailyQuizData.respuesta_correcta) {
         console.log('✅ Respuesta CORRECTA!');
-        console.log('👤 Usuario actual:', currentUser);
-        console.log('🆔 User ID:', currentUser.id);
-        console.log('📝 Nombre:', currentUser.name);
         
-        const newTicketCount = incrementUserTickets(currentUser.id);
+        const newGoldTickets = addGoldTickets(currentUser.id, 1);
         await saveTicketToServer(currentUser.id, currentUser.name, currentUser.email);
-        
-        console.log('💾 Ticket guardado. Nuevo total:', newTicketCount);
-        console.log('🔑 localStorage key:', `${QUIZ_TICKETS_KEY}_${currentUser.id}`);
-        console.log('📦 Valor guardado:', localStorage.getItem(`${QUIZ_TICKETS_KEY}_${currentUser.id}`));
         
         localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'CORRECT');
         
@@ -642,10 +896,11 @@ async function handleQuizSubmit() {
             <div class="quiz-result">
                 <h3>🎉 ¡FELICIDADES! 🎉</h3>
                 <p>¡Respondiste correctamente!</p>
-                <div class="ticket-earned">+1 TICKET</div>
-                <p style="font-size: 1rem; margin-top: 10px;">¡Has ganado 1 ticket! 🎫</p>
+                <div class="ticket-earned">+1 GOLD TICKET</div>
+                <p style="font-size: 1rem; margin-top: 10px;">¡Has ganado 1 ticket de oro! 🎫</p>
                 <div class="user-stats">
-                    <p>Total de tickets: ${newTicketCount} 🎟️</p>
+                    <p>Total de Gold Tickets: ${newGoldTickets} 🎫</p>
+                    <p>Silver Tickets: ${getSilverTickets(currentUser.id)} 🥈</p>
                     <p style="margin-top: 10px;">Vuelve mañana para ganar más tickets 😊</p>
                 </div>
             </div>
@@ -686,13 +941,15 @@ async function loadDailyQuiz(userId) {
         winnerSection.style.display = 'block';
         
         if (storedAnswer === 'CORRECT') {
-            const currentTickets = getUserTickets(userId);
+            const goldTickets = getGoldTickets(userId);
+            const silverTickets = getSilverTickets(userId);
             winnerSection.innerHTML = `
                 <div class="quiz-result">
                     <h3>✅ Ya participaste hoy</h3>
-                    <p>Ganaste 1 ticket 🎫</p>
+                    <p>Ganaste 1 Gold Ticket 🎫</p>
                     <div class="user-stats">
-                        <p>Total de tickets: ${currentTickets} 🎟️</p>
+                        <p>Total de Gold Tickets: ${goldTickets} 🎫</p>
+                        <p>Silver Tickets: ${silverTickets} 🥈</p>
                         <p style="margin-top: 10px;">Vuelve mañana para la nueva pregunta diaria 😊</p>
                     </div>
                 </div>
@@ -855,11 +1112,9 @@ async function toggleLike(postId) {
     
     if (!likeButton) return;
     
-    // Deshabilitar botón temporalmente
     likeButton.disabled = true;
     
     try {
-        // Guardar en servidor
         const response = await fetch(RANKING_API_URL, {
             method: 'POST',
             headers: {
@@ -877,24 +1132,24 @@ async function toggleLike(postId) {
         console.log('❤️ Respuesta del servidor:', data);
         
         if (data.success) {
-            // Actualizar UI según la acción
             if (data.action === 'liked') {
                 likeButton.classList.add('liked');
                 saveLocalLike(postId, true);
                 console.log('💖 Like agregado a:', postId);
+                
+                // Actualizar desafío de likes
+                updateChallengeProgress(currentUser.id, 'like');
             } else {
                 likeButton.classList.remove('liked');
                 saveLocalLike(postId, false);
                 console.log('💔 Like removido de:', postId);
             }
             
-            // Actualizar contador
             await updateLikeCount(postId);
         }
         
     } catch (error) {
         console.error('❌ Error al dar like:', error);
-        // Fallback a localStorage
         const isLiked = likeButton.classList.contains('liked');
         if (isLiked) {
             likeButton.classList.remove('liked');
@@ -902,8 +1157,8 @@ async function toggleLike(postId) {
         } else {
             likeButton.classList.add('liked');
             saveLocalLike(postId, true);
+            updateChallengeProgress(currentUser.id, 'like');
         }
-        // Actualizar contador con datos locales
         await updateLikeCount(postId);
     } finally {
         likeButton.disabled = false;
@@ -969,7 +1224,6 @@ async function updateLikeCount(postId) {
         
     } catch (error) {
         console.error('Error al obtener likes:', error);
-        // Fallback a localStorage
         const likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
         const count = likes[postId] ? likes[postId].length : 0;
         if (count > 0) {
@@ -1085,7 +1339,6 @@ async function loadPosts() {
                     placeholderText.style.display = 'none';
                 }
                 
-                // Cargar contador de likes del servidor
                 updateLikeCount(postId);
             }
         });
