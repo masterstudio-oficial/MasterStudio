@@ -39,7 +39,9 @@
             </div>
 
             <div id="notifications-list" style="margin-top: 20px;">
-                <!-- Las notificaciones se cargarán aquí dinámicamente -->
+                <div class="notification-empty" data-lang="notifications-empty">
+                    No tienes notificaciones por el momento.
+                </div>
             </div>
         </div>
     </div>
@@ -87,7 +89,7 @@
     <div class="modal-overlay" id="ranking-modal">
         <div class="modal-content" style="position: relative; max-width: 600px;">
             <button class="modal-close" onclick="closeModal('ranking-modal')">✕</button>
-            <h2 class="modal-header">🏆 Ranking Gold Tickets</h2>
+            <h2 class="modal-header" data-lang="ranking-title">🏆 Ranking Quiz</h2>
             
             <div class="ranking-container">
                 <!-- Top 3 -->
@@ -95,17 +97,17 @@
                     <div class="ranking-podium second">
                         <div class="podium-icon">🥈</div>
                         <div id="rank-2-name" style="font-weight: bold; margin-bottom: 5px;">---</div>
-                        <div class="ranking-tickets gold" id="rank-2-tickets">0 🎫</div>
+                        <div class="ranking-tickets" id="rank-2-tickets">0 TICKETS</div>
                     </div>
                     <div class="ranking-podium first">
                         <div class="podium-icon">🥇</div>
                         <div id="rank-1-name" style="font-weight: bold; margin-bottom: 5px;">---</div>
-                        <div class="ranking-tickets gold" id="rank-1-tickets">0 🎫</div>
+                        <div class="ranking-tickets" id="rank-1-tickets">0 TICKETS</div>
                     </div>
                     <div class="ranking-podium third">
                         <div class="podium-icon">🥉</div>
                         <div id="rank-3-name" style="font-weight: bold; margin-bottom: 5px;">---</div>
-                        <div class="ranking-tickets gold" id="rank-3-tickets">0 🎫</div>
+                        <div class="ranking-tickets" id="rank-3-tickets">0 TICKETS</div>
                     </div>
                 </div>
 
@@ -121,72 +123,75 @@
             <button class="modal-close" onclick="closeModal('challenges-modal')">✕</button>
             <h2 class="modal-header">🎯 Desafíos Diarios</h2>
             
-            <!-- Contenedor de desafíos -->
-            <div id="challenges-container">
-                <div class="challenge-item" id="challenge-like-1">
+            <div class="challenges-notice">
+                <div class="notice-icon">🚧</div>
+                <h3>Próximamente Disponible</h3>
+                <p>Los desafíos están en desarrollo y estarán disponibles muy pronto.</p>
+                <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                    Podrás completar misiones como dar likes, compartir posts y más para ganar recompensas exclusivas. ¡Estate atento! 🎁
+                </p>
+            </div>
+            
+            <!-- Contenedor de desafíos (actualmente oculto) -->
+            <div id="challenges-container" style="display: none;">
+                <div class="challenge-item locked">
                     <div class="challenge-icon">❤️</div>
                     <div class="challenge-info">
                         <div class="challenge-title">Primer Like</div>
                         <div class="challenge-description">Da like a 1 post</div>
                         <div class="challenge-progress">
                             <div class="progress-bar">
-                                <div class="progress-fill" id="progress-like-1" style="width: 0%"></div>
+                                <div class="progress-fill" style="width: 0%"></div>
                             </div>
-                            <span class="progress-text" id="progress-text-like-1">0/1</span>
+                            <span class="progress-text">0/1</span>
                         </div>
                     </div>
-                    <div class="challenge-reward silver">+2 🥈</div>
+                    <div class="challenge-reward">+2 🎫</div>
                 </div>
 
-                <div class="challenge-item" id="challenge-like-3">
+                <div class="challenge-item locked">
                     <div class="challenge-icon">💖</div>
                     <div class="challenge-info">
                         <div class="challenge-title">Amor Triple</div>
                         <div class="challenge-description">Da like a 3 posts</div>
                         <div class="challenge-progress">
                             <div class="progress-bar">
-                                <div class="progress-fill" id="progress-like-3" style="width: 0%"></div>
+                                <div class="progress-fill" style="width: 0%"></div>
                             </div>
-                            <span class="progress-text" id="progress-text-like-3">0/3</span>
+                            <span class="progress-text">0/3</span>
                         </div>
                     </div>
-                    <div class="challenge-reward silver">+5 🥈</div>
+                    <div class="challenge-reward">+5 🎫</div>
                 </div>
 
-                <div class="challenge-item locked" id="challenge-share-1">
+                <div class="challenge-item locked">
                     <div class="challenge-icon">🔗</div>
                     <div class="challenge-info">
                         <div class="challenge-title">Compartir es Cuidar</div>
                         <div class="challenge-description">Comparte 1 post en Discord</div>
                         <div class="challenge-progress">
                             <div class="progress-bar">
-                                <div class="progress-fill" id="progress-share-1" style="width: 0%"></div>
+                                <div class="progress-fill" style="width: 0%"></div>
                             </div>
-                            <span class="progress-text" id="progress-text-share-1">0/1</span>
+                            <span class="progress-text">0/1</span>
                         </div>
                     </div>
-                    <div class="challenge-reward silver">+3 🥈</div>
+                    <div class="challenge-reward">+3 🎫</div>
                 </div>
 
-                <div class="challenge-item locked" id="challenge-share-3">
+                <div class="challenge-item locked">
                     <div class="challenge-icon">📢</div>
                     <div class="challenge-info">
                         <div class="challenge-title">Súper Difusor</div>
                         <div class="challenge-description">Comparte 3 posts en Discord</div>
                         <div class="challenge-progress">
                             <div class="progress-bar">
-                                <div class="progress-fill" id="progress-share-3" style="width: 0%"></div>
+                                <div class="progress-fill" style="width: 0%"></div>
                             </div>
-                            <span class="progress-text" id="progress-text-share-3">0/3</span>
+                            <span class="progress-text">0/3</span>
                         </div>
                     </div>
-                    <div class="challenge-reward silver">+10 🥈</div>
-                </div>
-
-                <div class="challenges-info">
-                    <p style="text-align: center; color: #aaa; font-size: 0.9rem; margin-top: 20px;">
-                        💡 Acumula 10 Tickets de Plata 🥈 para convertirlos automáticamente en 1 Ticket de Oro 🎫
-                    </p>
+                    <div class="challenge-reward">+10 🎫</div>
                 </div>
             </div>
         </div>
@@ -247,13 +252,8 @@
                     <div class="profile-dropdown-header">
                         <div class="profile-dropdown-name" id="dropdown-username">Usuario</div>
                         <div class="profile-dropdown-email" id="dropdown-email">email@example.com</div>
-                        <div class="profile-dropdown-tickets-container">
-                            <div class="profile-dropdown-tickets gold" id="dropdown-tickets-gold">
-                                🎫 0
-                            </div>
-                            <div class="profile-dropdown-tickets silver" id="dropdown-tickets-silver">
-                                🥈 0
-                            </div>
+                        <div class="profile-dropdown-tickets" id="dropdown-tickets" style="margin-top: 10px; font-size: 1rem; color: #FFD700;">
+                            🎫 0 Tickets
                         </div>
                     </div>
 
@@ -268,7 +268,7 @@
                     </button>
 
                     <button class="profile-menu-option" onclick="openModal('ranking-modal')">
-                        <span>🏆 Ranking Gold Tickets</span>
+                        <span data-lang="menu-ranking">🏆 Ranking Quiz</span>
                     </button>
 
                     <button class="profile-menu-option" onclick="openModal('challenges-modal')">
