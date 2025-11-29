@@ -1,476 +1,128 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MasterStudio</title>
+<!-- Agregar en la navegación, después del botón de Quiz -->
+<button class="nav-button sorteos" data-section="sorteos">🎁 <span data-lang="nav-sorteos">Sorteos</span></button>
+
+<!-- Agregar en el main, después de la sección de Quiz -->
+<section id="sorteos">
+    <h1 data-lang="sorteos-title">🎁 Sorteos</h1>
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/MasterStudio.png">
-    
-    <!-- Fuentes -->
-    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-    
-    <!-- Google Sign-In -->
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    
-    <!-- Pantalla de Mantenimiento -->
-    <div id="maintenance-screen" class="hidden">
-        <h1>🛠️ ¡MANTENIMIENTO! 🛠️</h1>
-        <p>Nuestro sitio web está actualmente fuera de servicio por tareas de mantenimiento y grandes actualizaciones. Estaremos de vuelta muy pronto. ¡Gracias por tu paciencia!</p>
-    </div>
-
-    <!-- Modal de Notificaciones -->
-    <div class="modal-overlay" id="notifications-modal">
-        <div class="modal-content" style="position: relative;">
-            <button class="modal-close" onclick="closeModal('notifications-modal')">✕</button>
-            <h2 class="modal-header" data-lang="notifications-title">🔔 Notificaciones</h2>
-            
-            <div class="toggle-container">
-                <span data-lang="notifications-enable">Activar notificaciones</span>
-                <div class="toggle-switch" id="notifications-toggle" onclick="toggleNotifications()">
-                    <div class="toggle-slider"></div>
-                </div>
-            </div>
-
-            <div id="notifications-list" style="margin-top: 20px;">
-                <div class="notification-empty" data-lang="notifications-empty">
-                    No tienes notificaciones por el momento.
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Idioma -->
-    <div class="modal-overlay" id="language-modal">
-        <div class="modal-content" style="position: relative;">
-            <button class="modal-close" onclick="closeModal('language-modal')">✕</button>
-            <h2 class="modal-header" data-lang="language-title">🌍 Seleccionar Idioma</h2>
-            
-            <div class="language-selector">
-                <div class="language-option active" data-lang-code="es" onclick="selectLanguage('es')">
-                    🇪🇸<br>Español
-                </div>
-                <div class="language-option" data-lang-code="en" onclick="selectLanguage('en')">
-                    🇺🇸<br>English
-                </div>
-                <div class="language-option" data-lang-code="pt" onclick="selectLanguage('pt')">
-                    🇧🇷<br>Português
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Tema -->
-    <div class="modal-overlay" id="theme-modal">
-        <div class="modal-content" style="position: relative;">
-            <button class="modal-close" onclick="closeModal('theme-modal')">✕</button>
-            <h2 class="modal-header" data-lang="theme-title">🎨 Seleccionar Tema</h2>
-            
-            <div class="theme-selector">
-                <div class="theme-option active" data-theme="dark" onclick="selectTheme('dark')">
-                    <div class="theme-icon">🌙</div>
-                    <div data-lang="theme-dark">Oscuro</div>
-                </div>
-                <div class="theme-option" data-theme="light" onclick="selectTheme('light')">
-                    <div class="theme-icon">☀️</div>
-                    <div data-lang="theme-light">Claro</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Ranking -->
-    <div class="modal-overlay" id="ranking-modal">
-        <div class="modal-content" style="position: relative; max-width: 600px;">
-            <button class="modal-close" onclick="closeModal('ranking-modal')">✕</button>
-            <h2 class="modal-header" data-lang="ranking-title">🏆 Ranking Quiz</h2>
-            
-            <div class="ranking-container">
-                <!-- Top 3 -->
-                <div class="ranking-top3">
-                    <div class="ranking-podium second">
-                        <div class="podium-icon">🥈</div>
-                        <div id="rank-2-name" style="font-weight: bold; margin-bottom: 5px;">---</div>
-                        <div class="ranking-tickets" id="rank-2-tickets">0 TICKETS</div>
-                    </div>
-                    <div class="ranking-podium first">
-                        <div class="podium-icon">🥇</div>
-                        <div id="rank-1-name" style="font-weight: bold; margin-bottom: 5px;">---</div>
-                        <div class="ranking-tickets" id="rank-1-tickets">0 TICKETS</div>
-                    </div>
-                    <div class="ranking-podium third">
-                        <div class="podium-icon">🥉</div>
-                        <div id="rank-3-name" style="font-weight: bold; margin-bottom: 5px;">---</div>
-                        <div class="ranking-tickets" id="rank-3-tickets">0 TICKETS</div>
-                    </div>
-                </div>
-
-                <!-- Resto del ranking -->
-                <div id="ranking-list"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de Desafíos -->
-    <div class="modal-overlay" id="challenges-modal">
-        <div class="modal-content" style="position: relative; max-width: 700px;">
-            <button class="modal-close" onclick="closeModal('challenges-modal')">✕</button>
-            <h2 class="modal-header">🎯 Desafíos Diarios</h2>
-            
-            <div class="challenges-notice">
-                <div class="notice-icon">🚧</div>
-                <h3>Próximamente Disponible</h3>
-                <p>Los desafíos están en desarrollo y estarán disponibles muy pronto.</p>
-                <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
-                    Podrás completar misiones como dar likes, compartir posts y más para ganar recompensas exclusivas. ¡Estate atento! 🎁
-                </p>
-            </div>
-            
-            <!-- Contenedor de desafíos (actualmente oculto) -->
-            <div id="challenges-container" style="display: none;">
-                <div class="challenge-item locked">
-                    <div class="challenge-icon">❤️</div>
-                    <div class="challenge-info">
-                        <div class="challenge-title">Primer Like</div>
-                        <div class="challenge-description">Da like a 1 post</div>
-                        <div class="challenge-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 0%"></div>
-                            </div>
-                            <span class="progress-text">0/1</span>
-                        </div>
-                    </div>
-                    <div class="challenge-reward">+2 🎫</div>
-                </div>
-
-                <div class="challenge-item locked">
-                    <div class="challenge-icon">💖</div>
-                    <div class="challenge-info">
-                        <div class="challenge-title">Amor Triple</div>
-                        <div class="challenge-description">Da like a 3 posts</div>
-                        <div class="challenge-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 0%"></div>
-                            </div>
-                            <span class="progress-text">0/3</span>
-                        </div>
-                    </div>
-                    <div class="challenge-reward">+5 🎫</div>
-                </div>
-
-                <div class="challenge-item locked">
-                    <div class="challenge-icon">🔗</div>
-                    <div class="challenge-info">
-                        <div class="challenge-title">Compartir es Cuidar</div>
-                        <div class="challenge-description">Comparte 1 post en Discord</div>
-                        <div class="challenge-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 0%"></div>
-                            </div>
-                            <span class="progress-text">0/1</span>
-                        </div>
-                    </div>
-                    <div class="challenge-reward">+3 🎫</div>
-                </div>
-
-                <div class="challenge-item locked">
-                    <div class="challenge-icon">📢</div>
-                    <div class="challenge-info">
-                        <div class="challenge-title">Súper Difusor</div>
-                        <div class="challenge-description">Comparte 3 posts en Discord</div>
-                        <div class="challenge-progress">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: 0%"></div>
-                            </div>
-                            <span class="progress-text">0/3</span>
-                        </div>
-                    </div>
-                    <div class="challenge-reward">+10 🎫</div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Header -->
-    <header>
-        <div style="width: 1px;"></div> 
-        
-        <div class="header-logo-group">
-            <div class="logo">MasterStudio</div>
-            <div class="icon">👑</div>
-        </div>
-
-        <div class="login-button-container">
-            
-            <!-- Redes Sociales -->
-            <div class="social-links">
-                <a href="https://www.youtube.com/@MasterStudio_Oficial" target="_blank" class="social-icon youtube" title="YouTube">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                    </svg>
-                </a>
-                <a href="https://x.com/MasterStudioMC" target="_blank" class="social-icon twitter" title="X (Twitter)">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
-                    </svg>
-                </a>
-                <a href="https://discord.gg/Xj5SARVFQ5" target="_blank" class="social-icon discord" title="Discord">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028a14.09 14.09 0 0 0 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128a10.2 10.2 0 0 0 .372-.292a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127a12.299 12.299 0 0 1-1.873.892a.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028a19.839 19.839 0 0 0 6.002-3.03a.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.333-.946 2.418-2.157 2.418z"/>
-                    </svg>
+    <!-- Contenedor cuando NO hay sorteos activos -->
+    <div id="no-sorteos-container" style="display: none;">
+        <div class="no-sorteos-notice">
+            <div class="notice-icon">🎫</div>
+            <h3 data-lang="no-sorteos-title">No hay sorteos activos</h3>
+            <p data-lang="no-sorteos-description">Por el momento no tenemos sorteos disponibles. Mantente al tanto de nuestras redes sociales y Discord para futuras oportunidades.</p>
+            <div class="button-container">
+                <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
+                    <span>ÚNETE A NUESTRO DISCORD 💬</span>
                 </a>
             </div>
-            
-            <div id="g_id_onload"
-                 data-client_id="876697702769-gujmulrqcmueg1csvv9tgbb2l1ichv2p.apps.googleusercontent.com"
-                 data-context="signin"
-                 data-ux_mode="popup"
-                 data-callback="handleCredentialResponse"
-                 data-nonce="">
-            </div>
-            
-            <div class="g_id_signin"
-                 data-type="standard"
-                 data-shape="rectangular"
-                 data-theme="outline"
-                 data-text="signin_with"
-                 data-size="large"
-                 data-logo_alignment="left">
-            </div>
-            
-            <div id="profile-container" style="display: none;">
-                <div class="profile-icon" id="profile-icon">
-                    <div class="notification-badge" id="notification-badge" style="display: none;">0</div>
-                </div>
-                <div class="profile-dropdown" id="profile-dropdown">
-                    <div class="profile-dropdown-header">
-                        <div class="profile-dropdown-name" id="dropdown-username">Usuario</div>
-                        <div class="profile-dropdown-email" id="dropdown-email">email@example.com</div>
-                        <div class="profile-dropdown-tickets" id="dropdown-tickets" style="margin-top: 10px; font-size: 1rem; color: #FFD700;">
-                            🎫 0 Tickets
-                        </div>
-                    </div>
-
-                    <!-- Sección: Comunidad -->
-                    <div class="menu-section-divider">
-                        <span>COMUNIDAD</span>
-                    </div>
-
-                    <button class="profile-menu-option" onclick="openModal('notifications-modal')">
-                        <span data-lang="menu-notifications">🔔 Notificaciones</span>
-                        <span class="notification-count" id="notification-count-menu" style="display: none;">0</span>
-                    </button>
-
-                    <button class="profile-menu-option" onclick="openModal('ranking-modal')">
-                        <span data-lang="menu-ranking">🏆 Ranking Quiz</span>
-                    </button>
-
-                    <button class="profile-menu-option" onclick="openModal('challenges-modal')">
-                        <span>🎯 Desafíos</span>
-                    </button>
-
-                    <!-- Sección: Personalización -->
-                    <div class="menu-section-divider">
-                        <span>PERSONALIZACIÓN</span>
-                    </div>
-
-                    <button class="profile-menu-option" onclick="openModal('language-modal')">
-                        <span data-lang="menu-language">🌍 Idioma</span>
-                    </button>
-
-                    <button class="profile-menu-option" onclick="openModal('theme-modal')">
-                        <span data-lang="menu-theme">🎨 Tema</span>
-                    </button>
-
-                    <button class="logout-button" id="logout-button" data-lang="logout">Cerrar sesión</button>
-                </div>
-            </div>
         </div>
-    </header>
-
-    <!-- Navegación -->
-    <div class="main-navigation-container">
-        
-        <button class="nav-button launcher" data-section="launcher" style="margin: 10px 30px 10px 0;">💻 <span data-lang="nav-launcher">Launcher</span></button>
-
-        <nav>
-            <button class="nav-button home active-nav" data-section="home">🏠 <span data-lang="nav-home">Inicio</span></button>
-            <button class="nav-button mobs" data-section="mobs"><span data-lang="nav-mobs">Mobs nuevos</span></button>
-            <button class="nav-button dificultad" data-section="dificultad"><span data-lang="nav-difficulty">Cambio de dificultad</span></button>
-            <button class="nav-button eventos" data-section="eventos"><span data-lang="nav-events">Eventos</span></button>
-            <button class="nav-button actualizaciones" data-section="actualizaciones"><span data-lang="nav-updates">Actualizaciones</span></button>
-            <button class="nav-button recompensas" data-section="recompensas"><span data-lang="nav-rewards">Recompensas</span></button>
-            <button class="nav-button castigos" data-section="castigos"><span data-lang="nav-punishments">Castigos</span></button>
-            <button class="nav-button quiz" data-section="quiz">💡 <span data-lang="nav-quiz">Quiz</span></button>
-        </nav>
     </div>
 
-    <!-- Contenido Principal -->
-    <main>
-        <!-- Sección Home -->
-        <section id="home" class="active">
-            <h1>Bienvenido a MasterStudio</h1>
-            <p>En MasterStudio, nos apasiona crear y recrear experiencias inolvidables en Minecraft 🌍, fusionando creatividad, dinamismo y diversión para todos los jugadores 🎮.</p>
-            <p><strong>Nuestra Misión:</strong></p>
-            <p>Elevar el entretenimiento al máximo, recreando mapas icónicos como Dedsafio3, Dedsafio2 y Squid Craft en Minecraft a un nivel superior 🚀. Diseñamos mundos y sistemas que sorprenden, inspiran y mantienen a los jugadores inmersos en cada aventura 🧭.</p>
-            <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
+    <!-- Contenedor cuando SÍ hay sorteos activos -->
+    <div id="sorteo-activo-container" style="display: none;">
+        <div class="sorteo-main-card">
+            <!-- Header del sorteo -->
+            <div class="sorteo-header">
+                <div class="sorteo-badge">EN VIVO</div>
+                <h2 id="sorteo-titulo">SORTEO ESPECIAL</h2>
+                <p id="sorteo-subtitulo" class="sorteo-subtitle">Subtítulo del sorteo</p>
+                <div class="sorteo-descripcion-box">
+                    <p id="sorteo-descripcion" class="sorteo-description">Descripción detallada del sorteo y sus términos.</p>
+                </div>
             </div>
-        </section>
 
-        <!-- Sección Launcher -->
-        <section id="launcher">
-            
-            <div class="launcher-title-container">
-                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher" style="height: 50px; vertical-align: middle;">	
-                <h1>Instalación del MasterClient Launcher</h1>
-                <img src="https://i.postimg.cc/BZHYkt4S/mastersafio.webp" alt="Logo del Launcher" style="height: 50px; vertical-align: middle;">
+            <!-- Imagen del premio -->
+            <div class="sorteo-premio-container">
+                <img id="sorteo-imagen" src="" alt="Premio" class="sorteo-imagen">
+                <div class="sorteo-premio-badge">
+                    <span id="sorteo-premio">PREMIO</span>
+                </div>
             </div>
-            
-            <div class="guide-step">
-                <h2>PASO 1: Descarga del Instalador</h2>
-                <p>Deberás descargar la última versión publicada aca en nuestra pagina, o en nuestro canal de descargas de discord, haciendo click en el botón de descarga, Si te llega a salir un mensaje de error o de advertencia, no te preocupes, es totalmente seguro, dale al boton de descargar para continuar con tu descarga.</p>
-                
-                <div class="button-container">
-                    <a href="http://us-1.fl.hafu.cfd:41421/updates/MasterClient.exe" class="download-button" download>
-                        <span>DESCARGA AQUÍ</span>
+
+            <!-- Contador regresivo -->
+            <div class="sorteo-countdown-section">
+                <h3 class="countdown-title">⏰ TIEMPO RESTANTE</h3>
+                <div id="sorteo-countdown" class="sorteo-countdown">
+                    <div class="countdown-item">
+                        <span id="dias" class="countdown-number">00</span>
+                        <span class="countdown-label">DÍAS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span id="horas" class="countdown-number">00</span>
+                        <span class="countdown-label">HORAS</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span id="minutos" class="countdown-number">00</span>
+                        <span class="countdown-label">MIN</span>
+                    </div>
+                    <div class="countdown-separator">:</div>
+                    <div class="countdown-item">
+                        <span id="segundos" class="countdown-number">00</span>
+                        <span class="countdown-label">SEG</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requisitos para participar -->
+            <div class="sorteo-requisitos">
+                <h3 class="requisitos-title">📋 CÓMO PARTICIPAR</h3>
+                <ul id="sorteo-requisitos-lista" class="requisitos-lista">
+                    <!-- Se llenarán dinámicamente -->
+                </ul>
+                <div class="discord-cta">
+                    <p>👉 Ve a nuestro Discord y participa en el canal de sorteos</p>
+                    <a href="https://discord.gg/Xj5SARVFQ5" class="discord-inline-button" target="_blank">
+                        IR A DISCORD 💬
                     </a>
                 </div>
-                
-                <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/qR26GPny/Diseno-sin-titulo-31.png" alt="Imagen del Paso 1" style="max-width: 100%; height: auto; border-radius: 5px; border: 2px solid #00BCD4;">
+            </div>
+
+            <!-- Botón de participación - ELIMINADO -->
+            <!-- Los usuarios participan desde Discord -->
+
+            <!-- Estadísticas -->
+            <div class="sorteo-stats">
+                <div class="stat-item">
+                    <span class="stat-icon">👥</span>
+                    <span class="stat-number" id="total-participantes">0</span>
+                    <span class="stat-label">Participantes</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-icon">🎯</span>
+                    <span class="stat-number">1</span>
+                    <span class="stat-label">Ganador</span>
                 </div>
             </div>
-            
-            <div class="guide-step">
-                <h2>PASO 2: Ejecución y Instalación</h2>
-                <p>Lo mas seguro es que te salga una advertencia de Windows Protect, comunmente siempre sale cuando intentas instalar cualquier programa de internet, simplemente le daremos click en "Más Información" y una vez desplegado nos habilitara la opción de "Ejecutar de todas formas", haremos click sobre esta opción y ya podremos continuar con la instalacion de MasterClient.</p>
-                <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/SNYR7Fh8/Diseno-sin-titulo-33.png" alt="Imagen del Paso 2" style="max-width: 100%; height: auto; border-radius: 5px; border: 2px solid #00BCD4;">
+        </div>
+    </div>
+
+    <!-- Contenedor de ganador (se muestra cuando termina el sorteo) -->
+    <div id="sorteo-ganador-container" style="display: none;">
+        <div class="ganador-announcement">
+            <div class="confetti-container"></div>
+            <div class="ganador-icon">🏆</div>
+            <h2 class="ganador-title">¡TENEMOS UN GANADOR!</h2>
+            <div class="ganador-info">
+                <p class="ganador-label">El ganador es:</p>
+                <h3 id="ganador-nombre" class="ganador-nombre">Usuario Ganador</h3>
+                <div class="ganador-premio">
+                    <span id="ganador-premio-texto">Premio</span>
                 </div>
             </div>
+            <p class="ganador-mensaje">¡Felicidades! El ganador será contactado pronto para reclamar su premio. 🎉</p>
+            <div class="button-container">
+                <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
+                    <span>VER ANUNCIO EN DISCORD 💬</span>
+                </a>
+            </div>
+        </div>
+    </div>
 
-            <div class="guide-step">
-                <h2>Finalización PASO 2: Ejecución y Instalación</h2>
-                <p>Una vez pasemos el filtro de Windows Protect, podremos continuar con la instalación, en donde nos abrira automaticamente una ventana del instalador del MasterClient - MasterStudio Launcher, la primera ventana nos saldra los Terminos de uso del launcher, los cuales los leeremos para estar de acuerdo, y como siguiente paso le daremos a "Acepto". Luego pasaremos a la segunda ventana donde nos saldra en que usuario de nuestra PC queremos instalar el MasterClient o si lo instalaremos en todos los usuarios de nuestra PC, luego de elegir, seleccionaremos "Instalar".</p>
-                <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/8CZfXRn4/Diseno-sin-titulo-34.png" alt="Imagen del Paso 2.1" style="max-width: 100%; height: auto; border-radius: 5px; border: 2px solid #00BCD4;">	
-                </div>
-            </div>
-            
-            <div class="guide-step">
-                <h2>PASO 3: Configuración y Instancia</h2>
-                <p>Seguramente cuando se nos habra el Launcher, no nos saldra Jugar directamente, nos saldra sin Instancias o sin nada simplemente, primero que todo nos dirigiremos a la esquina superior derecha, y iniciaremos sesión, sea con cuenta Premiun (Microsoft) o como Invitado (Solo el nombre de Usuario del juego) En caso de haber seleccionado con Microsoft, pues iniciaras sesión como comunmente lo haces como usuario Premiun, pero en caso de seleccionar Invitado se abrira una pestaña donde pondras tu Nick Name que saldra en Minecraft. Luego de iniciar sesión nos dirigiremos a la tuerca de configuración del Launcher, y seleccionaremos la RAM que le brindaremos al juego (Recomendable asignar la mitad de tu RAM para evitar errores y crasheos por los mods), luego de asignarle la RAM, podremos activar o desactivar la opción de que el Launcher se cierre al abrir el juego, y finalmente podremos cerrar la configuración dandole de nuevo a la tuerca.</p>
-                <div class="guide-image-container">
-                    <img src="https://i.postimg.cc/Sssdg7kD/Diseno-sin-titulo-36.png" alt="Imagen del Paso 3" style="max-width: 100%; height: auto; border-radius: 5px; border: 2px solid #00BCD4;">
-                </div>
-            </div>
-
-            <div class="guide-step">
-                <h2>Finalización PASO 3: Instancia</h2>
-                <p>TODOS LOS PASOS PARA PODER JUGAR (DESCARGAR LAS INSTANCIAS/VERSIONES DE MINECRAFT) SERAN INFORMADOS EN EL DISCORD!</p>
-                
-                <div class="button-container">
-                    <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
-                        <span>ÚNETE A NUESTRO DISCORD 💬</span>
-                    </a>
-                </div>
-
-                <div class="footer">
-                    <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                </div>
-            </div>
-            
-        </section>
-        
-        <!-- Sección Quiz -->
-        <section id="quiz">
-            <h1>Quiz Diario</h1>
-            <div class="quiz-container">
-                <p style="text-align: center; color: #cccccc; margin-bottom: 20px;" id="login-to-participate">
-                    🔒 Por favor, inicia sesión para participar en el quiz diario y ganar tickets. 🎁
-                </p>
-                <div id="quiz-content" style="display: none;">
-                    <div class="quiz-timer" id="quiz-timer">⏱️ 15</div>
-                    <h2 id="quiz-question"></h2>
-                    <div id="quiz-options-container"></div>
-                    <p id="quiz-message" style="color: #cccccc;"></p>
-                </div>
-                <div id="winner-section" style="display: none;"></div>
-                <p id="no-quiz-message" style="display: none;">📅 Hoy no tenemos pregunta disponible.<br>¡Vuelve mañana para participar! 😊</p> 
-            </div>
-            
-            <div id="quiz-footer" class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
-            </div>
-        </section>
-
-        <!-- Secciones de Posts -->
-        <section id="mobs" data-category="mobs">
-            <h1>Mobs nuevos</h1>
-            <div id="posts-mobs" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
-            <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="dificultad" data-category="dificultad">
-            <h1>Cambio de dificultad</h1>
-            <div id="posts-dificultad" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
-            <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="eventos" data-category="eventos">
-            <h1>Eventos</h1>
-            <div id="posts-eventos" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
-            <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="actualizaciones" data-category="actualizaciones">
-            <h1>Actualizaciones</h1>
-            <div id="posts-actualizaciones" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
-            <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="recompensas" data-category="recompensas">
-            <h1>Recompensas</h1>
-            <div id="posts-recompensas" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
-            <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-
-        <section id="castigos" data-category="castigos">
-            <h1>Castigos</h1>
-            <div id="posts-castigos" class="posts-container"></div>
-            <p class="placeholder-text">Contenido próximamente...</p>
-            <div class="footer">
-                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-            </div>
-        </section>
-        
-    </main>
-
-    <!-- JavaScript -->
-    <script src="script.js"></script>
-</body>
-</html>
+    <div class="footer">
+        <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+        <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
+    </div>
+</section>
