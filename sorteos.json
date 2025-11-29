@@ -1,0 +1,22 @@
+{
+  "activo": true,
+  "titulo": "🎉 SORTEO DE PARTICIPANTE ESTELAR (Discord) 🎉",
+  "subtitulo": "¡Participa y gana increíbles premios!",
+  "descripcion": "Este sorteo está activo hasta el 1 de diciembre. Los que quieran participar, deberan ir a nuestro discord y seguir los pasos alli mencionados, una vez completen los pasos, abrir ticket en el mismo discord y mandar pruebas para participar. El ganador será anunciado automáticamente cuando termine el contador.",
+  "premio": "1000 TICKETS 🎫",
+  "imagenPremio": "https://i.postimg.cc/BZHYkt4S/mastersafio.webp",
+  "fechaFinalizacion": {
+    "año": 2025,
+    "mes": 12,
+    "dia": 31,
+    "hora": 23,
+    "minuto": 59
+  },
+  "requisitos": [
+    "Estar registrado en nuestro Discord",
+    "Participar en el canal de sorteos",
+    "Reaccionar al mensaje del sorteo con 🎉"
+  ],
+  "ganadorSeleccionado": false,
+  "ganador": null
+}
