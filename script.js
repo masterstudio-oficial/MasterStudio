@@ -1136,10 +1136,6 @@ function createPostElement(post, postId, category) {
 // SISTEMA DE SORTEOS
 // =============================================
 
-let sorteoData = null;
-let participantesData = null;
-let countdownInterval = null;
-
 /**
  * Cargar datos del sorteo desde el JSON
  */
@@ -1214,19 +1210,25 @@ function displaySorteo() {
     }
 
     // Mostrar sorteo activo
-    noSorteosContainer.style.display = 'none';
-    ganadorContainer.style.display = 'none';
-    sorteoActivoContainer.style.display = 'block';
+    if (noSorteosContainer) noSorteosContainer.style.display = 'none';
+    if (ganadorContainer) ganadorContainer.style.display = 'none';
+    if (sorteoActivoContainer) sorteoActivoContainer.style.display = 'block';
 
     // Llenar información del sorteo
-    document.getElementById('sorteo-titulo').textContent = sorteoData.titulo || 'SORTEO ESPECIAL';
-    document.getElementById('sorteo-subtitulo').textContent = sorteoData.subtitulo || '';
-    document.getElementById('sorteo-descripcion').textContent = sorteoData.descripcion || '';
+    const sorteoTituloEl = document.getElementById('sorteo-titulo');
+    if (sorteoTituloEl) sorteoTituloEl.textContent = sorteoData.titulo || 'SORTEO ESPECIAL';
+    
+    const sorteoSubtituloEl = document.getElementById('sorteo-subtitulo');
+    if (sorteoSubtituloEl) sorteoSubtituloEl.textContent = sorteoData.subtitulo || '';
+    
+    const sorteoDescripcionEl = document.getElementById('sorteo-descripcion');
+    if (sorteoDescripcionEl) sorteoDescripcionEl.textContent = sorteoData.descripcion || '';
     
     const sorteoImagenEl = document.getElementById('sorteo-imagen');
     if (sorteoImagenEl) sorteoImagenEl.src = sorteoData.imagenPremio || '';
     
-    document.getElementById('sorteo-premio').textContent = sorteoData.premio || 'PREMIO';
+    const sorteoPremioEl = document.getElementById('sorteo-premio');
+    if (sorteoPremioEl) sorteoPremioEl.textContent = sorteoData.premio || 'PREMIO';
 
     // Llenar requisitos
     const requisitosList = document.getElementById('sorteo-requisitos-lista');
@@ -1278,6 +1280,11 @@ function startCountdown(fechaFin) {
         const now = new Date().getTime();
         const distance = fechaFin.getTime() - now;
 
+        const diasEl = document.getElementById('dias');
+        const horasEl = document.getElementById('horas');
+        const minutosEl = document.getElementById('minutos');
+        const segundosEl = document.getElementById('segundos');
+        
         if (distance < 0) {
             clearInterval(countdownInterval);
             seleccionarGanador();
@@ -1289,10 +1296,10 @@ function startCountdown(fechaFin) {
         const minutos = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const segundos = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById('dias').textContent = String(dias).padStart(2, '0');
-        document.getElementById('horas').textContent = String(horas).padStart(2, '0');
-        document.getElementById('minutos').textContent = String(minutos).padStart(2, '0');
-        document.getElementById('segundos').textContent = String(segundos).padStart(2, '0');
+        if (diasEl) diasEl.textContent = String(dias).padStart(2, '0');
+        if (horasEl) horasEl.textContent = String(horas).padStart(2, '0');
+        if (minutosEl) minutosEl.textContent = String(minutos).padStart(2, '0');
+        if (segundosEl) segundosEl.textContent = String(segundos).padStart(2, '0');
     }
 
     updateCountdown();
@@ -1481,7 +1488,8 @@ function initialize() {
     const homeButton = document.querySelector(`.nav-button[data-section="${initialSection}"]`);
     if (homeButton) {
         homeButton.classList.add('active-nav');
-        document.getElementById(initialSection).classList.add('active');
+        const initialSectionEl = document.getElementById(initialSection);
+        if (initialSectionEl) initialSectionEl.classList.add('active');
         
         // Cargar quiz o sorteos si es la sección inicial
         if (initialSection === 'quiz' && currentUser) {
@@ -1506,10 +1514,10 @@ setInterval(() => {
     }
 }, 30000);
 
-// Exponer funciones globales (necesario para los manejadores onclick en el HTML)
+// Exponer funciones globales (necesario para los manejadores onclick en el HTML y SDKs externos como Google)
 window.openModal = openModal;
 window.closeModal = closeModal;
-window.handleCredentialResponse = handleCredentialResponse;
+window.handleCredentialResponse = handleCredentialResponse; // 🔑 NECESARIO PARA GOOGLE SIGN-IN
 window.toggleLike = toggleLike;
 window.sharePost = sharePost;
 window.selectLanguage = selectLanguage;
