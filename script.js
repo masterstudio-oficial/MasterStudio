@@ -30,10 +30,14 @@ const USER_DATA_KEY = 'masterstudio_users_data';
 const NOTIFICATIONS_KEY = 'masterstudio_notifications_enabled';
 const LANGUAGE_KEY = 'masterstudio_language';
 const THEME_KEY = 'masterstudio_theme';
+const LIKES_STORAGE_KEY = 'masterstudio_post_likes';
 
 // URLs
 const QUIZ_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/preguntas.json';
 const RANKING_API_URL = 'https://script.google.com/macros/s/AKfycbx-Oay0uBNGDJborb0kKQIkymVFxmO-NB4EUBZHNogOxP-FLPItFrnmYxYqzmuwx2vVBw/exec';
+const POSTS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
+const SORTEOS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/sorteos.json';
+const PARTICIPANTES_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/participantes.json';
 
 // Variables de estado
 let currentUser = null;
@@ -45,6 +49,10 @@ let notificationsEnabled = false;
 let currentLanguage = 'es';
 let currentTheme = 'dark';
 let translations = {};
+let sorteoData = null;
+let participantesData = null;
+let countdownInterval = null;
+
 
 // =============================================
 // CONFIGURACIÓN DE MANTENIMIENTO
@@ -796,6 +804,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         noQuizMessage.style.display = 'none';
                         winnerSection.style.display = 'none';
                     }
+                } else if (targetId === 'sorteos') {
+                    // Cargar datos del sorteo cuando se entra a la sección
+                    loadSorteoData();
                 }
             }
         });
@@ -805,8 +816,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // =============================================
 // CARGAR POSTS
 // =============================================
-
-const LIKES_STORAGE_KEY = 'masterstudio_post_likes';
 
 function generatePostId(post) {
     const cleanTitle = post.titulo.toLowerCase().replace(/[^a-z0-9]/g, '-');
@@ -912,24 +921,27 @@ async function toggleLike(postId) {
 
 function saveLocalLike(postId, liked) {
     if (!currentUser) return;
-    
-    let likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
-    
-    if (liked) {
-        if (!likes[postId]) likes[postId] = [];
-        if (!likes[postId].includes(currentUser.id)) {
-            likes[postId].push(currentUser.id);
-        }
-    } else {
-        if (likes[postId]) {
-            likes[postId] = likes[postId].filter(id => id !== currentUser.id);
-            if (likes[postId].length === 0) {
-                delete likes[postId];
+    try {
+        let likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
+        
+        if (liked) {
+            if (!likes[postId]) likes[postId] = [];
+            if (!likes[postId].includes(currentUser.id)) {
+                likes[postId].push(currentUser.id);
+            }
+        } else {
+            if (likes[postId]) {
+                likes[postId] = likes[postId].filter(id => id !== currentUser.id);
+                if (likes[postId].length === 0) {
+                    delete likes[postId];
+                }
             }
         }
+        
+        localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likes));
+    } catch (e) {
+        console.error('Error guardando like local:', e);
     }
-    
-    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likes));
 }
 
 function checkIfUserLiked(postId) {
@@ -1021,63 +1033,29 @@ function checkSharedPost() {
 }
 
 async function loadPosts() {
-    const POSTS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
-
     try {
         const response = await fetch(POSTS_JSON_URL);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const posts = await response.json();
+        const postsData = await response.json();
 
-        document.querySelectorAll('.posts-container').forEach(container => {
-            container.innerHTML = '';
-        });
+        // Si la data es un objeto de categorías, iteramos sobre ellas
+        const posts = Array.isArray(postsData) ? postsData : Object.values(postsData).flat();
+        
+        const contentContainer = document.getElementById('content-container');
+        if (contentContainer) {
+            contentContainer.innerHTML = '';
+        }
 
         posts.forEach(post => {
-            const category = post.categoria || 'dificultad';
-            const container = document.getElementById(`posts-${category}`);
+            // Usamos 'home' como categoría por defecto para renderizar en 'content-container'
+            const category = post.categoria || 'home'; 
+            const container = document.getElementById(`posts-${category}`) || contentContainer;
 
             if (container) {
                 const postId = generatePostId(post);
-                const postElement = document.createElement('div');
-                postElement.className = 'post';
-                postElement.id = postId;
-
-                const isLiked = checkIfUserLiked(postId);
-                const likedClass = isLiked ? 'liked' : '';
-                const heartFill = isLiked ? 'fill="currentColor"' : 'fill="none"';
-
-                let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
-                
-                postElement.innerHTML = `
-                    ${badge}
-                    <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
-                    <div class="post-content">
-                        <h3>${post.titulo}</h3>
-                        <span class="date">Fecha: ${post.fecha}</span>
-                        <p>${post.descripcion}</p>
-                        <div class="post-actions">
-                            <button class="like-button ${likedClass}" onclick="toggleLike('${postId}')">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${heartFill} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                </svg>
-                                Like
-                                <span class="like-count" style="display: none;">0</span>
-                            </button>
-                            <button class="share-button" onclick="sharePost('${postId}', '${category}')">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="18" cy="5" r="3"></circle>
-                                    <circle cx="6" cy="12" r="3"></circle>
-                                    <circle cx="18" cy="19" r="3"></circle>
-                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                                </svg>
-                                Compartir
-                            </button>
-                        </div>
-                    </div>
-                `;
+                const postElement = createPostElement(post, postId, category);
                 container.prepend(postElement);
                 
                 const placeholderText = container.parentElement.querySelector('.placeholder-text');
@@ -1094,23 +1072,431 @@ async function loadPosts() {
         
     } catch (e) {
         console.error('Error al cargar posts:', e);
+        const contentContainer = document.getElementById('content-container');
+        if (contentContainer) {
+             contentContainer.innerHTML = `
+                <div style="text-align: center; color: var(--text-color-secondary); padding: 50px;">
+                    Error al cargar el contenido. Por favor, inténtalo de nuevo más tarde. 😔
+                </div>
+            `;
+        }
     }
 }
+
+function createPostElement(post, postId, category) {
+    const isLiked = checkIfUserLiked(postId);
+    const likedClass = isLiked ? 'liked' : '';
+    const heartFill = isLiked ? 'fill="currentColor"' : 'fill="none"';
+    
+    const postDiv = document.createElement('div');
+    postDiv.className = 'post-card';
+    postDiv.id = postId;
+    
+    // Reemplazar saltos de línea con <br> para el contenido
+    const contentHtml = post.contenido ? post.contenido.replace(/\n/g, '<br>') : post.descripcion || '';
+    
+    let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
+    
+    postDiv.innerHTML = `
+        <div class="post-header">
+            <span class="post-category">${post.categoria || 'GENERAL'}</span>
+            <div class="post-meta">
+                <span class="post-date">${post.fecha}</span>
+                ${badge}
+            </div>
+        </div>
+        
+        <h2 class="post-title">${post.titulo}</h2>
+        ${post.imagenUrl ? `<img src="${post.imagenUrl}" alt="${post.titulo}" class="post-image">` : ''}
+        <div class="post-content">${contentHtml}</div>
+        
+        <div class="post-footer">
+            <button class="like-button ${likedClass}" onclick="toggleLike('${postId}')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${heartFill} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                </svg>
+                <span class="like-count">0</span>
+            </button>
+            <button class="share-button" onclick="sharePost('${postId}', '${category}')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg>
+            </button>
+        </div>
+    `;
+    return postDiv;
+}
+
+
+// =============================================
+// SISTEMA DE SORTEOS
+// =============================================
+
+let sorteoData = null;
+let participantesData = null;
+let countdownInterval = null;
+
+/**
+ * Cargar datos del sorteo desde el JSON
+ */
+async function loadSorteoData() {
+    try {
+        const response = await fetch(SORTEOS_JSON_URL + '?' + Date.now()); // Cache busting
+        if (!response.ok) {
+            throw new Error('Error al cargar sorteos.json');
+        }
+        sorteoData = await response.json();
+        console.log('📦 Datos del sorteo cargados:', sorteoData);
+        
+        // Cargar participantes si el sorteo está activo o ya finalizó
+        await loadParticipantes();
+        
+        displaySorteo();
+    } catch (error) {
+        console.error('❌ Error al cargar sorteo:', error);
+        showNoSorteos();
+    }
+}
+
+/**
+ * Cargar lista de participantes desde el JSON
+ */
+async function loadParticipantes() {
+    try {
+        const response = await fetch(PARTICIPANTES_JSON_URL + '?' + Date.now());
+        if (!response.ok) {
+            throw new Error('Error al cargar participantes.json');
+        }
+        participantesData = await response.json();
+        console.log('👥 Participantes cargados:', participantesData.totalParticipantes);
+    } catch (error) {
+        console.error('❌ Error al cargar participantes:', error);
+        participantesData = { participantes: [], totalParticipantes: 0 };
+    }
+}
+
+/**
+ * Mostrar el sorteo o el mensaje de "no hay sorteos"
+ */
+function displaySorteo() {
+    const noSorteosContainer = document.getElementById('no-sorteos-container');
+    const sorteoActivoContainer = document.getElementById('sorteo-activo-container');
+    const ganadorContainer = document.getElementById('sorteo-ganador-container');
+
+    if (!sorteoData || !sorteoData.activo) {
+        showNoSorteos();
+        return;
+    }
+
+    // Verificar si ya hay un ganador seleccionado
+    if (sorteoData.ganadorSeleccionado && sorteoData.ganador) {
+        showGanador();
+        return;
+    }
+
+    // Verificar si el sorteo ya terminó
+    const fechaFin = new Date(
+        sorteoData.fechaFinalizacion.año,
+        sorteoData.fechaFinalizacion.mes - 1,
+        sorteoData.fechaFinalizacion.dia,
+        sorteoData.fechaFinalizacion.hora || 0,
+        sorteoData.fechaFinalizacion.minuto || 0
+    );
+
+    if (new Date() >= fechaFin) {
+        // El sorteo terminó, seleccionar ganador (si no hay uno en el JSON)
+        seleccionarGanador();
+        return;
+    }
+
+    // Mostrar sorteo activo
+    noSorteosContainer.style.display = 'none';
+    ganadorContainer.style.display = 'none';
+    sorteoActivoContainer.style.display = 'block';
+
+    // Llenar información del sorteo
+    document.getElementById('sorteo-titulo').textContent = sorteoData.titulo || 'SORTEO ESPECIAL';
+    document.getElementById('sorteo-subtitulo').textContent = sorteoData.subtitulo || '';
+    document.getElementById('sorteo-descripcion').textContent = sorteoData.descripcion || '';
+    
+    const sorteoImagenEl = document.getElementById('sorteo-imagen');
+    if (sorteoImagenEl) sorteoImagenEl.src = sorteoData.imagenPremio || '';
+    
+    document.getElementById('sorteo-premio').textContent = sorteoData.premio || 'PREMIO';
+
+    // Llenar requisitos
+    const requisitosList = document.getElementById('sorteo-requisitos-lista');
+    if (requisitosList) {
+        requisitosList.innerHTML = '';
+        if (sorteoData.requisitos && sorteoData.requisitos.length > 0) {
+            sorteoData.requisitos.forEach(req => {
+                const li = document.createElement('li');
+                li.textContent = req;
+                requisitosList.appendChild(li);
+            });
+        }
+    }
+
+
+    // Iniciar contador regresivo
+    startCountdown(fechaFin);
+
+    // Actualizar contador de participantes
+    updateParticipantesCount();
+}
+
+/**
+ * Mostrar mensaje de "no hay sorteos"
+ */
+function showNoSorteos() {
+    const noSorteosContainer = document.getElementById('no-sorteos-container');
+    const sorteoActivoContainer = document.getElementById('sorteo-activo-container');
+    const ganadorContainer = document.getElementById('sorteo-ganador-container');
+    
+    if (noSorteosContainer) noSorteosContainer.style.display = 'block';
+    if (sorteoActivoContainer) sorteoActivoContainer.style.display = 'none';
+    if (ganadorContainer) ganadorContainer.style.display = 'none';
+    
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+}
+
+/**
+ * Iniciar contador regresivo
+ */
+function startCountdown(fechaFin) {
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+
+    function updateCountdown() {
+        const now = new Date().getTime();
+        const distance = fechaFin.getTime() - now;
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            seleccionarGanador();
+            return;
+        }
+
+        const dias = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const horas = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutos = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const segundos = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById('dias').textContent = String(dias).padStart(2, '0');
+        document.getElementById('horas').textContent = String(horas).padStart(2, '0');
+        document.getElementById('minutos').textContent = String(minutos).padStart(2, '0');
+        document.getElementById('segundos').textContent = String(segundos).padStart(2, '0');
+    }
+
+    updateCountdown();
+    countdownInterval = setInterval(updateCountdown, 1000);
+}
+
+/**
+ * Actualizar contador de participantes
+ */
+function updateParticipantesCount() {
+    const totalElement = document.getElementById('total-participantes');
+    
+    if (totalElement && participantesData && participantesData.totalParticipantes) {
+        totalElement.textContent = participantesData.totalParticipantes;
+    } else if (totalElement) {
+        totalElement.textContent = '0';
+    }
+}
+
+/**
+ * Seleccionar ganador del sorteo de forma aleatoria
+ */
+function seleccionarGanador() {
+    console.log('🎲 Seleccionando ganador del sorteo...');
+    
+    if (!participantesData || !participantesData.participantes || participantesData.participantes.length === 0) {
+        console.warn('⚠️ No hay participantes en el sorteo');
+        showNoSorteos();
+        return;
+    }
+
+    // Seleccionar participante aleatorio
+    const randomIndex = Math.floor(Math.random() * participantesData.participantes.length);
+    const ganador = participantesData.participantes[randomIndex];
+    
+    console.log('🏆 Ganador seleccionado:', ganador);
+    mostrarGanador(ganador);
+    
+    // NOTA: Para persistencia, el ganador debería subirse a sorteos.json en un entorno real.
+}
+
+/**
+ * Mostrar ganador en la interfaz
+ */
+function mostrarGanador(ganador) {
+    const ganadorContainer = document.getElementById('sorteo-ganador-container');
+    
+    document.getElementById('no-sorteos-container').style.display = 'none';
+    document.getElementById('sorteo-activo-container').style.display = 'none';
+    if (ganadorContainer) ganadorContainer.style.display = 'block';
+    
+    // Mostrar nombre del ganador
+    const nombreGanador = ganador.nombre || ganador.username || 'Participante Afortunado';
+    const ganadorNombreEl = document.getElementById('ganador-nombre');
+    const ganadorPremioEl = document.getElementById('ganador-premio-texto');
+    
+    if (ganadorNombreEl) ganadorNombreEl.textContent = nombreGanador;
+    if (ganadorPremioEl) ganadorPremioEl.textContent = sorteoData?.premio || 'PREMIO';
+    
+    // Crear efecto de confeti
+    createConfetti();
+    
+    if (countdownInterval) {
+        clearInterval(countdownInterval);
+    }
+}
+
+/**
+ * Mostrar ganador (cuando ya está seleccionado en sorteos.json)
+ */
+function showGanador() {
+    if (!sorteoData || !sorteoData.ganador) return;
+    
+    mostrarGanador({
+        nombre: sorteoData.ganador.nombre || sorteoData.ganador.username
+    });
+}
+
+/**
+ * Crear efecto de confeti
+ */
+function createConfetti() {
+    const container = document.getElementById('confetti-container');
+    if (!container) return;
+    
+    const colors = ['#FFD700', '#FFA500', '#FF6B35', '#4CAF50', '#2196F3', '#9C27B0'];
+    
+    // Limpiar confeti existente
+    container.innerHTML = '';
+    
+    for (let i = 0; i < 50; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti-piece'; // Asume que tienes estilos CSS para esto
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = '-10px';
+            confetti.style.opacity = '1';
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+            confetti.style.transition = 'all 3s ease-out';
+            
+            container.appendChild(confetti);
+            
+            // Animación
+            setTimeout(() => {
+                confetti.style.top = (Math.random() * 100 + 100) + '%';
+                confetti.style.opacity = '0';
+                confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
+            }, 50);
+            
+            setTimeout(() => {
+                confetti.remove();
+            }, 3000);
+        }, i * 50);
+    }
+}
+
 
 // =============================================
 // INICIALIZACIÓN
 // =============================================
 
-document.addEventListener('DOMContentLoaded', () => {
-    const isMaintenance = checkMaintenanceStatus();
-    
-    if (isMaintenance) {
+function initialize() {
+    if (checkMaintenanceStatus()) {
         return;
     }
     
-    loadPosts();
+    // 1. Cargar configuraciones de usuario (idioma, tema)
+    loadLanguageSettings();
+    loadThemeSettings();
+    
+    // 2. Comprobar autenticación de usuario
     checkLocalStorageUser();
-});
+    
+    // 3. Cargar posts en la sección de inicio
+    loadPosts();
+    
+    // 4. Configurar eventos de modales
+    document.querySelectorAll('[data-open-modal]').forEach(button => {
+        button.addEventListener('click', () => {
+            const modalId = button.getAttribute('data-open-modal');
+            openModal(modalId);
+        });
+    });
+    
+    document.querySelectorAll('.close-modal, .modal-close-button').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const modalId = e.target.closest('.modal').id;
+            closeModal(modalId);
+        });
+    });
+    
+    // 5. Configurar eventos de idioma
+    document.querySelectorAll('.language-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+            selectLanguage(e.target.getAttribute('data-lang-code'));
+        });
+    });
+    
+    // 6. Configurar eventos de tema
+    document.querySelectorAll('.theme-option').forEach(opt => {
+        opt.addEventListener('click', (e) => {
+            selectTheme(e.target.getAttribute('data-theme'));
+        });
+    });
+    
+    // 7. Configurar evento de notificaciones
+    const notificationsToggle = document.getElementById('notifications-toggle');
+    if (notificationsToggle) {
+        notificationsToggle.addEventListener('click', toggleNotifications);
+    }
+    
+    // 8. Inicializar la vista de la primera sección (home)
+    const urlParams = new URLSearchParams(window.location.search);
+    const postIdParam = urlParams.get('post');
+    let initialSection = 'home';
+    
+    // Determinar la sección inicial basada en la URL o el estado activo
+    document.querySelectorAll('.nav-button').forEach(btn => {
+        const targetId = btn.getAttribute('data-section');
+        if (document.getElementById(targetId)?.classList.contains('active')) {
+             initialSection = targetId;
+        }
+    });
+
+    const homeButton = document.querySelector(`.nav-button[data-section="${initialSection}"]`);
+    if (homeButton) {
+        homeButton.classList.add('active-nav');
+        document.getElementById(initialSection).classList.add('active');
+        
+        // Cargar quiz o sorteos si es la sección inicial
+        if (initialSection === 'quiz' && currentUser) {
+            loadDailyQuiz(currentUser.id);
+        } else if (initialSection === 'sorteos') {
+            loadSorteoData();
+        }
+    }
+    
+    // 9. Cargar sorteos si la URL apunta a un post compartido (aunque esto está en loadPosts, es un fallback)
+    checkSharedPost();
+}
+
+// Inicializar la aplicación al cargar el DOM
+document.addEventListener('DOMContentLoaded', initialize);
 
 // Auto-actualizar ranking cada 30 segundos si el modal está abierto
 setInterval(() => {
@@ -1119,3 +1505,13 @@ setInterval(() => {
         loadRanking();
     }
 }, 30000);
+
+// Exponer funciones globales (necesario para los manejadores onclick en el HTML)
+window.openModal = openModal;
+window.closeModal = closeModal;
+window.handleCredentialResponse = handleCredentialResponse;
+window.toggleLike = toggleLike;
+window.sharePost = sharePost;
+window.selectLanguage = selectLanguage;
+window.selectTheme = selectTheme;
+window.toggleNotifications = toggleNotifications;
