@@ -1,1353 +1,1748 @@
-}
+/* =============================================
+   VARIABLES CSS
+   ============================================= */
+
+:root {
+    /* Modo Oscuro (Default) */
+    --main-bg: #1e1e1e;
+    --card-bg: #2d2d2d;
+    --header-bg: #1a1a1a;
+    --text-color: #ffffff;
+    --subtle-text: #aaaaaa;
+    --border-color: #444444;
+    --primary-color: #3f51b5; /* Indigo */
+    --accent-color: #ff9800; /* Amber */
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --quiz-correct: #4CAF50;
+    --quiz-incorrect: #F44336;
+    --quiz-timer-warning: #FF5722;
+    --nav-hover-bg: #383838;
 }
 
-// =============================================
-// FUNCIONES DE MODAL
-// =============================================
+/* Modo Claro (Class 'light-mode' en body) */
+body.light-mode {
+    --main-bg: #f4f4f9;
+    --card-bg: #ffffff;
+    --header-bg: #ffffff;
+    --text-color: #333333;
+    --subtle-text: #666666;
+    --border-color: #dddddd;
+    --primary-color: #0d47a1; /* Blue Darker */
+    --accent-color: #ff6f00; /* Amber Darker */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --quiz-correct: #388E3C;
+    --quiz-incorrect: #D32F2F;
+    --quiz-timer-warning: #E64A19;
+    --nav-hover-bg: #eeeeee;
+}
 
-function openModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.add('show');
-        profileDropdown.classList.remove('show');
-        
-        if (modalId === 'ranking-modal') {
-            loadRanking();
-        }
+/* =============================================
+   ESTILOS GENERALES
+   ============================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--main-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+#app-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+}
+
+main {
+    padding: 20px 0;
+}
+
+section {
+    display: none;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 20px var(--shadow-color);
+    margin-top: 20px;
+}
+
+section.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    color: var(--subtle-text);
+    font-size: 0.9rem;
+    padding: 20px 0;
+    margin-top: 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer a {
+    color: var(--primary-color);
+}
+
+/* =============================================
+   HEADER Y NAVEGACIÓN
+   ============================================= */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.navigation {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.nav-button {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 2px solid transparent;
+    border-radius: 25px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-button:hover {
+    background-color: var(--nav-hover-bg);
+}
+
+.nav-button.active-nav {
+    background-color: var(--primary-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(63, 81, 181, 0.5);
+}
+
+/* Estilos específicos para el botón activo */
+.quiz.active-nav {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(255, 152, 0, 0.5);
+}
+
+.posts.active-nav {
+    border-color: #4CAF50;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+}
+
+.sorteos.active-nav { 
+    border-color: #FF6B35; 
+    box-shadow: 0 0 15px rgba(255, 107, 53, 0.8); 
+}
+
+/* Light Mode Navigation */
+body.light-mode .nav-button {
+    color: var(--text-color);
+}
+
+body.light-mode .nav-button.active-nav {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 10px rgba(13, 71, 161, 0.5);
+}
+
+/* User Controls and Profile */
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.profile-icon:hover {
+    transform: scale(1.1);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 250px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 8px 16px var(--shadow-color);
+    display: none;
+    z-index: 1010;
+    padding: 10px 0;
+}
+
+.profile-dropdown.show {
+    display: block;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-header {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 5px;
+}
+
+.dropdown-header span {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.dropdown-header .email {
+    font-size: 0.85rem;
+    color: var(--subtle-text);
+    font-weight: normal;
+}
+
+.dropdown-header .tickets {
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    margin-top: 5px;
+}
+
+.dropdown-menu-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown-menu-item:hover {
+    background-color: var(--nav-hover-bg);
+}
+
+#logout-button {
+    color: var(--quiz-incorrect);
+    font-weight: bold;
+    border-top: 1px solid var(--border-color);
+    margin-top: 5px;
+    padding-top: 10px;
+}
+
+/* =============================================
+   SECCIÓN INICIO
+   ============================================= */
+
+.welcome-card {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, var(--card-bg), var(--nav-hover-bg));
+    border-radius: 15px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 15px var(--shadow-color);
+}
+
+.welcome-card img {
+    max-width: 100%;
+    width: 500px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.welcome-card h2 {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+}
+
+.welcome-card p {
+    font-size: 1.1rem;
+    color: var(--subtle-text);
+    margin-bottom: 30px;
+    line-height: 1.6;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.action-button, .discord-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.action-button {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.action-button:hover {
+    background-color: #5c6bc0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(63, 81, 181, 0.5);
+}
+
+.discord-button {
+    background-color: #5865F2; /* Discord Blue */
+    color: white;
+}
+
+.discord-button:hover {
+    background-color: #404EED;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(88, 101, 242, 0.5);
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.feature-item {
+    background-color: var(--nav-hover-bg);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    border-left: 5px solid var(--accent-color);
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.feature-item h3 {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.feature-item p {
+    color: var(--subtle-text);
+}
+
+body.light-mode .feature-item {
+    background-color: #f9f9f9;
+    border-left-color: var(--primary-color);
+}
+
+/* =============================================
+   SECCIÓN QUIZ
+   ============================================= */
+
+.login-to-participate {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--nav-hover-bg);
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.login-to-participate p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.quiz-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+}
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.quiz-header h2 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.quiz-timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    padding: 5px 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.quiz-timer.warning {
+    color: var(--quiz-timer-warning);
+    border-color: var(--quiz-timer-warning);
+    animation: shake 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(5px); }
+}
+
+.quiz-question {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.quiz-option {
+    background-color: var(--nav-hover-bg);
+    color: var(--text-color);
+    padding: 15px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.1rem;
+    border: 2px solid var(--border-color);
+}
+
+.quiz-option:hover:not(.disabled) {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.quiz-option.selected {
+    background-color: var(--accent-color);
+    color: black;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+}
+
+.quiz-option.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.quiz-message {
+    text-align: center;
+    padding: 30px;
+    margin-top: 30px;
+    border-radius: 10px;
+    background-color: var(--nav-hover-bg);
+}
+
+.quiz-message h3 {
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.quiz-message-text {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Sección de Resultado/Ganador */
+.winner-section {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.quiz-result {
+    background-color: var(--quiz-correct);
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.quiz-result.incorrect {
+    background-color: var(--quiz-incorrect);
+}
+
+.quiz-result h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.quiz-result p {
+    font-size: 1.1rem;
+}
+
+.ticket-earned {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    background-color: white;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 50px;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.user-stats p {
+    font-size: 1rem;
+    color: #eeeeee;
+}
+
+/* =============================================
+   SECCIÓN POSTS
+   ============================================= */
+
+.posts-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.posts-tab-button {
+    background-color: var(--nav-hover-bg);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    flex-grow: 1;
+    max-width: 250px;
+}
+
+.posts-tab-button:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.posts-tab-button:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.posts-tab-button.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.posts-tab-content {
+    display: none;
+    min-height: 200px;
+    padding: 20px 0;
+}
+
+.posts-tab-content.active {
+    display: block;
+}
+
+.posts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.placeholder-text {
+    text-align: center;
+    padding: 50px;
+    color: var(--subtle-text);
+    font-size: 1.2rem;
+}
+
+.post {
+    background-color: var(--nav-hover-bg);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.post.highlighted {
+    animation: highlight 1.5s 3;
+}
+
+@keyframes highlight {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-color); }
+    50% { box-shadow: 0 0 15px 5px var(--accent-color); }
+}
+
+.post img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.post-content {
+    padding: 20px;
+}
+
+.post-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.post-content .date {
+    display: block;
+    color: var(--subtle-text);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.post-content p {
+    color: var(--text-color);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.like-button, .share-button {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.like-button svg, .share-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.like-button {
+    color: #F44336; /* Rojo para Likes */
+}
+
+.like-button:hover {
+    background-color: #F44336;
+    color: white;
+}
+
+.like-button.liked {
+    background-color: #F44336;
+    color: white;
+    border-color: #F44336;
+}
+
+.share-button:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.new-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--accent-color);
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.like-count {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: normal;
+    min-width: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.copy-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* =============================================
+   MODALES (Ranking, Configuración)
+   ============================================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    text-align: center;
+    color: var(--subtle-text);
+    margin-bottom: 20px;
+}
+
+.modal-close-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-close-button:hover {
+    background-color: #5c6bc0;
+}
+
+/* Ranking Modal */
+.ranking-podium {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.podium-item {
+    text-align: center;
+    padding: 15px 10px;
+    border-radius: 8px 8px 0 0;
+    min-width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    font-weight: bold;
+    color: black;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+}
+
+.podium-item.first {
+    background-color: #FFD700; /* Gold */
+    height: 150px;
+    font-size: 1.1rem;
+    transform: scale(1.1);
+}
+
+.podium-item.second {
+    background-color: #C0C0C0; /* Silver */
+    height: 120px;
+}
+
+.podium-item.third {
+    background-color: #CD7F32; /* Bronze */
+    height: 100px;
+}
+
+.rank-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.podium-item span {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-color);
+}
+
+.podium-item.first span { color: black; }
+.podium-item.second span { color: black; }
+.podium-item.third span { color: black; }
+
+.ranking-list {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.ranking-user {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px;
+    border-bottom: 1px dashed var(--border-color);
+    font-size: 1rem;
+    align-items: center;
+}
+
+.ranking-user:last-child {
+    border-bottom: none;
+}
+
+.ranking-position {
+    font-weight: bold;
+    color: var(--accent-color);
+    width: 40px;
+}
+
+.ranking-name {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.ranking-tickets {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Settings Modal */
+.settings-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.settings-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.theme-options, .language-options {
+    display: flex;
+    gap: 10px;
+}
+
+.theme-option, .language-option {
+    padding: 10px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.theme-option.active, .language-option.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.theme-option:hover, .language-option:hover {
+    border-color: var(--accent-color);
+}
+
+.toggle-switch-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Toggle Switch (Notifications) */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-color);
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--quiz-correct);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+
+/* =============================================
+   ESTILOS PARA SECCIÓN DE SORTEOS
+   ============================================= */
+
+/* Botón de navegación sorteos */
+body.light-mode .sorteos.active-nav { 
+    border-color: #FF6B35; 
+}
+
+/* Contenedor cuando no hay sorteos */
+.no-sorteos-notice {
+    text-align: center;
+    padding: 60px 20px;
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+    border: 2px dashed rgba(255, 107, 53, 0.4);
+    border-radius: 20px;
+    margin: 40px auto;
+    max-width: 700px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.no-sorteos-notice .notice-icon {
+    font-size: 5rem;
+    margin-bottom: 20px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-15px); }
+}
+
+.no-sorteos-notice h3 {
+    font-family: 'VT323', monospace;
+    font-size: 2.5rem;
+    color: #FF6B35;
+    margin-bottom: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.no-sorteos-notice p {
+    color: #cccccc;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+body.light-mode .no-sorteos-notice {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.08) 0%, rgba(255, 165, 0, 0.08) 100%);
+    border-color: rgba(255, 107, 53, 0.3);
+}
+
+body.light-mode .no-sorteos-notice p {
+    color: #666666;
+}
+
+/* Card principal del sorteo */
+.sorteo-main-card {
+    background: linear-gradient(135deg, rgba(26, 26, 26, 0.95) 0%, rgba(40, 40, 40, 0.95) 100%);
+    border: 3px solid transparent;
+    border-radius: 25px;
+    padding: 40px;
+    max-width: 900px;
+    margin: 40px auto;
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.sorteo-main-card::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(45deg, #FF6B35, #FFA500, #FFD700, #FFA500, #FF6B35);
+    background-size: 400% 400%;
+    border-radius: 25px;
+    z-index: -1;
+    animation: gradientRotate 8s ease infinite;
+}
+
+@keyframes gradientRotate {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+body.light-mode .sorteo-main-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(250, 250, 250, 0.98) 100%);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+}
+
+/* Header del sorteo */
+.sorteo-header {
+    text-align: center;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.sorteo-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #FF6B35 0%, #FFA500 100%);
+    color: #ffffff;
+    padding: 8px 25px;
+    border-radius: 50px;
+    font-family: 'VT323', monospace;
+    font-size: 1.2rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.5);
+    animation: pulse 2s infinite;
+    margin-bottom: 15px;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+.sorteo-header h2 {
+    font-family: 'VT323', monospace;
+    font-size: 3rem;
+    color: #FFD700;
+    margin: 15px 0 10px 0;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    letter-spacing: 2px;
+}
+
+body.light-mode .sorteo-header h2 {
+    color: #FF6B35;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sorteo-subtitle {
+    font-size: 1.3rem;
+    color: #FFA500;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+body.light-mode .sorteo-subtitle {
+    color: #FF8C00;
+}
+
+.sorteo-descripcion-box {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+body.light-mode .sorteo-descripcion-box {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.08) 0%, rgba(255, 165, 0, 0.08) 100%);
+}
+
+.sorteo-description {
+    font-size: 1.1rem;
+    color: #cccccc;
+    line-height: 1.8;
+    margin: 0;
+    text-align: center;
+}
+
+body.light-mode .sorteo-description {
+    color: #666666;
+}
+
+/* Imagen del premio */
+.sorteo-premio-container {
+    position: relative;
+    text-align: center;
+    margin: 30px 0;
+}
+
+.sorteo-imagen {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+    border: 3px solid #FFD700;
+    animation: imageFloat 4s ease-in-out infinite;
+}
+
+@keyframes imageFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+}
+
+.sorteo-premio-badge {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000000;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-family: 'VT323', monospace;
+    font-size: 2rem;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 20px;
+    box-shadow: 0 8px 20px rgba(255, 215, 0, 0.6);
+    border: 3px solid #FF8C00;
+}
+
+/* Contador regresivo */
+.sorteo-countdown-section {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.15) 0%, rgba(255, 165, 0, 0.15) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 40px 0;
+}
+
+body.light-mode .sorteo-countdown-section {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+}
+
+.countdown-title {
+    font-family: 'VT323', monospace;
+    font-size: 2rem;
+    color: #FFD700;
+    text-align: center;
+    margin-bottom: 25px;
+    letter-spacing: 3px;
+}
+
+body.light-mode .countdown-title {
+    color: #FF6B35;
+}
+
+.sorteo-countdown {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.countdown-item {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.5) 0%, rgba(40, 40, 40, 0.5) 100%);
+    border: 2px solid #FFD700;
+    border-radius: 15px;
+    padding: 20px;
+    min-width: 100px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.countdown-item:hover {
+    transform: scale(1.05);
+}
+
+body.light-mode .countdown-item {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(250, 250, 250, 0.9) 100%);
+    border-color: #FF6B35;
+}
+
+.countdown-number {
+    font-family: 'VT323', monospace;
+    font-size: 3.5rem;
+    color: #FFD700;
+    display: block;
+    font-weight: bold;
+    line-height: 1;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .countdown-number {
+    color: #FF6B35;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.countdown-label {
+    font-size: 0.9rem;
+    color: #cccccc;
+    display: block;
+    margin-top: 10px;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+body.light-mode .countdown-label {
+    color: #666666;
+}
+
+.countdown-separator {
+    font-family: 'VT323', monospace;
+    font-size: 3rem;
+    color: #FFD700;
+    font-weight: bold;
+}
+
+body.light-mode .countdown-separator {
+    color: #FF6B35;
+}
+
+/* Requisitos */
+.sorteo-requisitos {
+    background: rgba(40, 40, 40, 0.5);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 25px;
+    margin: 30px 0;
+}
+
+body.light-mode .sorteo-requisitos {
+    background: rgba(250, 250, 250, 0.8);
+    border-color: rgba(0, 0, 0, 0.1);
+}
+
+.requisitos-title {
+    font-family: 'VT323', monospace;
+    font-size: 1.8rem;
+    color: #FFD700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+body.light-mode .requisitos-title {
+    color: #FF6B35;
+}
+
+.requisitos-lista {
+    list-style: none;
+    padding: 0;
+}
+
+.requisitos-lista li {
+    color: #cccccc;
+    font-size: 1.1rem;
+    padding: 12px 0;
+    padding-left: 35px;
+    position: relative;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.requisitos-lista li:last-child {
+    border-bottom: none;
+}
+
+.requisitos-lista li::before {
+    content: '✓';
+    position: absolute;
+    left: 0;
+    color: #4CAF50;
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+body.light-mode .requisitos-lista li {
+    color: #444444;
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Call to action de Discord */
+.discord-cta {
+    margin-top: 25px;
+    padding-top: 25px;
+    border-top: 2px solid rgba(255, 215, 0, 0.3);
+    text-align: center;
+}
+
+.discord-cta p {
+    color: #FFD700;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+body.light-mode .discord-cta p {
+    color: #FF6B35;
+}
+
+.discord-inline-button {
+    display: inline-block;
+    padding: 12px 30px;
+    background: linear-gradient(135deg, #5865F2 0%, #404EED 100%);
+    color: #ffffff;
+    font-family: 'VT323', monospace;
+    font-size: 1.3rem;
+    font-weight: bold;
+    text-decoration: none;
+    border: 2px solid #7289DA;
+    border-radius: 50px;
+    box-shadow: 0 5px 15px rgba(88, 101, 242, 0.4);
+    transition: all 0.3s ease;
+}
+
+.discord-inline-button:hover {
+    background: linear-gradient(135deg, #404EED 0%, #2F3AE0 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(88, 101, 242, 0.6);
+}
+
+/* Estadísticas */
+.sorteo-stats {
+    display: flex;
+    justify-content: space-around;
+    gap: 20px;
+    margin-top: 40px;
+    flex-wrap: wrap;
+}
+
+.stat-item {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.2) 0%, rgba(255, 165, 0, 0.2) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 15px;
+    padding: 25px;
+    text-align: center;
+    flex: 1;
+    min-width: 150px;
+    transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+    transform: translateY(-5px);
+}
+
+body.light-mode .stat-item {
+    background: linear-gradient(135deg, rgba(255, 107, 53, 0.1) 0%, rgba(255, 165, 0, 0.1) 100%);
+}
+
+.stat-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    font-family: 'VT323', monospace;
+    font-size: 3rem;
+    color: #FFD700;
+    display: block;
+    font-weight: bold;
+}
+
+body.light-mode .stat-number {
+    color: #FF6B35;
+}
+
+.stat-label {
+    font-size: 1rem;
+    color: #cccccc;
+    display: block;
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+body.light-mode .stat-label {
+    color: #666666;
+}
+
+/* Anuncio del ganador */
+.ganador-announcement {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.2) 0%, rgba(129, 199, 132, 0.2) 100%);
+    border: 3px solid #4CAF50;
+    border-radius: 25px;
+    padding: 60px 40px;
+    max-width: 800px;
+    margin: 40px auto;
+    text-align: center;
+    box-shadow: 0 15px 50px rgba(76, 175, 80, 0.4);
+    position: relative;
+    overflow: hidden;
+}
+
+body.light-mode .ganador-announcement {
+    background: linear-gradient(135deg, rgba(76, 175, 80, 0.15) 0%, rgba(129, 199, 132, 0.15) 100%);
+}
+
+.confetti-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+/* Estilos de confeti para JS */
+.confetti-container > div {
+    will-change: transform, opacity;
+}
+
+.ganador-icon {
+    font-size: 6rem;
+    margin-bottom: 20px;
+    animation: bounce 1s ease infinite;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-20px) scale(1.1); }
+}
+
+.ganador-title {
+    font-family: 'VT323', monospace;
+    font-size: 3.5rem;
+    color: #FFD700;
+    margin-bottom: 30px;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.5);
+    letter-spacing: 3px;
+}
+
+body.light-mode .ganador-title {
+    color: #4CAF50;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ganador-info {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 20px;
+    padding: 30px;
+    margin: 30px 0;
+}
+
+body.light-mode .ganador-info {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.ganador-label {
+    font-size: 1.2rem;
+    color: #cccccc;
+    margin-bottom: 15px;
+}
+
+body.light-mode .ganador-label {
+    color: #666666;
+}
+
+.ganador-nombre {
+    font-family: 'VT323', monospace;
+    font-size: 3rem;
+    color: #FFD700;
+    margin: 15px 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+body.light-mode .ganador-nombre {
+    color: #4CAF50;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.ganador-premio {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #000000;
+    padding: 15px 30px;
+    border-radius: 50px;
+    font-family: 'VT323', monospace;
+    font-size: 2rem;
+    font-weight: bold;
+    display: inline-block;
+    margin-top: 20px;
+    box-shadow: 0 5px 15px rgba(255, 215, 0, 0.5);
+}
+
+.ganador-mensaje {
+    font-size: 1.2rem;
+    color: #cccccc;
+    line-height: 1.8;
+    margin-top: 30px;
+}
+
+body.light-mode .ganador-mensaje {
+    color: #666666;
+}
+
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 900px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+    }
+
+    .navigation {
+        justify-content: space-around;
+        width: 100%;
+    }
+    
+    .nav-button {
+        flex-grow: 1;
+        text-align: center;
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-button span {
+        display: none; /* Ocultar texto para ahorrar espacio */
+    }
+    
+    .nav-button:hover span,
+    .nav-button.active-nav span {
+        display: inline; /* Mostrar solo al pasar el ratón o si está activo */
     }
 }
 
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.classList.remove('show');
+@media (max-width: 600px) {
+    #app-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .nav-button {
+        font-size: 0.8rem;
+    }
+    
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .quiz-container {
+        padding: 20px;
+    }
+    
+    .quiz-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .quiz-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .posts-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .ranking-podium {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .podium-item {
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        padding: 15px;
+    }
+    
+    .podium-item.first {
+        height: auto;
+        transform: scale(1.05);
+    }
+    
+    .sorteo-main-card {
+        padding: 25px;
+    }
+    
+    .sorteo-header h2 {
+        font-size: 2rem;
+    }
+    
+    .countdown-item {
+        min-width: 80px;
+        padding: 15px;
+    }
+    
+    .countdown-number {
+        font-size: 2.5rem;
+    }
+    
+    .ganador-title {
+        font-size: 2.5rem;
+    }
+    
+    .ganador-nombre {
+        font-size: 2rem;
     }
 }
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.modal-overlay').forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.classList.remove('show');
-            }
-        });
-    });
-});
-
-// =============================================
-// SISTEMA DE IDIOMAS
-// =============================================
-
-async function loadLanguage(lang) {
-    try {
-        const response = await fetch(`https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/lang/${lang}.json`);
-        if (!response.ok) {
-            console.error('Error al cargar idioma:', lang);
-            return;
-        }
-        translations = await response.json();
-        applyTranslations();
-    } catch (e) {
-        console.error('Error cargando traducciones:', e);
-    }
-}
-
-function applyTranslations() {
-    document.querySelectorAll('[data-lang]').forEach(element => {
-        const key = element.getAttribute('data-lang');
-        if (translations[key]) {
-            if (key.includes('quiz-no-question')) {
-                element.innerHTML = translations[key].replace('\\n', '<br>');
-            } else {
-                element.textContent = translations[key];
-            }
-        }
-    });
-}
-
-function selectLanguage(lang) {
-    currentLanguage = lang;
-    localStorage.setItem(LANGUAGE_KEY, lang);
-    
-    document.querySelectorAll('.language-option').forEach(opt => {
-        opt.classList.remove('active');
-    });
-    document.querySelector(`[data-lang-code="${lang}"]`).classList.add('active');
-    
-    loadLanguage(lang);
-}
-
-function loadLanguageSettings() {
-    currentLanguage = localStorage.getItem(LANGUAGE_KEY) || 'es';
-    document.querySelectorAll('.language-option').forEach(opt => {
-        opt.classList.remove('active');
-    });
-    const activeOpt = document.querySelector(`[data-lang-code="${currentLanguage}"]`);
-    if (activeOpt) activeOpt.classList.add('active');
-    
-    loadLanguage(currentLanguage);
-}
-
-// =============================================
-// SISTEMA DE NOTIFICACIONES
-// =============================================
-
-function toggleNotifications() {
-    notificationsEnabled = !notificationsEnabled;
-    localStorage.setItem(NOTIFICATIONS_KEY, notificationsEnabled);
-    
-    const toggle = document.getElementById('notifications-toggle');
-    if (notificationsEnabled) {
-        toggle.classList.add('active');
-    } else {
-        toggle.classList.remove('active');
-    }
-    
-    updateNotificationBadge();
-}
-
-function updateNotificationBadge() {
-    if (notificationsEnabled) {
-        const count = 0;
-        if (count > 0) {
-            notificationBadge.textContent = count;
-            notificationBadge.style.display = 'flex';
-            notificationCountMenu.textContent = count;
-            notificationCountMenu.style.display = 'inline';
-        } else {
-            notificationBadge.style.display = 'none';
-            notificationCountMenu.style.display = 'none';
-        }
-    } else {
-        notificationBadge.style.display = 'none';
-        notificationCountMenu.style.display = 'none';
-    }
-}
-
-function loadNotificationsSettings() {
-    notificationsEnabled = localStorage.getItem(NOTIFICATIONS_KEY) === 'true';
-    const toggle = document.getElementById('notifications-toggle');
-    if (notificationsEnabled) {
-        toggle.classList.add('active');
-    }
-    updateNotificationBadge();
-}
-
-// =============================================
-// SISTEMA DE TEMAS
-// =============================================
-
-function selectTheme(theme) {
-    currentTheme = theme;
-    localStorage.setItem(THEME_KEY, theme);
-    
-    // Aplicar tema al body
-    if (theme === 'light') {
-        document.body.classList.add('light-mode');
-    } else {
-        document.body.classList.remove('light-mode');
-    }
-    
-    // Actualizar selector visual
-    document.querySelectorAll('.theme-option').forEach(opt => {
-        opt.classList.remove('active');
-    });
-    document.querySelector(`[data-theme="${theme}"]`).classList.add('active');
-    
-    console.log(`🎨 Tema cambiado a: ${theme}`);
-}
-
-function loadThemeSettings() {
-    currentTheme = localStorage.getItem(THEME_KEY) || 'dark';
-    
-    // Aplicar tema guardado
-    if (currentTheme === 'light') {
-        document.body.classList.add('light-mode');
-    } else {
-        document.body.classList.remove('light-mode');
-    }
-    
-    // Actualizar selector visual
-    document.querySelectorAll('.theme-option').forEach(opt => {
-        opt.classList.remove('active');
-    });
-    const activeOpt = document.querySelector(`[data-theme="${currentTheme}"]`);
-    if (activeOpt) activeOpt.classList.add('active');
-}
-
-// =============================================
-// SISTEMA DE RANKING
-// =============================================
-
-function saveUserData(userId, username, email) {
-    try {
-        let usersData = JSON.parse(localStorage.getItem(USER_DATA_KEY)) || {};
-        usersData[userId] = {
-            username: username,
-            email: email,
-            lastUpdate: Date.now()
-        };
-        localStorage.setItem(USER_DATA_KEY, JSON.stringify(usersData));
-        console.log('💾 Datos de usuario guardados:', username);
-    } catch (e) {
-        console.error('Error guardando datos de usuario:', e);
-    }
-}
-
-function getUserData(userId) {
-    try {
-        const usersData = JSON.parse(localStorage.getItem(USER_DATA_KEY)) || {};
-        return usersData[userId] || null;
-    } catch (e) {
-        console.error('Error leyendo datos de usuario:', e);
-        return null;
-    }
-}
-
-function getUserTickets(userId) {
-    const key = `${QUIZ_TICKETS_KEY}_${userId}`;
-    const tickets = localStorage.getItem(key);
-    const ticketCount = tickets ? parseInt(tickets) : 0;
-    console.log(`🎟️ getUserTickets("${userId}"): ${ticketCount} (key: ${key})`);
-    return ticketCount;
-}
-
-function incrementUserTickets(userId) {
-    const currentTickets = getUserTickets(userId);
-    const newTickets = currentTickets + 1;
-    localStorage.setItem(`${QUIZ_TICKETS_KEY}_${userId}`, newTickets);
-    console.log(`✅ Tickets actualizados: ${newTickets} para usuario ${userId}`);
-    
-    if (dropdownTickets && currentUser && currentUser.id === userId) {
-        dropdownTickets.textContent = `🎫 ${newTickets} Tickets`;
-    }
-    
-    return newTickets;
-}
-
-async function loadRanking() {
-    try {
-        const response = await fetch(RANKING_API_URL + '?action=getRanking');
-        const data = await response.json();
-        
-        console.log('📊 Datos del ranking recibidos:', data);
-        
-        if (data.success && data.users && data.users.length > 0) {
-            displayRanking(data.users);
-        } else {
-            const localRanking = createLocalRanking();
-            displayRanking(localRanking);
-        }
-    } catch (error) {
-        console.error('❌ Error al cargar ranking:', error);
-        const localRanking = createLocalRanking();
-        displayRanking(localRanking);
-    }
-}
-
-function createLocalRanking() {
-    const users = [];
-    const processedUsers = new Set();
-    
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        if (key && key.startsWith(QUIZ_TICKETS_KEY)) {
-            const userId = key.replace(`${QUIZ_TICKETS_KEY}_`, '');
-            
-            if (processedUsers.has(userId)) continue;
-            processedUsers.add(userId);
-            
-            const tickets = parseInt(localStorage.getItem(key)) || 0;
-            
-            if (tickets > 0) {
-                const userData = getUserData(userId);
-                let username = 'Usuario';
-                
-                if (userData && userData.username) {
-                    username = userData.username;
-                } else if (currentUser && currentUser.id === userId) {
-                    username = currentUser.name;
-                } else {
-                    username = `Usuario ${userId.substring(0, 8)}`;
-                }
-                
-                users.push({ userId, username, tickets });
-            }
-        }
-    }
-    
-    if (currentUser) {
-        const userInList = users.find(u => u.userId === currentUser.id);
-        if (!userInList) {
-            const userTickets = getUserTickets(currentUser.id);
-            if (userTickets > 0) {
-                users.push({
-                    userId: currentUser.id,
-                    username: currentUser.name,
-                    tickets: userTickets
-                });
-            }
-        }
-    }
-    
-    users.sort((a, b) => b.tickets - a.tickets);
-    
-    console.log('📊 Ranking local creado:', users);
-    console.log('👤 Usuario actual:', currentUser);
-    console.log('🎫 Tickets del usuario actual:', currentUser ? getUserTickets(currentUser.id) : 0);
-    
-    return users;
-}
-
-function displayRanking(users) {
-    document.getElementById('rank-1-name').textContent = users[0]?.username || '---';
-    document.getElementById('rank-1-tickets').textContent = users[0] ? `${users[0].tickets} TICKETS` : '0 TICKETS';
-    
-    document.getElementById('rank-2-name').textContent = users[1]?.username || '---';
-    document.getElementById('rank-2-tickets').textContent = users[1] ? `${users[1].tickets} TICKETS` : '0 TICKETS';
-    
-    document.getElementById('rank-3-name').textContent = users[2]?.username || '---';
-    document.getElementById('rank-3-tickets').textContent = users[2] ? `${users[2].tickets} TICKETS` : '0 TICKETS';
-
-    const rankingList = document.getElementById('ranking-list');
-    rankingList.innerHTML = '';
-
-    for (let i = 3; i < users.length; i++) {
-        const user = users[i];
-        const rankingUser = document.createElement('div');
-        rankingUser.className = 'ranking-user';
-        
-        rankingUser.innerHTML = `
-            <span class="ranking-position">#${i + 1}</span>
-            <span class="ranking-name">${user.username}</span>
-            <span class="ranking-tickets">${user.tickets} TICKETS</span>
-        `;
-        
-        rankingList.appendChild(rankingUser);
-    }
-
-    if (users.length === 0) {
-        rankingList.innerHTML = '<div style="text-align: center; color: #aaaaaa; padding: 20px;">Aún no hay participantes en el ranking. ¡Sé el primero! 🎮</div>';
-    } else if (users.length <= 3) {
-        rankingList.innerHTML = '<div style="text-align: center; color: #aaaaaa; padding: 20px;">No hay más participantes en el ranking</div>';
-    }
-}
-
-// =============================================
-// AUTENTICACIÓN CON GOOGLE
-// =============================================
-
-function handleCredentialResponse(response) {
-    if (response.credential) {
-        const idToken = response.credential;
-        const base64Url = idToken.split('.')[1];
-        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-        const payload = JSON.parse(atob(base64));
-
-        currentUser = { 
-            id: payload.sub,
-            name: payload.given_name || payload.name || payload.email,
-            email: payload.email 
-        };
-        
-        localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(currentUser));
-        saveUserData(currentUser.id, currentUser.name, currentUser.email);
-        
-        updateLoginUI();
-        
-        if (document.getElementById('quiz').classList.contains('active')) {
-            loadDailyQuiz(currentUser.id);
-        }
-    }
-}
-
-function updateLoginUI() {
-    const gIdOnload = document.getElementById('g_id_onload');
-    const gIdSignin = document.querySelector('.g_id_signin');
-
-    if (currentUser) {
-        if (gIdOnload) gIdOnload.style.display = 'none';
-        if (gIdSignin) gIdSignin.style.display = 'none';
-
-        profileContainer.style.display = 'block';
-        dropdownUsername.textContent = currentUser.name;
-        dropdownEmail.textContent = currentUser.email;
-        
-        const userTickets = getUserTickets(currentUser.id);
-        if (dropdownTickets) {
-            dropdownTickets.textContent = `🎫 ${userTickets} Tickets`;
-        }
-        
-        loginToParticipate.style.display = 'none';
-        
-        loadNotificationsSettings();
-        loadLanguageSettings();
-        loadThemeSettings();
-    } else {
-        if (gIdOnload) gIdOnload.style.display = 'block';
-        if (gIdSignin) gIdSignin.style.display = 'block';
-        
-        profileContainer.style.display = 'none';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    if (profileIcon) {
-        profileIcon.addEventListener('click', (e) => {
-            e.stopPropagation();
-            profileDropdown.classList.toggle('show');
-            
-            if (currentUser && dropdownTickets) {
-                const userTickets = getUserTickets(currentUser.id);
-                dropdownTickets.textContent = `🎫 ${userTickets} Tickets`;
-                console.log('🔄 Menú abierto - Tickets actualizados:', userTickets);
-            }
-        });
-    }
-
-    document.addEventListener('click', (e) => {
-        if (profileContainer && !profileContainer.contains(e.target)) {
-            profileDropdown.classList.remove('show');
-        }
-    });
-
-    if (logoutButton) {
-        logoutButton.addEventListener('click', () => {
-            currentUser = null;
-            localStorage.removeItem(USER_STORAGE_KEY);
-            profileDropdown.classList.remove('show');
-            updateLoginUI();
-            
-            if (document.getElementById('quiz').classList.contains('active')) {
-                loginToParticipate.style.display = 'block';
-                quizContent.style.display = 'none';
-                noQuizMessage.style.display = 'none';
-                winnerSection.style.display = 'none';
-            }
-            
-            location.reload();
-        });
-    }
-});
-
-// =============================================
-// SISTEMA DE QUIZ
-// =============================================
-
-function getTodayDate() {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-}
-
-async function getDailyQuizData() {
-    try {
-        console.log('🔍 Cargando quiz del día:', getTodayDate());
-        const response = await fetch(QUIZ_JSON_URL);
-        if (!response.ok) {
-            console.error('❌ Error al cargar preguntas.json:', response.statusText);
-            return null;
-        }
-        const quizData = await response.json();
-        console.log('📦 Datos del quiz cargados:', quizData);
-        
-        const todayDate = getTodayDate();
-        console.log('📅 Fecha de hoy:', todayDate);
-        console.log('📋 Pregunta de hoy:', quizData[todayDate]);
-        
-        return quizData[todayDate] || null;
-    } catch (e) {
-        console.error('❌ Fallo en la petición de preguntas.json:', e);
-        return null;
-    }
-}
-
-async function saveTicketToServer(userId, username, email) {
-    try {
-        const response = await fetch(RANKING_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'addTicket',
-                userId: userId,
-                username: username,
-                email: email,
-                date: getTodayDate(),
-                timestamp: Date.now()
-            })
-        });
-        
-        const data = await response.json();
-        console.log('✅ Respuesta del servidor:', data);
-        
-        if (data.success) {
-            console.log('✅ Ticket guardado en servidor:', username);
-        } else {
-            console.log('⚠️ Error del servidor:', data.message);
-        }
-    } catch (error) {
-        console.log('⚠️ No se pudo conectar con el servidor:', error);
-    }
-}
-
-function startQuizTimer() {
-    timeRemaining = 15;
-    updateTimerDisplay();
-    
-    quizTimer = setInterval(() => {
-        timeRemaining--;
-        updateTimerDisplay();
-        
-        if (timeRemaining <= 5) {
-            quizTimerEl.classList.add('warning');
-        }
-        
-        if (timeRemaining <= 0) {
-            clearInterval(quizTimer);
-            handleTimeUp();
-        }
-    }, 1000);
-}
-
-function updateTimerDisplay() {
-    quizTimerEl.textContent = `⏱️ ${timeRemaining}`;
-}
-
-function handleTimeUp() {
-    localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'TIMEOUT');
-    
-    document.querySelectorAll('.quiz-option').forEach(opt => {
-        opt.classList.add('disabled');
-    });
-    
-    quizMessage.textContent = '⏰ ¡Se acabó el tiempo! No respondiste a tiempo. Vuelve mañana para una nueva oportunidad.';
-    quizMessage.style.color = '#F44336';
-}
-
-function handleOptionClick(event) {
-    if (timeRemaining <= 0) return;
-    
-    document.querySelectorAll('.quiz-option').forEach(opt => {
-        opt.classList.remove('selected');
-    });
-    event.target.classList.add('selected');
-    selectedOption = event.target.textContent;
-    
-    setTimeout(() => handleQuizSubmit(), 300);
-}
-
-async function handleQuizSubmit() {
-    if (!selectedOption || timeRemaining <= 0) return;
-    
-    const selectedElement = document.querySelector('.quiz-option.selected');
-    const selectedKey = selectedElement ? selectedElement.getAttribute('data-key') : null;
-
-    if (!dailyQuizData) return;
-
-    clearInterval(quizTimer);
-
-    document.querySelectorAll('.quiz-option').forEach(opt => {
-        opt.classList.add('disabled');
-    });
-
-    if (selectedKey === dailyQuizData.respuesta_correcta) {
-        console.log('✅ Respuesta CORRECTA!');
-        console.log('👤 Usuario actual:', currentUser);
-        console.log('🆔 User ID:', currentUser.id);
-        console.log('📝 Nombre:', currentUser.name);
-        
-        const newTicketCount = incrementUserTickets(currentUser.id);
-        await saveTicketToServer(currentUser.id, currentUser.name, currentUser.email);
-        
-        console.log('💾 Ticket guardado. Nuevo total:', newTicketCount);
-        console.log('🔑 localStorage key:', `${QUIZ_TICKETS_KEY}_${currentUser.id}`);
-        console.log('📦 Valor guardado:', localStorage.getItem(`${QUIZ_TICKETS_KEY}_${currentUser.id}`));
-        
-        localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'CORRECT');
-        
-        quizContent.style.display = 'none';
-        winnerSection.style.display = 'block';
-        winnerSection.innerHTML = `
-            <div class="quiz-result">
-                <h3>🎉 ¡FELICIDADES! 🎉</h3>
-                <p>¡Respondiste correctamente!</p>
-                <div class="ticket-earned">+1 TICKET</div>
-                <p style="font-size: 1rem; margin-top: 10px;">¡Has ganado 1 ticket! 🎫</p>
-                <div class="user-stats">
-                    <p>Total de tickets: ${newTicketCount} 🎟️</p>
-                    <p style="margin-top: 10px;">Vuelve mañana para ganar más tickets 😊</p>
-                </div>
-            </div>
-        `;
-        
-    } else {
-        localStorage.setItem(`${QUIZ_ANSWER_KEY}_${currentUser.id}_${getTodayDate()}`, 'INCORRECT');
-        
-        quizContent.style.display = 'none';
-        winnerSection.style.display = 'block';
-        winnerSection.innerHTML = `
-            <div class="quiz-result incorrect">
-                <h3>❌ Respuesta Incorrecta</h3>
-                <p>¡Oh no! Tu respuesta fue incorrecta.</p>
-                <p style="margin-top: 15px;">Vuelve mañana para intentarlo de nuevo con la pregunta diaria del siguiente día. ¡No te rindas! 💪</p>
-            </div>
-        `;
-    }
-}
-
-async function loadDailyQuiz(userId) {
-    loginToParticipate.style.display = 'none';
-    quizContent.style.display = 'none';
-    noQuizMessage.style.display = 'none';
-    winnerSection.style.display = 'none';
-    quizTimerEl.classList.remove('warning');
-    
-    dailyQuizData = await getDailyQuizData();
-    
-    if (!dailyQuizData) {
-        noQuizMessage.style.display = 'block';
-        return;
-    }
-
-    const storedAnswer = localStorage.getItem(`${QUIZ_ANSWER_KEY}_${userId}_${getTodayDate()}`);
-
-    if (storedAnswer) {
-        winnerSection.style.display = 'block';
-        
-        if (storedAnswer === 'CORRECT') {
-            const currentTickets = getUserTickets(userId);
-            winnerSection.innerHTML = `
-                <div class="quiz-result">
-                    <h3>✅ Ya participaste hoy</h3>
-                    <p>Ganaste 1 ticket 🎫</p>
-                    <div class="user-stats">
-                        <p>Total de tickets: ${currentTickets} 🎟️</p>
-                        <p style="margin-top: 10px;">Vuelve mañana para la nueva pregunta diaria 😊</p>
-                    </div>
-                </div>
-            `;
-        } else if (storedAnswer === 'INCORRECT') {
-            winnerSection.innerHTML = `
-                <div class="quiz-result incorrect">
-                    <h3>❌ Ya participaste hoy</h3>
-                    <p>Tu respuesta fue incorrecta</p>
-                    <div class="user-stats">
-                        <p>Vuelve mañana para intentarlo de nuevo 💪</p>
-                    </div>
-                </div>
-            `;
-        } else if (storedAnswer === 'TIMEOUT') {
-            winnerSection.innerHTML = `
-                <div class="quiz-result incorrect">
-                    <h3>⏰ Ya participaste hoy</h3>
-                    <p>No respondiste a tiempo</p>
-                    <div class="user-stats">
-                        <p>¡Vuelve mañana por otra oportunidad! 🎮</p>
-                    </div>
-                </div>
-            `;
-        }
-        return;
-    }
-
-    quizContent.style.display = 'block';
-    quizTimerEl.style.display = 'block';
-    quizQuestionEl.textContent = dailyQuizData.pregunta;
-    quizOptionsContainer.innerHTML = '';
-    quizMessage.textContent = '';
-    selectedOption = null;
-
-    const optionsArray = Object.values(dailyQuizData.opciones);
-    optionsArray.forEach(option => {
-        const optionEl = document.createElement('div');
-        const optionKey = Object.keys(dailyQuizData.opciones).find(key => dailyQuizData.opciones[key] === option);
-        optionEl.className = 'quiz-option';
-        optionEl.setAttribute('data-key', optionKey);
-        optionEl.textContent = option;
-        optionEl.addEventListener('click', handleOptionClick);
-        quizOptionsContainer.appendChild(optionEl);
-    });
-
-    startQuizTimer();
-}
-
-function checkLocalStorageUser() {
-    const storedUser = localStorage.getItem(USER_STORAGE_KEY);
-    if (storedUser) {
-        try {
-            currentUser = JSON.parse(storedUser);
-            saveUserData(currentUser.id, currentUser.name, currentUser.email);
-            updateLoginUI();
-            return true;
-        } catch (e) {
-            localStorage.removeItem(USER_STORAGE_KEY);
-        }
-    }
-    
-    if (document.getElementById('quiz') && document.getElementById('quiz').classList.contains('active')) {
-        loginToParticipate.style.display = 'block';
-        quizContent.style.display = 'none';
-        noQuizMessage.style.display = 'none';
-        winnerSection.style.display = 'none';
-    }
-    return false;
-}
-
-// =============================================
-// NAVEGACIÓN
-// =============================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    document.querySelectorAll('.nav-button').forEach(button => {
-        button.addEventListener('click', function() {
-            const targetId = this.getAttribute('data-section');
-            
-            document.querySelectorAll('.nav-button').forEach(btn => {
-                btn.classList.remove('active-nav');
-            });
-            
-            this.classList.add('active-nav');
-
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-            
-            const targetSection = document.getElementById(targetId);
-            if (targetSection) {
-                targetSection.classList.add('active');
-                
-                if (targetId === 'quiz') {
-                     if (currentUser) {
-                        loadDailyQuiz(currentUser.id);
-                    } else {
-                        loginToParticipate.style.display = 'block';
-                        quizContent.style.display = 'none';
-                        noQuizMessage.style.display = 'none';
-                        winnerSection.style.display = 'none';
-                    }
-                } else if (targetId === 'sorteos') { // <-- Lógica añadida para sorteos
-                    loadSorteoData();
-                }
-            }
-        });
-    });
-});
-
-// =============================================
-// CARGAR POSTS
-// =============================================
-
-const LIKES_STORAGE_KEY = 'masterstudio_post_likes';
-
-function generatePostId(post) {
-    const cleanTitle = post.titulo.toLowerCase().replace(/[^a-z0-9]/g, '-');
-    const cleanDate = post.fecha.replace(/[^0-9]/g, '');
-    return `post-${cleanTitle}-${cleanDate}`;
-}
-
-function sharePost(postId, category) {
-    const baseUrl = window.location.origin + window.location.pathname;
-    const shareUrl = `${baseUrl}?post=${postId}&category=${category}`;
-    
-    navigator.clipboard.writeText(shareUrl).then(() => {
-        showCopyNotification();
-        console.log('🔗 Link copiado:', shareUrl);
-    }).catch(err => {
-        console.error('Error al copiar:', err);
-        const textArea = document.createElement('textarea');
-        textArea.value = shareUrl;
-        document.body.appendChild(textArea);
-        textArea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textArea);
-        showCopyNotification();
-    });
-}
-
-function showCopyNotification() {
-    const notification = document.createElement('div');
-    notification.className = 'copy-notification';
-    notification.innerHTML = '✅ ¡Link copiado al portapapeles!';
-    document.body.appendChild(notification);
-    
-    setTimeout(() => {
-        notification.remove();
-    }, 3000);
-}
-
-async function toggleLike(postId) {
-    if (!currentUser) {
-        alert('Por favor, inicia sesión para dar like a los posts 💙');
-        return;
-    }
-    
-    const likeButton = document.querySelector(`#${postId} .like-button`);
-    const likeCountSpan = document.querySelector(`#${postId} .like-count`);
-    
-    if (!likeButton) return;
-    
-    // Deshabilitar botón temporalmente
-    likeButton.disabled = true;
-    
-    try {
-        // Guardar en servidor
-        const response = await fetch(RANKING_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'toggleLike',
-                postId: postId,
-                userId: currentUser.id,
-                username: currentUser.name
-            })
-        });
-        
-        const data = await response.json();
-        console.log('❤️ Respuesta del servidor:', data);
-        
-        if (data.success) {
-            // Actualizar UI según la acción
-            if (data.action === 'liked') {
-                likeButton.classList.add('liked');
-                saveLocalLike(postId, true);
-                console.log('💖 Like agregado a:', postId);
-            } else {
-                likeButton.classList.remove('liked');
-                saveLocalLike(postId, false);
-                console.log('💔 Like removido de:', postId);
-            }
-            
-            // Actualizar contador
-            await updateLikeCount(postId);
-        }
-        
-    } catch (error) {
-        console.error('❌ Error al dar like:', error);
-        // Fallback a localStorage
-        const isLiked = likeButton.classList.contains('liked');
-        if (isLiked) {
-            likeButton.classList.remove('liked');
-            saveLocalLike(postId, false);
-        } else {
-            likeButton.classList.add('liked');
-            saveLocalLike(postId, true);
-        }
-        // Actualizar contador con datos locales
-        await updateLikeCount(postId);
-    } finally {
-        likeButton.disabled = false;
-    }
-}
-
-function saveLocalLike(postId, liked) {
-    if (!currentUser) return;
-    
-    let likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
-    
-    if (liked) {
-        if (!likes[postId]) likes[postId] = [];
-        if (!likes[postId].includes(currentUser.id)) {
-            likes[postId].push(currentUser.id);
-        }
-    } else {
-        if (likes[postId]) {
-            likes[postId] = likes[postId].filter(id => id !== currentUser.id);
-            if (likes[postId].length === 0) {
-                delete likes[postId];
-            }
-        }
-    }
-    
-    localStorage.setItem(LIKES_STORAGE_KEY, JSON.stringify(likes));
-}
-
-function checkIfUserLiked(postId) {
-    if (!currentUser) return false;
-    
-    const likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
-    return likes[postId] && likes[postId].includes(currentUser.id);
-}
-
-async function updateLikeCount(postId) {
-    const likeCountSpan = document.querySelector(`#${postId} .like-count`);
-    if (!likeCountSpan) return;
-    
-    try {
-        const response = await fetch(RANKING_API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                action: 'getLikes',
-                postId: postId
-            })
-        });
-        
-        const data = await response.json();
-        
-        if (data.success) {
-            const count = data.count || 0;
-            if (count > 0) {
-                likeCountSpan.textContent = count;
-                likeCountSpan.style.display = 'inline-flex';
-            } else {
-                likeCountSpan.style.display = 'none';
-            }
-        }
-        
-    } catch (error) {
-        console.error('Error al obtener likes:', error);
-        // Fallback a localStorage
-        const likes = JSON.parse(localStorage.getItem(LIKES_STORAGE_KEY)) || {};
-        const count = likes[postId] ? likes[postId].length : 0;
-        if (count > 0) {
-            likeCountSpan.textContent = count;
-            likeCountSpan.style.display = 'inline-flex';
-        } else {
-            likeCountSpan.style.display = 'none';
-        }
-    }
-}
-
-function checkSharedPost() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('post');
-    const category = urlParams.get('category');
-    
-    if (postId && category) {
-        console.log('📌 Post compartido detectado:', postId, 'en categoría:', category);
-        
-        const targetSection = document.getElementById(category);
-        if (targetSection) {
-            document.querySelectorAll('.nav-button').forEach(btn => {
-                btn.classList.remove('active-nav');
-            });
-            document.querySelector(`[data-section="${category}"]`)?.classList.add('active-nav');
-            
-            document.querySelectorAll('section').forEach(section => {
-                section.classList.remove('active');
-            });
-            targetSection.classList.add('active');
-            
-            setTimeout(() => {
-                const postElement = document.getElementById(postId);
-                if (postElement) {
-                    postElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    postElement.classList.add('highlighted');
-                    
-                    setTimeout(() => {
-                        postElement.classList.remove('highlighted');
-                        const cleanUrl = window.location.origin + window.location.pathname;
-                        window.history.replaceState({}, document.title, cleanUrl);
-                    }, 5000);
-                } else {
-                    console.warn('⚠️ Post no encontrado:', postId);
-                }
-            }, 500);
-        }
-    }
-}
-
-async function loadPosts() {
-    const POSTS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/posts.json';
-
-    try {
-        const response = await fetch(POSTS_JSON_URL);
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const posts = await response.json();
-
-        document.querySelectorAll('.posts-container').forEach(container => {
-            container.innerHTML = '';
-        });
-
-        posts.forEach(post => {
-            const category = post.categoria || 'dificultad';
-            const container = document.getElementById(`posts-${category}`);
-
-            if (container) {
-                const postId = generatePostId(post);
-                const postElement = document.createElement('div');
-                postElement.className = 'post';
-                postElement.id = postId;
-
-                const isLiked = checkIfUserLiked(postId);
-                const likedClass = isLiked ? 'liked' : '';
-                const heartFill = isLiked ? 'fill="currentColor"' : 'fill="none"';
-
-                let badge = post.esNuevo ? '<div class="new-badge">NEW!</div>' : '';
-                
-                postElement.innerHTML = `
-                    ${badge}
-                    <img src="${post.imagenUrl || 'https://via.placeholder.com/150'}" alt="Imagen del post">
-                    <div class="post-content">
-                        <h3>${post.titulo}</h3>
-                        <span class="date">Fecha: ${post.fecha}</span>
-                        <p>${post.descripcion}</p>
-                        <div class="post-actions">
-                            <button class="like-button ${likedClass}" onclick="toggleLike('${postId}')">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" ${heartFill} stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
-                                </svg>
-                                Like
-                                <span class="like-count" style="display: none;">0</span>
-                            </button>
-                            <button class="share-button" onclick="sharePost('${postId}', '${category}')">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                    <circle cx="18" cy="5" r="3"></circle>
-                                    <circle cx="6" cy="12" r="3"></circle>
-                                    <circle cx="18" cy="19" r="3"></circle>
-                                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                                </svg>
-                                Compartir
-                            </button>
-                        </div>
-                    </div>
-                `;
-                container.prepend(postElement);
-                
-                const placeholderText = container.parentElement.querySelector('.placeholder-text');
-                if (placeholderText) {
-                    placeholderText.style.display = 'none';
-                }
-                
-                // Cargar contador de likes del servidor
-                updateLikeCount(postId);
-            }
-        });
-        
-        checkSharedPost();
-        
-    } catch (e) {
-        console.error('Error al cargar posts:', e);
-    }
-}
-
-// =============================================
-// SISTEMA DE SORTEOS
-// =============================================
-
-// URLs y constantes
-const SORTEOS_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/sorteos.json';
-const PARTICIPANTES_JSON_URL = 'https://raw.githubusercontent.com/masterstudio-oficial/MasterStudio/main/participantes.json';
-
-let sorteoData = null;
-let participantesData = null;
-let countdownInterval = null;
-
-/**
- * Cargar datos del sorteo desde el JSON
- */
-async function loadSorteoData() {
-    try {
-        const response = await fetch(SORTEOS_JSON_URL + '?' + Date.now()); // Cache busting
-        if (!response.ok) {
-            throw new Error('Error al cargar sorteos.json');
-        }
-        sorteoData = await response.json();
-        console.log('📦 Datos del sorteo cargados:', sorteoData);
-        
-        // Cargar participantes si el sorteo está activo y no ha terminado
-        const fechaFin = sorteoData.activo ? new Date(
-            sorteoData.fechaFinalizacion.año,
-            sorteoData.fechaFinalizacion.mes - 1,
-            sorteoData.fechaFinalizacion.dia,
-            sorteoData.fechaFinalizacion.hora,
-            sorteoData.fechaFinalizacion.minuto
-        ) : null;
-        
-        if (sorteoData.activo && (!fechaFin || new Date() < fechaFin) && !sorteoData.ganadorSeleccionado) {
-            await loadParticipantes();
-        }
-        
-        displaySorteo();
-    } catch (error) {
-        console.error('❌ Error al cargar sorteo:', error);
-        showNoSorteos();
-    }
-}
-
-/**
- * Cargar lista de participantes desde el JSON
- */
-async function loadParticipantes() {
-    try {
-        const response = await fetch(PARTICIPANTES_JSON_URL + '?' + Date.now());
-        if (!response.ok) {
-            throw new Error('Error al cargar participantes.json');
-        }
-        participantesData = await response.json();
-        console.log('👥 Participantes cargados:', participantesData.totalParticipantes);
-    } catch (error) {
-        console.error('❌ Error al cargar participantes:', error);
-        participantesData = { participantes: [], totalParticipantes: 0 };
-    }
-}
-
-/**
- * Mostrar el sorteo o el mensaje de "no hay sorteos"
- */
-function displaySorteo() {
-    const noSorteosContainer = document.getElementById('no-sorteos-container');
-    const sorteoActivoContainer = document.getElementById('sorteo-activo-container');
-    const ganadorContainer = document.getElementById('sorteo-ganador-container');
-    
-    // Detener cualquier contador previo
-    if (countdownInterval) {
-        clearInterval(countdownInterval);
-    }
-
-    if (!sorteoData || !sorteoData.activo) {
-        showNoSorteos();
-        return;
-    }
-
-    // Verificar si ya hay un ganador seleccionado
-    if (sorteoData.ganadorSeleccionado && sorteoData.ganador) {
-        showGanador();
-        return;
-    }
-
-    // Verificar si el sorteo ya terminó
-    const fechaFin = new Date(
-        sorteoData.fechaFinalizacion.año,
-        sorteoData.fechaFinalizacion.mes - 1,
-        sorteoData.fechaFinalizacion.dia,
-        sorteoData.fechaFinalizacion.hora,
-        sorteoData.fechaFinalizacion.minuto
-    );
-
-    if (new Date() >= fechaFin) {
-        // El sorteo terminó, pero aún no tiene ganador en el JSON (o se debe simular la selección)
-        // Para este entorno de JS en cliente, asumimos que mostrará el ganador si está en el JSON,
-        // o si no, se muestra como "sin sorteos" hasta que el JSON se actualice con el ganador.
-        // Si quieres simular la selección de ganador aquí, descomenta la línea siguiente:
-        // seleccionarGanador(); 
-        console.log('Sorteo finalizado. Esperando actualización del ganador en sorteos.json');
-        showNoSorteos(); // Mostrar "no hay sorteos" si terminó y no hay ganador confirmado
-        return;
-    }
-
-    // Mostrar sorteo activo
-    noSorteosContainer.style.display = 'none';
-    ganadorContainer.style.display = 'none';
-    sorteoActivoContainer.style.display = 'block';
-
-    // Llenar información del sorteo
-    document.getElementById('sorteo-titulo').textContent = sorteoData.titulo || 'SORTEO ESPECIAL';
-    document.getElementById('sorteo-subtitulo').textContent = sorteoData.subtitulo || '';
-    document.getElementById('sorteo-descripcion').textContent = sorteoData.descripcion || '';
-    document.getElementById('sorteo-imagen').src = sorteoData.imagenPremio || '';
-    document.getElementById('sorteo-premio').textContent = sorteoData.premio || 'PREMIO';
-
-    // Llenar requisitos
-    const requisitosList = document.getElementById('sorteo-requisitos-lista');
-    requisitosList.innerHTML = '';
-    if (sorteoData.requisitos && sorteoData.requisitos.length > 0) {
-        sorteoData.requisitos.forEach(req => {
-            const li = document.createElement('li');
-            li.textContent = req;
-            requisitosList.appendChild(li);
-        });
-    }
-
-    // Iniciar contador regresivo
-    startCountdown(fechaFin);
-
-    // Actualizar contador de participantes
-    updateParticipantesCount();
-}
-
-/**
- * Mostrar mensaje de "no hay sorteos"
- */
-function showNoSorteos() {
-    document.getElementById('no-sorteos-container').style.display = 'block';
-    document.getElementById('sorteo-activo-container').style.display = 'none';
-    document.getElementById('sorteo-ganador-container').style.display = 'none';
-    
-    if (countdownInterval) {
-        clearInterval(countdownInterval);
-    }
-}
-
-/**
- * Iniciar contador regresivo
- */
-function startCountdown(fechaFin) {
-    if (countdownInterval) {
-        clearInterval(countdownInterval);
-    }
-
-    function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = fechaFin.getTime() - now;
-
-        if (distance < 0) {
-            clearInterval(countdownInterval);
-            // Simulación de finalización y recarga de estado
-            console.log('Contador terminado. Recargando estado del sorteo...');
-            loadSorteoData(); 
-            return;
-        }
-
-        const dias = Math.floor(distance / (1000 * 60 * 60 * 24));
-        const horas = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutos = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-        const segundos = Math.floor((distance % (1000 * 60)) / 1000);
-
-        document.getElementById('dias').textContent = String(dias).padStart(2, '0');
-        document.getElementById('horas').textContent = String(horas).padStart(2, '0');
-        document.getElementById('minutos').textContent = String(minutos).padStart(2, '0');
-        document.getElementById('segundos').textContent = String(segundos).padStart(2, '0');
-    }
-
-    updateCountdown();
-    countdownInterval = setInterval(updateCountdown, 1000);
-}
-
-/**
- * Actualizar contador de participantes
- */
-function updateParticipantesCount() {
-    const totalElement = document.getElementById('total-participantes');
-    
-    if (participantesData && participantesData.totalParticipantes) {
-        totalElement.textContent = participantesData.totalParticipantes;
-    } else {
-        totalElement.textContent = '0';
-    }
-}
-
-/**
- * Seleccionar ganador del sorteo de forma aleatoria (Lógica solo si el sorteo es 100% en cliente, idealmente esto se hace en servidor)
- */
-function seleccionarGanador() {
-    console.log('🎲 Seleccionando ganador del sorteo (solo en cliente)...');
-    
-    if (!participantesData || !participantesData.participantes || participantesData.participantes.length === 0) {
-        console.warn('⚠️ No hay participantes en el sorteo');
-        showNoSorteos();
-        return;
-    }
-
-    // Seleccionar participante aleatorio
-    const randomIndex = Math.floor(Math.random() * participantesData.participantes.length);
-    const ganador = participantesData.participantes[randomIndex];
-    
-    console.log('🏆 Ganador simulado:', ganador);
-    mostrarGanador(ganador);
-}
-
-
-/**
- * Mostrar ganador en la interfaz
- */
-function mostrarGanador(ganador) {
-    const ganadorContainer = document.getElementById('sorteo-ganador-container');
-    
-    document.getElementById('no-sorteos-container').style.display = 'none';
-    document.getElementById('sorteo-activo-container').style.display = 'none';
-    ganadorContainer.style.display = 'block';
-    
-    // Mostrar nombre del ganador
-    const nombreGanador = ganador.nombre || ganador.username || 'Participante';
-    document.getElementById('ganador-nombre').textContent = nombreGanador;
-    document.getElementById('ganador-premio-texto').textContent = sorteoData?.premio || 'PREMIO';
-    
-    // Crear efecto de confeti
-    createConfetti();
-    
-    if (countdownInterval) {
-        clearInterval(countdownInterval);
-    }
-}
-
-/**
- * Mostrar ganador (cuando ya está seleccionado en sorteos.json)
- */
-function showGanador() {
-    if (!sorteoData || !sorteoData.ganador) return;
-    
-    mostrarGanador({
-        nombre: sorteoData.ganador.nombre || sorteoData.ganador.username
-    });
-}
-
-/**
- * Crear efecto de confeti
- */
-function createConfetti() {
-    const container = document.querySelector('.confetti-container');
-    if (!container) return;
-    
-    const colors = ['#FFD700', '#FFA500', '#FF6B35', '#4CAF50', '#2196F3', '#9C27B0'];
-    
-    // Limpiar confeti anterior
-    container.innerHTML = ''; 
-
-    for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-            const confetti = document.createElement('div');
-            confetti.style.position = 'absolute';
-            confetti.style.width = '10px';
-            confetti.style.height = '10px';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.top = '-10px';
-            confetti.style.opacity = '1';
-            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-            confetti.style.transition = 'all 3s ease-out';
-            
-            container.appendChild(confetti);
-            
-            setTimeout(() => {
-                confetti.style.top = '100%';
-                confetti.style.opacity = '0';
-                confetti.style.transform = `rotate(${Math.random() * 720}deg)`;
-            }, 50);
-            
-            setTimeout(() => {
-                confetti.remove();
-            }, 3000);
-        }, i * 50);
-    }
-}
-
-
-// =============================================
-// INICIALIZACIÓN
-// =============================================
-
-document.addEventListener('DOMContentLoaded', () => {
-    const isMaintenance = checkMaintenanceStatus();
-    
-    if (isMaintenance) {
-        return;
-    }
-    
-    loadPosts();
-    checkLocalStorageUser();
-    
-    // Lógica para cargar sorteos si la sección está activa al inicio
-    if (document.getElementById('sorteos')?.classList.contains('active')) {
-        loadSorteoData();
-    }
-});
-
-// Auto-actualizar ranking cada 30 segundos si el modal está abierto
-setInterval(() => {
-    const rankingModal = document.getElementById('ranking-modal');
-    if (rankingModal && rankingModal.classList.contains('show')) {
-        loadRanking();
-    }
-}, 30000);
