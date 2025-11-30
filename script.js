@@ -53,6 +53,32 @@ let sorteoData = null;
 let participantesData = null;
 let countdownInterval = null;
 
+// =============================================
+// INICIALIZACIÓN AL ENTRAR A LA SECCIÓN
+// =============================================
+
+// Agregar al evento de navegación existente
+document.addEventListener('DOMContentLoaded', () => {
+    // Buscar el código donde se manejan los clics de navegación
+    // y agregar esta lógica cuando se selecciona "sorteos"
+    
+    const originalNavButtons = document.querySelectorAll('.nav-button');
+    originalNavButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const targetId = this.getAttribute('data-section');
+            
+            if (targetId === 'sorteos') {
+                // Cargar datos del sorteo cuando se entra a la sección
+                loadSorteoData();
+            }
+        });
+    });
+});
+
+// También cargar si la página se carga directamente en la sección de sorteos
+if (document.getElementById('sorteos')?.classList.contains('active')) {
+    loadSorteoData();
+}
 
 // =============================================
 // CONFIGURACIÓN DE MANTENIMIENTO
