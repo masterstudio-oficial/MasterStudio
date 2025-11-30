@@ -1,13 +1,1065 @@
 /* =============================================
-   ESTILOS PARA SECCIÓN DE SORTEOS
+   VARIABLES CSS
    ============================================= */
 
-/* Botón de navegación sorteos */
+:root {
+    /* Modo Oscuro (Default) */
+    --main-bg: #1e1e1e;
+    --card-bg: #2d2d2d;
+    --header-bg: #1a1a1a;
+    --text-color: #ffffff;
+    --subtle-text: #aaaaaa;
+    --border-color: #444444;
+    --primary-color: #3f51b5; /* Indigo */
+    --accent-color: #ff9800; /* Amber */
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --quiz-correct: #4CAF50;
+    --quiz-incorrect: #F44336;
+    --quiz-timer-warning: #FF5722;
+    --nav-hover-bg: #383838;
+}
+
+/* Modo Claro (Class 'light-mode' en body) */
+body.light-mode {
+    --main-bg: #f4f4f9;
+    --card-bg: #ffffff;
+    --header-bg: #ffffff;
+    --text-color: #333333;
+    --subtle-text: #666666;
+    --border-color: #dddddd;
+    --primary-color: #0d47a1; /* Blue Darker */
+    --accent-color: #ff6f00; /* Amber Darker */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --quiz-correct: #388E3C;
+    --quiz-incorrect: #D32F2F;
+    --quiz-timer-warning: #E64A19;
+    --nav-hover-bg: #eeeeee;
+}
+
+/* =============================================
+   ESTILOS GENERALES
+   ============================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: var(--main-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+#app-container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 20px;
+}
+
+main {
+    padding: 20px 0;
+}
+
+section {
+    display: none;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: var(--card-bg);
+    box-shadow: 0 4px 20px var(--shadow-color);
+    margin-top: 20px;
+}
+
+section.active {
+    display: block;
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    color: var(--subtle-text);
+    font-size: 0.9rem;
+    padding: 20px 0;
+    margin-top: 40px;
+    border-top: 1px solid var(--border-color);
+}
+
+.footer a {
+    color: var(--primary-color);
+}
+
+/* =============================================
+   HEADER Y NAVEGACIÓN
+   ============================================= */
+
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+    background-color: var(--header-bg);
+    border-bottom: 1px solid var(--border-color);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.logo-img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.navigation {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.nav-button {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 2px solid transparent;
+    border-radius: 25px;
+    padding: 10px 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.nav-button:hover {
+    background-color: var(--nav-hover-bg);
+}
+
+.nav-button.active-nav {
+    background-color: var(--primary-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(63, 81, 181, 0.5);
+}
+
+/* Estilos específicos para el botón activo */
+.quiz.active-nav {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 15px rgba(255, 152, 0, 0.5);
+}
+
+.posts.active-nav {
+    border-color: #4CAF50;
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+}
+
 .sorteos.active-nav { 
     border-color: #FF6B35; 
     box-shadow: 0 0 15px rgba(255, 107, 53, 0.8); 
 }
 
+/* Light Mode Navigation */
+body.light-mode .nav-button {
+    color: var(--text-color);
+}
+
+body.light-mode .nav-button.active-nav {
+    background-color: var(--primary-color);
+    color: white;
+    box-shadow: 0 0 10px rgba(13, 71, 161, 0.5);
+}
+
+/* User Controls and Profile */
+.user-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.profile-container {
+    position: relative;
+    cursor: pointer;
+}
+
+.profile-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: transform 0.2s;
+}
+
+.profile-icon:hover {
+    transform: scale(1.1);
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 250px;
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 8px 16px var(--shadow-color);
+    display: none;
+    z-index: 1010;
+    padding: 10px 0;
+}
+
+.profile-dropdown.show {
+    display: block;
+    animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.dropdown-header {
+    padding: 10px 15px;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 5px;
+}
+
+.dropdown-header span {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.dropdown-header .email {
+    font-size: 0.85rem;
+    color: var(--subtle-text);
+    font-weight: normal;
+}
+
+.dropdown-header .tickets {
+    font-size: 0.9rem;
+    color: var(--accent-color);
+    margin-top: 5px;
+}
+
+.dropdown-menu-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dropdown-menu-item:hover {
+    background-color: var(--nav-hover-bg);
+}
+
+#logout-button {
+    color: var(--quiz-incorrect);
+    font-weight: bold;
+    border-top: 1px solid var(--border-color);
+    margin-top: 5px;
+    padding-top: 10px;
+}
+
+/* =============================================
+   SECCIÓN INICIO
+   ============================================= */
+
+.welcome-card {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, var(--card-bg), var(--nav-hover-bg));
+    border-radius: 15px;
+    margin-bottom: 40px;
+    box-shadow: 0 8px 15px var(--shadow-color);
+}
+
+.welcome-card img {
+    max-width: 100%;
+    width: 500px;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 25px;
+}
+
+.welcome-card h2 {
+    font-size: 2rem;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+}
+
+.welcome-card p {
+    font-size: 1.1rem;
+    color: var(--subtle-text);
+    margin-bottom: 30px;
+    line-height: 1.6;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.action-button, .discord-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 50px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    display: inline-block;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.action-button {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.action-button:hover {
+    background-color: #5c6bc0;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(63, 81, 181, 0.5);
+}
+
+.discord-button {
+    background-color: #5865F2; /* Discord Blue */
+    color: white;
+}
+
+.discord-button:hover {
+    background-color: #404EED;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(88, 101, 242, 0.5);
+}
+
+.feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    margin-top: 20px;
+}
+
+.feature-item {
+    background-color: var(--nav-hover-bg);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px var(--shadow-color);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    border-left: 5px solid var(--accent-color);
+}
+
+.feature-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px var(--shadow-color);
+}
+
+.feature-item h3 {
+    font-size: 1.5rem;
+    color: var(--accent-color);
+    margin-bottom: 10px;
+}
+
+.feature-item p {
+    color: var(--subtle-text);
+}
+
+body.light-mode .feature-item {
+    background-color: #f9f9f9;
+    border-left-color: var(--primary-color);
+}
+
+/* =============================================
+   SECCIÓN QUIZ
+   ============================================= */
+
+.login-to-participate {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: var(--nav-hover-bg);
+    border-radius: 10px;
+    margin-top: 30px;
+}
+
+.login-to-participate p {
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.quiz-container {
+    max-width: 700px;
+    margin: 30px auto;
+    padding: 30px;
+    border: 1px solid var(--border-color);
+    border-radius: 15px;
+}
+
+.quiz-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--border-color);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+}
+
+.quiz-header h2 {
+    font-size: 1.8rem;
+    margin: 0;
+    color: var(--text-color);
+}
+
+.quiz-timer {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+    padding: 5px 15px;
+    border: 2px solid var(--primary-color);
+    border-radius: 8px;
+    transition: color 0.3s, border-color 0.3s;
+}
+
+.quiz-timer.warning {
+    color: var(--quiz-timer-warning);
+    border-color: var(--quiz-timer-warning);
+    animation: shake 0.5s ease-in-out infinite alternate;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(5px); }
+}
+
+.quiz-question {
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.quiz-option {
+    background-color: var(--nav-hover-bg);
+    color: var(--text-color);
+    padding: 15px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.1rem;
+    border: 2px solid var(--border-color);
+}
+
+.quiz-option:hover:not(.disabled) {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.quiz-option.selected {
+    background-color: var(--accent-color);
+    color: black;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
+}
+
+.quiz-option.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.quiz-message {
+    text-align: center;
+    padding: 30px;
+    margin-top: 30px;
+    border-radius: 10px;
+    background-color: var(--nav-hover-bg);
+}
+
+.quiz-message h3 {
+    color: var(--accent-color);
+    margin-bottom: 10px;
+    font-size: 1.8rem;
+}
+
+.quiz-message-text {
+    margin-top: 20px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Sección de Resultado/Ganador */
+.winner-section {
+    max-width: 600px;
+    margin: 30px auto;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 20px var(--shadow-color);
+}
+
+.quiz-result {
+    background-color: var(--quiz-correct);
+    color: white;
+    padding: 30px;
+    border-radius: 10px;
+}
+
+.quiz-result.incorrect {
+    background-color: var(--quiz-incorrect);
+}
+
+.quiz-result h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.quiz-result p {
+    font-size: 1.1rem;
+}
+
+.ticket-earned {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--accent-color);
+    background-color: white;
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 50px;
+    margin: 20px 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.user-stats p {
+    font-size: 1rem;
+    color: #eeeeee;
+}
+
+/* =============================================
+   SECCIÓN POSTS
+   ============================================= */
+
+.posts-tabs {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 30px;
+}
+
+.posts-tab-button {
+    background-color: var(--nav-hover-bg);
+    color: var(--text-color);
+    border: none;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    flex-grow: 1;
+    max-width: 250px;
+}
+
+.posts-tab-button:first-child {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+}
+
+.posts-tab-button:last-child {
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
+}
+
+.posts-tab-button.active {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.posts-tab-content {
+    display: none;
+    min-height: 200px;
+    padding: 20px 0;
+}
+
+.posts-tab-content.active {
+    display: block;
+}
+
+.posts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.placeholder-text {
+    text-align: center;
+    padding: 50px;
+    color: var(--subtle-text);
+    font-size: 1.2rem;
+}
+
+.post {
+    background-color: var(--nav-hover-bg);
+    border-radius: 10px;
+    box-shadow: 0 4px 15px var(--shadow-color);
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    border: 1px solid var(--border-color);
+}
+
+.post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--shadow-color);
+}
+
+.post.highlighted {
+    animation: highlight 1.5s 3;
+}
+
+@keyframes highlight {
+    0%, 100% { box-shadow: 0 0 0 0 var(--accent-color); }
+    50% { box-shadow: 0 0 15px 5px var(--accent-color); }
+}
+
+.post img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    display: block;
+}
+
+.post-content {
+    padding: 20px;
+}
+
+.post-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.post-content .date {
+    display: block;
+    color: var(--subtle-text);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+}
+
+.post-content p {
+    color: var(--text-color);
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.like-button, .share-button {
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.like-button svg, .share-button svg {
+    width: 18px;
+    height: 18px;
+}
+
+.like-button {
+    color: #F44336; /* Rojo para Likes */
+}
+
+.like-button:hover {
+    background-color: #F44336;
+    color: white;
+}
+
+.like-button.liked {
+    background-color: #F44336;
+    color: white;
+    border-color: #F44336;
+}
+
+.share-button:hover {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.new-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: var(--accent-color);
+    color: black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: 0.8rem;
+}
+
+.like-count {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 2px 8px;
+    border-radius: 50%;
+    font-size: 0.8rem;
+    font-weight: normal;
+    min-width: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.copy-notification {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 10000;
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translate(-50%, 20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+/* =============================================
+   MODALES (Ranking, Configuración)
+   ============================================= */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s;
+}
+
+.modal-overlay.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background-color: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    transform: scale(0.9);
+    transition: transform 0.3s;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+.modal-content h2 {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    text-align: center;
+    color: var(--subtle-text);
+    margin-bottom: 20px;
+}
+
+.modal-close-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-close-button:hover {
+    background-color: #5c6bc0;
+}
+
+/* Ranking Modal */
+.ranking-podium {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 10px;
+    margin-bottom: 30px;
+}
+
+.podium-item {
+    text-align: center;
+    padding: 15px 10px;
+    border-radius: 8px 8px 0 0;
+    min-width: 100px;
+    height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    font-weight: bold;
+    color: black;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s;
+}
+
+.podium-item.first {
+    background-color: #FFD700; /* Gold */
+    height: 150px;
+    font-size: 1.1rem;
+    transform: scale(1.1);
+}
+
+.podium-item.second {
+    background-color: #C0C0C0; /* Silver */
+    height: 120px;
+}
+
+.podium-item.third {
+    background-color: #CD7F32; /* Bronze */
+    height: 100px;
+}
+
+.rank-number {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.podium-item span {
+    display: block;
+    font-size: 0.8rem;
+    color: var(--text-color);
+}
+
+.podium-item.first span { color: black; }
+.podium-item.second span { color: black; }
+.podium-item.third span { color: black; }
+
+.ranking-list {
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.ranking-user {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 5px;
+    border-bottom: 1px dashed var(--border-color);
+    font-size: 1rem;
+    align-items: center;
+}
+
+.ranking-user:last-child {
+    border-bottom: none;
+}
+
+.ranking-position {
+    font-weight: bold;
+    color: var(--accent-color);
+    width: 40px;
+}
+
+.ranking-name {
+    flex-grow: 1;
+    margin-left: 10px;
+}
+
+.ranking-tickets {
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+/* Settings Modal */
+.settings-section {
+    margin-bottom: 25px;
+    padding: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.settings-section h3 {
+    font-size: 1.3rem;
+    margin-bottom: 15px;
+    color: var(--primary-color);
+}
+
+.theme-options, .language-options {
+    display: flex;
+    gap: 10px;
+}
+
+.theme-option, .language-option {
+    padding: 10px 15px;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.theme-option.active, .language-option.active {
+    background-color: var(--primary-color);
+    color: white;
+    border-color: var(--primary-color);
+}
+
+.theme-option:hover, .language-option:hover {
+    border-color: var(--accent-color);
+}
+
+.toggle-switch-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Toggle Switch (Notifications) */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    cursor: pointer;
+}
+
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--border-color);
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--quiz-correct);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+
+/* =============================================
+   ESTILOS PARA SECCIÓN DE SORTEOS
+   ============================================= */
+
+/* Botón de navegación sorteos */
 body.light-mode .sorteos.active-nav { 
     border-color: #FF6B35; 
 }
@@ -401,53 +1453,6 @@ body.light-mode .discord-cta p {
     box-shadow: 0 8px 20px rgba(88, 101, 242, 0.6);
 }
 
-/* Sección de participación */
-.sorteo-participar-section {
-    text-align: center;
-    margin: 40px 0;
-}
-
-.btn-participar {
-    background: linear-gradient(135deg, #FF6B35 0%, #FFA500 100%);
-    border: 3px solid #FFD700;
-    border-radius: 50px;
-    padding: 20px 50px;
-    font-family: 'VT323', monospace;
-    font-size: 2rem;
-    font-weight: bold;
-    color: #ffffff;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.5);
-    display: inline-flex;
-    align-items: center;
-    gap: 15px;
-    letter-spacing: 2px;
-}
-
-.btn-participar:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 12px 35px rgba(255, 107, 53, 0.7);
-    background: linear-gradient(135deg, #FFA500 0%, #FFD700 100%);
-}
-
-.btn-participar:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
-}
-
-.btn-icon {
-    font-size: 2.5rem;
-}
-
-.participacion-status {
-    margin-top: 20px;
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: #4CAF50;
-}
-
 /* Estadísticas */
 .sorteo-stats {
     display: flex;
@@ -535,6 +1540,11 @@ body.light-mode .ganador-announcement {
     overflow: hidden;
 }
 
+/* Estilos de confeti para JS */
+.confetti-container > div {
+    will-change: transform, opacity;
+}
+
 .ganador-icon {
     font-size: 6rem;
     margin-bottom: 20px;
@@ -618,8 +1628,99 @@ body.light-mode .ganador-mensaje {
     color: #666666;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* =============================================
+   RESPONSIVE
+   ============================================= */
+
+@media (max-width: 900px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+    }
+
+    .logo {
+        margin-bottom: 10px;
+    }
+
+    .navigation {
+        justify-content: space-around;
+        width: 100%;
+    }
+    
+    .nav-button {
+        flex-grow: 1;
+        text-align: center;
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .nav-button span {
+        display: none; /* Ocultar texto para ahorrar espacio */
+    }
+    
+    .nav-button:hover span,
+    .nav-button.active-nav span {
+        display: inline; /* Mostrar solo al pasar el ratón o si está activo */
+    }
+}
+
+@media (max-width: 600px) {
+    #app-container {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .nav-button {
+        font-size: 0.8rem;
+    }
+    
+    .feature-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .button-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .quiz-container {
+        padding: 20px;
+    }
+    
+    .quiz-header {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .quiz-header h2 {
+        font-size: 1.5rem;
+    }
+
+    .posts-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .ranking-podium {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .podium-item {
+        width: 100%;
+        max-width: 250px;
+        height: auto;
+        padding: 15px;
+    }
+    
+    .podium-item.first {
+        height: auto;
+        transform: scale(1.05);
+    }
+    
     .sorteo-main-card {
         padding: 25px;
     }
@@ -635,11 +1736,6 @@ body.light-mode .ganador-mensaje {
     
     .countdown-number {
         font-size: 2.5rem;
-    }
-    
-    .btn-participar {
-        font-size: 1.5rem;
-        padding: 15px 35px;
     }
     
     .ganador-title {
