@@ -3,358 +3,175 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title data-lang="app-title">MasterStudio Hub</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="https://masterstudio-oficial.github.io/MasterStudio/images/logo-ms.png" type="image/png">
-    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <title>MasterStudio</title>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="https://masterstudio.xyz/favicon.ico" type="image/x-icon">
 </head>
-<body>
+<body class="dark-mode">
+    <header>
+        <div class="logo">
+            <h1>MasterStudio</h1>
+        </div>
+        <nav class="navigation">
+            <button class="nav-button home active-nav" data-section="home">Inicio</button>
+            <button class="nav-button comandos" data-section="comandos">Comandos</button>
+            <button class="nav-button staff" data-section="staff">Staff</button>
+            <button class="nav-button quiz" data-section="quiz">Quiz</button>
+            <button class="nav-button sorteos" data-section="sorteos">Sorteos</button>
+            <button class="nav-button theme-toggle" id="theme-toggle">Modo</button>
+        </nav>
+    </header>
 
-    <div id="app-container">
-        <header>
-            <div class="logo">
-                <img src="https://masterstudio-oficial.github.io/MasterStudio/images/logo-ms.png" alt="Logo de MasterStudio" class="logo-img">
-                <span data-lang="header-title">MasterStudio Hub</span>
+    <main>
+        <!-- ==================== HOME ==================== -->
+        <section id="home" class="active">
+            <h1 data-lang="home-title">Bienvenido a MasterStudio</h1>
+            <p data-lang="home-description">El bot más completo para tu servidor de Discord</p>
+            <div class="button-container">
+                <a href="https://discord.com/oauth2/authorize?client_id=1090012797268496474" class="invite-button" target="_blank">
+                    Invitar Bot
+                </a>
+                <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
+                    Discord
+                </a>
             </div>
-            
-            <nav class="navigation">
-                <button class="nav-button active-nav inicio" data-section="inicio">🏠 <span data-lang="nav-inicio">Inicio</span></button>
-                <button class="nav-button quiz" data-section="quiz">🧠 <span data-lang="nav-quiz">Quiz Diario</span></button>
-                <button class="nav-button posts" data-section="posts">📰 <span data-lang="nav-posts">Posts</span></button>
-                <button class="nav-button sorteos" data-section="sorteos">🎁 <span data-lang="nav-sorteos">Sorteos</span></button>
-            </nav>
-            
-            <div class="user-controls">
-                
-                <div id="g_id_onload"
-                    data-client_id="TU_CLIENT_ID_DE_GOOGLE" data-context="signin"
-                    data-ux_mode="popup"
-                    data-callback="handleCredentialResponse"
-                    data-auto_prompt="false">
-                </div>
-                <div class="g_id_signin"
-                    data-type="icon"
-                    data-shape="circle"
-                    data-theme="outline"
-                    data-text="signin_with"
-                    data-size="large">
-                </div>
-                
-                <div class="profile-container" id="profile-container" style="display: none;">
-                    <div class="profile-icon" id="profile-icon">👤</div>
-                    <div class="profile-dropdown" id="profile-dropdown">
-                        <div class="dropdown-header">
-                            <span id="dropdown-username">Usuario</span>
-                            <span id="dropdown-email" class="email">correo@ejemplo.com</span>
-                            <span id="dropdown-tickets" class="tickets">🎫 0 Tickets</span>
-                        </div>
-                        <div class="dropdown-menu-item" onclick="openModal('ranking-modal')">
-                            🏆 <span data-lang="menu-ranking">Ranking Global</span>
-                        </div>
-                        <div class="dropdown-menu-item" onclick="openModal('settings-modal')">
-                            ⚙️ <span data-lang="menu-settings">Configuración</span>
-                        </div>
-                        <div class="dropdown-menu-item" id="logout-button">
-                            🚪 <span data-lang="menu-logout">Cerrar Sesión</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+        </section>
 
-        <main>
-            <section id="inicio" class="active">
-                <h1 data-lang="inicio-title">Bienvenido al Hub</h1>
-                <div class="welcome-card">
-                    <img src="https://masterstudio-oficial.github.io/MasterStudio/images/banner-ms.png" alt="Banner de MasterStudio">
-                    <h2 data-lang="welcome-h2">¡Tu punto de encuentro con MasterStudio!</h2>
-                    <p data-lang="welcome-p">Aquí puedes participar en nuestro Quiz Diario para ganar tickets, ver las últimas novedades y participar en sorteos exclusivos. ¡No te pierdas nada!</p>
+        <!-- ==================== COMANDOS ==================== -->
+        <section id="comandos">
+            <h1 data-lang="commands-title">Comandos</h1>
+            <!-- Tus comandos aquí -->
+        </section>
+
+        <!-- ==================== STAFF ==================== -->
+        <section id="staff">
+            <h1 data-lang="staff-title">Equipo Staff</h1>
+            <!-- Tu staff aquí -->
+        </section>
+
+        <!-- ==================== QUIZ ==================== -->
+        <section id="quiz">
+            <h1 data-lang="quiz-title">Quiz Diario</h1>
+            <!-- Tu quiz aquí -->
+        </section>
+
+        <!-- ==================== SORTEOS ==================== -->
+        <section id="sorteos">
+            <h1 data-lang="sorteos-title">Sorteos</h1>
+
+            <!-- Sin sorteos activos -->
+            <div id="no-sorteos-container" style="display: none;">
+                <div class="no-sorteos-notice">
+                    <div class="notice-icon">Ticket</div>
+                    <h3 data-lang="no-sorteos-title">No hay sorteos activos</h3>
+                    <p data-lang="no-sorteos-description">Por el momento no tenemos sorteos disponibles. Mantente al tanto de nuestras redes sociales y Discord para futuras oportunidades.</p>
                     <div class="button-container">
-                        <button class="action-button" onclick="document.querySelector('[data-section=quiz]').click()">
-                            <span data-lang="button-quiz">Participar en Quiz Diario 🧠</span>
-                        </button>
                         <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
-                            <span>ÚNETE A NUESTRO DISCORD 💬</span>
+                            <span>ÚNETE A NUESTRO DISCORD</span>
                         </a>
                     </div>
                 </div>
-                
-                <div class="feature-grid">
-                    <div class="feature-item" onclick="document.querySelector('[data-section=posts]').click()">
-                        <h3>📰 Novedades</h3>
-                        <p>Descubre los últimos posts, tutoriales y noticias sobre programación y tecnología.</p>
-                    </div>
-                    <div class="feature-item" onclick="document.querySelector('[data-section=sorteos]').click()">
-                        <h3>🎁 Sorteos</h3>
-                        <p>Usa tus tickets para participar en sorteos exclusivos y ganar premios geniales.</p>
-                    </div>
-                    <div class="feature-item" onclick="openModal('ranking-modal')">
-                        <h3>🏆 Ranking</h3>
-                        <p>Compite con otros usuarios en el ranking global de tickets y sé el mejor.</p>
-                    </div>
-                </div>
-                
-                <div class="footer">
-                    <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                    <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
-                </div>
-            </section>
-            
-            <section id="quiz">
-                <h1 data-lang="quiz-title">🧠 Quiz Diario</h1>
-                
-                <div id="login-to-participate" class="login-to-participate" style="display: none;">
-                    <p data-lang="quiz-login-message">Debes iniciar sesión con Google para participar en el Quiz Diario y empezar a ganar tickets.</p>
-                    <div class="g_id_signin"
-                        data-type="standard"
-                        data-shape="pill"
-                        data-theme="filled_blue"
-                        data-text="signin_with"
-                        data-size="large">
-                    </div>
-                </div>
-                
-                <div id="no-quiz-message" class="quiz-message" style="display: none;">
-                    <h3 data-lang="quiz-no-question-title">Aún no hay pregunta de hoy</h3>
-                    <p data-lang="quiz-no-question">La pregunta diaria de hoy aún no está disponible o ha ocurrido un error al cargarla. Por favor, vuelve más tarde o revisa el Discord para actualizaciones.</p>
-                </div>
+            </div>
 
-                <div id="quiz-content" class="quiz-container" style="display: none;">
-                    <div class="quiz-header">
-                        <div class="quiz-timer" id="quiz-timer">⏱️ 15</div>
-                        <h2 data-lang="quiz-question-title">Pregunta del Día</h2>
+            <!-- Sorteo activo -->
+            <div id="sorteo-activo-container" style="display: none;">
+                <div class="sorteo-main-card">
+                    <div class="sorteo-header">
+                        <div class="sorteo-badge">EN VIVO</div>
+                        <h2 id="sorteo-titulo">SORTEO ESPECIAL</h2>
+                        <p id="sorteo-subtitulo" class="sorteo-subtitle">Subtítulo del sorteo</p>
+                        <div class="sorteo-descripcion-box">
+                            <p id="sorteo-descripcion" class="sorteo-description">Descripción detallada del sorteo y sus términos.</p>
+                        </div>
                     </div>
-                    <p id="quiz-question" class="quiz-question"></p>
-                    
-                    <div id="quiz-options-container" class="quiz-options">
+
+                    <div class="sorteo-premio-container">
+                        <img id="sorteo-imagen" src="" alt="Premio" class="sorteo-imagen">
+                        <div class="sorteo-premio-badge">
+                            <span id="sorteo-premio">PREMIO</span>
                         </div>
-                    
-                    <p id="quiz-message" class="quiz-message-text"></p>
-                </div>
-                
-                <div id="winner-section" class="winner-section" style="display: none;">
                     </div>
-                
-                <div class="footer">
-                    <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                    <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
-                </div>
-            </section>
 
-            <section id="posts">
-                <h1 data-lang="posts-title">📰 Novedades y Posts</h1>
-                
-                <div class="posts-tabs">
-                    <button class="posts-tab-button active" data-tab="dificultad" data-lang="posts-tab-dificultad">Por Dificultad</button>
-                    <button class="posts-tab-button" data-tab="categoria" data-lang="posts-tab-categoria">Por Categoría</button>
-                </div>
+                    <div class="sorteo-countdown-section">
+                        <h3 class="countdown-title">TIEMPO RESTANTE</h3>
+                        <div id="sorteo-countdown" class="sorteo-countdown">
+                            <div class="countdown-item">
+                                <span id="dias" class="countdown-number">00</span>
+                                <span class="countdown-label">DÍAS</span>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-item">
+                                <span id="horas" class="countdown-number">00</span>
+                                <span class="countdown-label">HORAS</span>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-item">
+                                <span id="minutos" class="countdown-number">00</span>
+                                <span class="countdown-label">MIN</span>
+                            </div>
+                            <div class="countdown-separator">:</div>
+                            <div class="countdown-item">
+                                <span id="segundos" class="countdown-number">00</span>
+                                <span class="countdown-label">SEG</span>
+                            </div>
+                        </div>
+                    </div>
 
-                <div class="posts-tab-content active" id="posts-dificultad">
-                    <div class="placeholder-text">Cargando posts de MasterStudio...</div>
-                    <div class="posts-container">
-                        </div>
-                </div>
-                
-                <div class="posts-tab-content" id="posts-categoria">
-                    <div class="placeholder-text">Cargando posts de MasterStudio...</div>
-                    <div class="posts-container">
-                        </div>
-                </div>
-                
-                <div class="footer">
-                    <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                    <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
-                </div>
-            </section>
-            
-            <section id="sorteos">
-                <h1 data-lang="sorteos-title">🎁 Sorteos</h1>
-                
-                <div id="no-sorteos-container" style="display: none;">
-                    <div class="no-sorteos-notice">
-                        <div class="notice-icon">🎫</div>
-                        <h3 data-lang="no-sorteos-title">No hay sorteos activos</h3>
-                        <p data-lang="no-sorteos-description">Por el momento no tenemos sorteos disponibles. Mantente al tanto de nuestras redes sociales y Discord para futuras oportunidades.</p>
-                        <div class="button-container">
-                            <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
-                                <span>ÚNETE A NUESTRO DISCORD 💬</span>
+                    <div class="sorteo-requisitos">
+                        <h3 class="requisitos-title">CÓMO PARTICIPAR</h3>
+                        <ul id="sorteo-requisitos-lista" class="requisitos-lista"></ul>
+                        <div class="discord-cta">
+                            <p>Ve a nuestro Discord y participa en el canal de sorteos</p>
+                            <a href="https://discord.gg/Xj5SARVFQ5" class="discord-inline-button" target="_blank">
+                                IR A DISCORD
                             </a>
                         </div>
                     </div>
-                </div>
 
-                <div id="sorteo-activo-container" style="display: none;">
-                    <div class="sorteo-main-card">
-                        <div class="sorteo-header">
-                            <div class="sorteo-badge">EN VIVO</div>
-                            <h2 id="sorteo-titulo">SORTEO ESPECIAL</h2>
-                            <p id="sorteo-subtitulo" class="sorteo-subtitle">Subtítulo del sorteo</p>
-                            <div class="sorteo-descripcion-box">
-                                <p id="sorteo-descripcion" class="sorteo-description">Descripción detallada del sorteo y sus términos.</p>
-                            </div>
+                    <div class="sorteo-stats">
+                        <div class="stat-item">
+                            <span class="stat-icon">Personas</span>
+                            <span class="stat-number" id="total-participantes">0</span>
+                            <span class="stat-label">Participantes</span>
                         </div>
-
-                        <div class="sorteo-premio-container">
-                            <img id="sorteo-imagen" src="" alt="Premio" class="sorteo-imagen">
-                            <div class="sorteo-premio-badge">
-                                <span id="sorteo-premio">PREMIO</span>
-                            </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">Objetivo</span>
+                            <span class="stat-number">1</span>
+                            <span class="stat-label">Ganador</span>
                         </div>
-
-                        <div class="sorteo-countdown-section">
-                            <h3 class="countdown-title">⏰ TIEMPO RESTANTE</h3>
-                            <div id="sorteo-countdown" class="sorteo-countdown">
-                                <div class="countdown-item">
-                                    <span id="dias" class="countdown-number">00</span>
-                                    <span class="countdown-label">DÍAS</span>
-                                </div>
-                                <div class="countdown-separator">:</div>
-                                <div class="countdown-item">
-                                    <span id="horas" class="countdown-number">00</span>
-                                    <span class="countdown-label">HORAS</span>
-                                </div>
-                                <div class="countdown-separator">:</div>
-                                <div class="countdown-item">
-                                    <span id="minutos" class="countdown-number">00</span>
-                                    <span class="countdown-label">MIN</span>
-                                </div>
-                                <div class="countdown-separator">:</div>
-                                <div class="countdown-item">
-                                    <span id="segundos" class="countdown-number">00</span>
-                                    <span class="countdown-label">SEG</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="sorteo-requisitos">
-                            <h3 class="requisitos-title">📋 CÓMO PARTICIPAR</h3>
-                            <ul id="sorteo-requisitos-lista" class="requisitos-lista">
-                                </ul>
-                            <div class="discord-cta">
-                                <p>👉 Ve a nuestro Discord y participa en el canal de sorteos</p>
-                                <a href="https://discord.gg/Xj5SARVFQ5" class="discord-inline-button" target="_blank">
-                                    IR A DISCORD 💬
-                                </a>
-                            </div>
-                        </div>
-
-                        <div class="sorteo-stats">
-                            <div class="stat-item">
-                                <span class="stat-icon">👥</span>
-                                <span class="stat-number" id="total-participantes">0</span>
-                                <span class="stat-label">Participantes</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-icon">🎯</span>
-                                <span class="stat-number">1</span>
-                                <span class="stat-label">Ganador</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="sorteo-ganador-container" style="display: none;">
-                    <div class="ganador-announcement">
-                        <div class="confetti-container"></div>
-                        <div class="ganador-icon">🏆</div>
-                        <h2 class="ganador-title">¡TENEMOS UN GANADOR!</h2>
-                        <div class="ganador-info">
-                            <p class="ganador-label">El ganador es:</p>
-                            <h3 id="ganador-nombre" class="ganador-nombre">Usuario Ganador</h3>
-                            <div class="ganador-premio">
-                                <span id="ganador-premio-texto">Premio</span>
-                            </div>
-                        </div>
-                        <p class="ganador-mensaje">¡Felicidades! El ganador será contactado pronto para reclamar su premio. 🎉</p>
-                        <div class="button-container">
-                            <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
-                                <span>VER ANUNCIO EN DISCORD 💬</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="footer">
-                    <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
-                    <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
-                </div>
-            </section>
-            
-        </main>
-    </div>
-    
-    <div id="ranking-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 data-lang="ranking-modal-title">🏆 Ranking Global</h2>
-            <p data-lang="ranking-modal-subtitle">Los 3 mejores ganadores de tickets.</p>
-            
-            <div class="ranking-podium">
-                <div class="podium-item second">
-                    <div class="rank-number">2</div>
-                    <span id="rank-2-name">---</span>
-                    <span id="rank-2-tickets">0 TICKETS</span>
-                </div>
-                <div class="podium-item first">
-                    <div class="rank-number">1</div>
-                    <span id="rank-1-name">---</span>
-                    <span id="rank-1-tickets">0 TICKETS</span>
-                </div>
-                <div class="podium-item third">
-                    <div class="rank-number">3</div>
-                    <span id="rank-3-name">---</span>
-                    <span id="rank-3-tickets">0 TICKETS</span>
-                </div>
-            </div>
-            
-            <div class="ranking-list" id="ranking-list">
-                </div>
-            
-            <button class="modal-close-button" onclick="closeModal('ranking-modal')">Cerrar</button>
-        </div>
-    </div>
-    
-    <div id="settings-modal" class="modal-overlay">
-        <div class="modal-content">
-            <h2 data-lang="settings-modal-title">⚙️ Configuración</h2>
-            
-            <div class="settings-section">
-                <h3 data-lang="settings-theme-title">🎨 Tema</h3>
-                <div class="theme-options">
-                    <div class="theme-option" data-theme="dark" onclick="selectTheme('dark')">
-                        <span data-lang="theme-dark">Oscuro</span>
-                    </div>
-                    <div class="theme-option" data-theme="light" onclick="selectTheme('light')">
-                        <span data-lang="theme-light">Claro</span>
                     </div>
                 </div>
             </div>
-            
-            <div class="settings-section">
-                <h3 data-lang="settings-lang-title">🌎 Idioma</h3>
-                <div class="language-options">
-                    <div class="language-option" data-lang-code="es" onclick="selectLanguage('es')">
-                        Español
+
+            <!-- Ganador anunciado -->
+            <div id="sorteo-ganador-container" style="display: none;">
+                <div class="ganador-announcement">
+                    <div class="confetti-container"></div>
+                    <div class="ganador-icon">Trophy</div>
+                    <h2 class="ganador-title">¡TENEMOS UN GANADOR!</h2>
+                    <div class="ganador-info">
+                        <p class="ganador-label">El ganador es:</p>
+                        <h3 id="ganador-nombre" class="ganador-nombre">Usuario Ganador</h3>
+                        <div class="ganador-premio">
+                            <span id="ganador-premio-texto">Premio</span>
+                        </div>
                     </div>
-                    <div class="language-option" data-lang-code="en" onclick="selectLanguage('en')">
-                        English
+                    <p class="ganador-mensaje">¡Felicidades! El ganador será contactado pronto para reclamar su premio.</p>
+                    <div class="button-container">
+                        <a href="https://discord.gg/Xj5SARVFQ5" class="discord-button" target="_blank">
+                            <span>VER ANUNCIO EN DISCORD</span>
+                        </a>
                     </div>
                 </div>
             </div>
-            
-            <div class="settings-section">
-                <h3 data-lang="settings-notifications-title">🔔 Notificaciones</h3>
-                <div class="toggle-switch-container">
-                    <span data-lang="notifications-label">Recibir notificaciones</span>
-                    <label class="toggle-switch" id="notifications-toggle" onclick="toggleNotifications()">
-                        <input type="checkbox" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </div>
+
+            <div class="footer">
+                <p>© 2025 MasterStudio. Todos los derechos reservados.</p>
+                <p>Únete a nuestro <a href="https://discord.gg/Xj5SARVFQ5" target="_blank">Discord</a></p>
             </div>
-            
-            <button class="modal-close-button" onclick="closeModal('settings-modal')">Cerrar</button>
-        </div>
-    </div>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
